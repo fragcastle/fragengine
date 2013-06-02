@@ -1,0 +1,14 @@
+{
+  "GameLevels": [
+	"c:/temp/rockkickass/Data/intro.json",
+	"c:/temp/rockkickass/Data/lab1.json"
+  ],
+
+  "GameAssemblies": [
+	"c:/temp/rockkickass/RockKickass.Entities.dll"
+  ],
+
+  "GameContent": [
+	"c:/temp/rockkickass/Content/"
+  ]
+}

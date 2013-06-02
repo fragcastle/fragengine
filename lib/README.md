@@ -1,0 +1,1 @@
+FragEngine uses a [custom fork of MonoGame](https://github.com/fragcastle/MonoGame/tree/rock-kickass). Using submodules to include this dependency proved hard to manage, and it doesn't change very often, so we just build it and include it here in the libs directory.
