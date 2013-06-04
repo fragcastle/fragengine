@@ -6,7 +6,7 @@ namespace FragEd.Forms
 {
     public partial class Main : Form
     {
-        private ProjectController _projectController;
+        private OldProjectController _oldProjectController;
         private LevelController _levelController;
         private LevelRendererController _levelRenderController;
 
@@ -17,10 +17,9 @@ namespace FragEd.Forms
             Load += ( sender, args ) => tabControl1.TabPages.Clear();
 
             saveToolStripMenuItem.Enabled = false;
-            saveLevelToolStripMenuItem.Enabled = false;
 
-            _levelRenderController = LevelRendererController.BoundTo( this );
-            _projectController = ProjectController.BoundTo(this);
+            // _levelRenderController = LevelRendererController.BoundTo( this );
+            _oldProjectController = OldProjectController.BoundTo(this);
             _levelController = LevelController.BoundTo( this );
         }
 

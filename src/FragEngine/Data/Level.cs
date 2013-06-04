@@ -39,16 +39,21 @@ namespace FragEngine.Data
         public Level()
         {
             // levels always have a collision layer
-            Layers = new List<MapLayer>() { new CollisionLayer() };
+            MapLayers = new List<MapLayer>();
 
             Entities = new List<EntityBase>();
+
+            CollisionLayer = new CollisionLayer();
         }
 
         [DataMember]
         public List<EntityBase> Entities { get; set; }
 
         [DataMember]
-        public List<MapLayer> Layers { get; set; }
+        public List<MapLayer> MapLayers { get; set; }
+
+        [DataMember]
+        public CollisionLayer CollisionLayer { get; set; }
 
         [DataMember]
         public string Name { get; set; }
@@ -60,16 +65,6 @@ namespace FragEngine.Data
             {
                 OnPersisted( this, EventArgs.Empty );
             }
-        }
-
-        public List<MapLayer> MapLayers()
-        {
-            return Layers.Where( l => ( l as CollisionLayer ) == null ).ToList();
-        }
-
-        public CollisionLayer CollisionLayer()
-        {
-            return (CollisionLayer)Layers.First( l => l is CollisionLayer );
         }
 
         [IgnoreDataMember]

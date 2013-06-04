@@ -82,7 +82,7 @@ namespace FragEd.Data
         {
             foreach( var levelFile in gameLevels )
             {
-                var level = Level.Load( levelFile );
+                var level = Level.Load( new FileInfo(levelFile) );
                 Levels.Add( level );
 
                 if( OnLoadLevel != null )

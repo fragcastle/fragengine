@@ -17,8 +17,8 @@ namespace FragEngine.Mapping
 
         public CollisionMap( Level level )
         {
-            MapData = level.CollisionLayer().MapData;
-            TileSize = level.CollisionLayer().TileSize;
+            MapData = level.CollisionLayer.MapData;
+            TileSize = level.CollisionLayer.TileSize;
         }
 
         public CollisionCheckResult Peek( EntityBase entity, Vector2 proposedPosition )

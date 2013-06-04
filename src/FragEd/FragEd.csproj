@@ -65,10 +65,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AssemblyResolutionManager.cs" />
+    <Compile Include="Controllers\Controller.cs" />
     <Compile Include="Controllers\ControllerBase.cs" />
     <Compile Include="Controllers\LevelController.cs" />
     <Compile Include="Controllers\LevelRendererController.cs" />
+    <Compile Include="Controllers\OldProjectController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
+    <Compile Include="Controllers\StateController.cs" />
     <Compile Include="Controls\GLControl\CarbonGLControl.cs" />
     <Compile Include="Controls\GLControl\DummyGLControl.cs" />
     <Compile Include="Controls\GLControl\GLControl.cs">
@@ -92,7 +95,12 @@
     </Compile>
     <Compile Include="Data\Project.cs" />
     <Compile Include="Data\ProjectConfiguration.cs" />
-    <Compile Include="Forms\InputBox.cs" />
+    <Compile Include="Forms\Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Editor.Designer.cs">
+      <DependentUpon>Editor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -105,6 +113,9 @@
     <Compile Include="Services\GraphicsDeviceService.cs" />
     <EmbeddedResource Include="Controls\GLControl\GLControl.resx">
       <DependentUpon>GLControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editor.resx">
+      <DependentUpon>Editor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Main.resx">
       <DependentUpon>Main.cs</DependentUpon>

@@ -35,7 +35,7 @@ namespace FragEd.Controls
 
             Controls.Add( Editor );
 
-            LevelRendererController.Current.ListenTo( Editor );
+            // LevelRendererController.Current.ListenTo( Editor );
 
             Text = Level.Name;
         }

@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using FragEd.Controls;
 using FragEd.Forms;
 using FragEd.Services;
 using FragEngine.Data;
+using FragEngine.IO;
 using FragEngine.Layers;
 
 namespace FragEd.Controllers
@@ -28,47 +31,27 @@ namespace FragEd.Controllers
             _mainForm = form;
             _mainForm.ux_ProjectTree.AfterSelect += UxProjectTreeOnAfterSelect;
             _mainForm.ux_ProjectTree.NodeMouseDoubleClick += UxProjectTreeOnNodeMouseDoubleClick;
-            _mainForm.saveLevelToolStripMenuItem.Click += (sender, args) => Save();
-            _mainForm.tabControl1.TabIndexChanged += ( sender, args ) => _mainForm.saveLevelToolStripMenuItem.Text = "Save " + ((LevelTabPage)sender).Level.Name;
             _mainForm.ux_ToolStripAddLevel.Click += ( sender, args ) => New();
 
-            _mainForm.ux_ProjectTree.AfterLabelEdit += UxProjectTreeOnAfterLabelEdit;
+            _mainForm.saveLevelDialog.FileOk += SaveFileDialog1OnFileOk;
 
             OpenLevels = new Dictionary<string, LevelTabPage>();
 
             EventAggregator.Current.On("add:entity").Add(OnAddEntity);
         }
 
-        private void UxProjectTreeOnAfterLabelEdit(object sender, NodeLabelEditEventArgs nodeLabelEditEventArgs)
+        private void SaveFileDialog1OnFileOk(object sender, CancelEventArgs cancelEventArgs)
         {
-            var node = nodeLabelEditEventArgs.Node;
+            var levelFilePath = _mainForm.saveLevelDialog.FileName;
 
-            var label = nodeLabelEditEventArgs.Label;
-
-            var level = GetLevelFromNode( node );
-
-            if( level != null )
-            {
-                if( OpenLevels.ContainsKey( level.Name ) )
-                {
-                    var page = OpenLevels[ level.Name ];
-                    page.Text = label;
-                }
-
-                level.Name = label;
-            }
-        }
-
-        private void New()
-        {
             var levelsNode = _mainForm.ux_ProjectTree.Nodes.Find( "levels", true ).First();
 
-            var level = new Level()
-                {
-                    Name = "New Level" + _newLevelCount
-                };
+            var level = new Level() {
+                Name = Path.GetFileNameWithoutExtension(levelFilePath),
+                FilePath = levelFilePath
+            };
 
-            _newLevelCount++;
+            level.Save();
 
             var node = levelsNode.Nodes.Add( level.Name );
 
@@ -76,14 +59,26 @@ namespace FragEd.Controllers
 
             OpenLevel( level, node );
 
-            if( !levelsNode.IsExpanded )
-            {
+            if( !levelsNode.IsExpanded ) {
                 levelsNode.Expand();
             }
 
             node.Expand();
 
-            node.BeginEdit();
+            EventAggregator.Current.Trigger("add:level", level );
+        }
+
+        private void New()
+        {
+            _mainForm.saveLevelDialog.CheckPathExists = false;
+            _mainForm.saveLevelDialog.AddExtension = true;
+            _mainForm.saveLevelDialog.Filter = "FragEd Level|*.json";
+            _mainForm.saveLevelDialog.DefaultExt = ".json";
+            _mainForm.saveLevelDialog.FileName = "NewLevel";
+            _mainForm.saveLevelDialog.InitialDirectory = Environment.GetFolderPath( Environment.SpecialFolder.MyDocuments );
+            _mainForm.saveLevelDialog.SupportMultiDottedExtensions = true;
+            _mainForm.saveLevelDialog.Title = "Save your new level";
+            _mainForm.saveLevelDialog.ShowDialog();
         }
 
         private void OnAddEntity( Object sender, EventArgs e )
@@ -121,7 +116,7 @@ namespace FragEd.Controllers
             {
                 _mainForm.ux_PropertiesGrid.SelectedObject = layer;
 
-                level.Layers.ForEach( l => l.Alpha = l != layer ? 128f : 255f );
+                level.MapLayers.ForEach( l => l.Alpha = l != layer ? 128f : 255f );
             }
         }
 
@@ -151,7 +146,7 @@ namespace FragEd.Controllers
                 }
 
                 // load the layers
-                foreach(var layer in level.MapLayers())
+                foreach(var layer in level.MapLayers)
                 {
                     var layerNode = layers.Nodes.Add( layer.Name );
                     layerNode.Tag = layer;
@@ -159,7 +154,7 @@ namespace FragEd.Controllers
 
                 // add the collision layer
                 var collision = layers.Nodes.Add("Collision");
-                collision.Tag = level.CollisionLayer();
+                collision.Tag = level.CollisionLayer;
 
                 OpenLevels.Add(level.Name, tabPage);
                 _mainForm.tabControl1.TabPages.Add( tabPage );
@@ -167,15 +162,20 @@ namespace FragEd.Controllers
 
             // set the level as the active tab
             tabPage.Select();
-
-            _mainForm.saveLevelToolStripMenuItem.Text = string.Format("Save {0}", level.Name);
-            _mainForm.saveLevelToolStripMenuItem.Enabled = true;
         }
 
         public void Save()
         {
             var tabPage = (LevelTabPage)_mainForm.tabControl1.SelectedTab;
             tabPage.Level.Save();
+        }
+
+        public void SaveAll()
+        {
+            foreach(var page in OpenLevels)
+            {
+                page.Value.Level.Save();
+            }
         }
     }
 }

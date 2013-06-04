@@ -10,37 +10,13 @@ namespace FragEd.Controllers
 {
     public class LevelRendererController : ControllerBase
     {
+        private Dictionary<Layer, int> _layerTileMap;        
 
-        private static LevelRendererController _instance = null;
-
-        private static readonly object syncRoot = new object();
-
-        private Dictionary<Layer, int> _layerTileMap;
-
-        public static LevelRendererController Current
+        public LevelRendererController( LevelEditorControl control )
         {
-            get
-            {
-                return _instance;
-            }
-        }
-
-        public static LevelRendererController BoundTo(Main form)
-        {
-            lock(syncRoot)
-            {
-                if( _instance == null )
-                {
-                   _instance = new LevelRendererController(form);
-                }
-            }
-            return _instance;
-        }
-
-        private LevelRendererController( Main form )
-        {
-            _mainForm = form;
             _layerTileMap = new Dictionary<Layer, int>();
+
+            ListenTo(control);
         }
 
         public void ListenTo( LevelEditorControl editor )
@@ -81,22 +57,20 @@ namespace FragEd.Controllers
 
         private void EditorOnMouseMove(object sender, MouseEventArgs mouseEventArgs)
         {
-            var currentNode = GetSelectedNode();
+            //var currentNode = GetSelectedNode();
 
-            _mainForm.mousePosition.Text = string.Format( "Mouse Pos: {0}, {1}", mouseEventArgs.X, mouseEventArgs.Y );
+            //if( mouseEventArgs.Button.HasFlag( MouseButtons.Left ) )
+            //{
+            //    // user has an entity selected, move the entity
+            //    var entity = GetEntityFromNode( currentNode );
+            //    if( entity != null )
+            //    {
+            //        entity.Position = new Vector2( mouseEventArgs.X, mouseEventArgs.Y );
 
-            if( mouseEventArgs.Button.HasFlag( MouseButtons.Left ) )
-            {
-                // user has an entity selected, move the entity
-                var entity = GetEntityFromNode( currentNode );
-                if( entity != null )
-                {
-                    entity.Position = new Vector2( mouseEventArgs.X, mouseEventArgs.Y );
-
-                    var level = ( (LevelEditorControl)sender ).Level;
-                    level.SetDirty();
-                }
-            }
+            //        var level = ( (LevelEditorControl)sender ).Level;
+            //        level.SetDirty();
+            //    }
+            //}
         }
     }
 }

@@ -59,7 +59,7 @@ namespace FragEd.Controls
         {
             if( Visible )
             {
-                foreach( var map in Level.MapLayers() )
+                foreach( var map in Level.MapLayers )
                 {
                     map.Draw( spriteBatch );
                 }
@@ -78,7 +78,7 @@ namespace FragEd.Controls
 
                 // draw the collision layer
                 // in the game we don't draw this layer
-                Level.CollisionLayer().Draw( spriteBatch );
+                Level.CollisionLayer.Draw( spriteBatch );
             }
         }
     }
