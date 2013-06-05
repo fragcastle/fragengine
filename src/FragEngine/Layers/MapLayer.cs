@@ -33,8 +33,6 @@ namespace FragEngine.Layers
 
                 if (!String.IsNullOrWhiteSpace(value))
                 {
-                    TileSetTexture = ContentCacheManager.GetTexture( TileSetTexturePath );
-
                     // don't load the animation sheet yet as we can't garauntee that the TileSize
                     // is correct, which will throw off our frame calculations.
                     // instead, set a flag that tells draw that we are "dirty" and need to reload
@@ -95,6 +93,8 @@ namespace FragEngine.Layers
 
             if( _tileSetTextureIsDirty )
             {
+                TileSetTexture = ContentCacheManager.GetTexture( TileSetTexturePath );
+
                 TileSheet = new AnimationSheet( TileSetTexture, TileSize, TileSize );
 
                 // add the animations

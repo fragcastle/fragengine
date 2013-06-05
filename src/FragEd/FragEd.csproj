@@ -64,6 +64,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\AddLayer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AddLayer.Designer.cs">
+      <DependentUpon>AddLayer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\AssemblyResolutionManager.cs" />
     <Compile Include="Controllers\Controller.cs" />
     <Compile Include="Controllers\ControllerBase.cs" />
@@ -111,6 +117,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\EventAggregator.cs" />
     <Compile Include="Services\GraphicsDeviceService.cs" />
+    <EmbeddedResource Include="Forms\AddLayer.resx">
+      <DependentUpon>AddLayer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\GLControl\GLControl.resx">
       <DependentUpon>GLControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -154,6 +163,12 @@
       <Project>{bc47c0e4-61f4-46d2-907e-009f4d1cfcda}</Project>
       <Name>FragEngine</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Offline_16xMD.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\action_add_16xMD.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

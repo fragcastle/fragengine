@@ -63,6 +63,16 @@ namespace FragEd.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap action_add_16xMD {
+            get {
+                object obj = ResourceManager.GetObject("action_add_16xMD", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap AddControl_371 {
             get {
                 object obj = ResourceManager.GetObject("AddControl_371", resourceCulture);
@@ -105,6 +115,16 @@ namespace FragEd.Properties {
         internal static string Dialog_Title_Open_Project_File {
             get {
                 return ResourceManager.GetString("Dialog_Title_Open_Project_File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Offline_16xMD {
+            get {
+                object obj = ResourceManager.GetObject("Offline_16xMD", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

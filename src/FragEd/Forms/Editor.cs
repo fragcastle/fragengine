@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -15,7 +16,9 @@ using FragEngine.Data;
 using FragEngine.Entities;
 using FragEngine.IO;
 using FragEngine.Layers;
+using FragEngine.Services;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 
 namespace FragEd.Forms {
     // TODO: Remove Level
@@ -23,8 +26,15 @@ namespace FragEd.Forms {
     // TODO: Add Game Assembly
     // TODO: Remove Game Assembly
     //
+    // TODO: load content folders
     // TODO: Add Content Folder
     // TODO: Remove Content Folder
+    // 
+    // TODO: Add Layer
+    // TODO: Remove Layer
+    //
+    // TODO: Add Entity
+    // TODO: Remove Entity
     public partial class Editor : Form {
         private Project _project;
         private Dictionary<Layer, int> _layerTileMap = new Dictionary<Layer, int>();
@@ -36,6 +46,14 @@ namespace FragEd.Forms {
                 _project = value; 
                 UpdateLevelControl();
                 UpdateUserInterface();
+            }
+        }
+
+        public Level CurrentLevel
+        {
+            get
+            {
+                return ux_LevelEditor.Level;
             }
         }
 
@@ -81,6 +99,9 @@ namespace FragEd.Forms {
             Project.Levels.ForEach( l => ux_GameLevels.DropDownItems.Add( Path.GetFileName( l.FilePath ), null, ( sender, args ) => EditLevel( l ) ) );
 
             Project.ContentDirectories.ForEach( ContentCacheManager.AddContentDirectory );
+
+            // TODO: disk op... show progress bar?
+            ContentCacheManager.LoadContent( new ContentManager( ServiceInjector.Apply() ) );
         }
 
         private void EditLevel( Level level ) {
@@ -97,10 +118,9 @@ namespace FragEd.Forms {
 
             ux_LevelEditor.Level = level;
 
-            ux_LayerList.Items.Clear();
+            ux_LevelEntityList.Items.Clear();            
 
-            ux_LayerList.Items.Add( "Collision", true );
-            level.MapLayers.ForEach( ml => ux_LayerList.Items.Add( ml.Name, true ) );
+            RefreshLayerList();
 
             foreach(ToolStripMenuItem item in ux_GameLevels.DropDownItems )
             {
@@ -110,6 +130,16 @@ namespace FragEd.Forms {
                     break;
                 }
             }
+
+            level.Entities.ForEach( e => ux_LevelEntityList.Items.Add( e, true ));
+        }
+
+        private void RefreshLayerList()
+        {
+            ux_LayerList.Items.Clear();
+
+            ux_LayerList.Items.Add( "Collision", true );
+            CurrentLevel.MapLayers.ForEach( ml => ux_LayerList.Items.Add( ml.Name, true ) );
         }
 
         private void AddEntityToLevel( Type type ) {
@@ -225,6 +255,36 @@ namespace FragEd.Forms {
 
                 Project.Levels.Add(level);
                 UpdateUserInterface();
+            }
+        }
+
+        private void ux_RemoveLayer_Click( object sender, EventArgs e ) {
+            var name = ux_LayerList.SelectedItem;
+            if( name == "Collision" ) {
+                MessageBox.Show( "Sorry, you can't remove the Collision layer.", "Sorry Dave...", MessageBoxButtons.OK, MessageBoxIcon.Hand );
+                return;
+            }
+
+            CurrentLevel.MapLayers.RemoveAll( ml => ml.Name == name );
+            
+            RefreshLayerList();
+        }
+
+        private void ux_AddLayer_Click( object sender, EventArgs e ) {
+            var dialog = new AddLayer( this );
+            var result = dialog.ShowDialog();
+            if( result == DialogResult.OK ) {
+                // create a layer object
+                var layer = new MapLayer();
+
+                // TODO: make sure this is relative to one of the content directories...
+                layer.TileSetTexturePath = dialog.TileSet;
+                layer.TileSize = dialog.TileSize;
+                layer.Name = dialog.LayerName;
+
+                CurrentLevel.MapLayers.Add( layer );
+
+                RefreshLayerList();
             }
         }
     }

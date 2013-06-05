@@ -17,7 +17,7 @@ namespace FragEngine
     {
         private static readonly object _syncRoot = new object();
 
-        private static Dictionary<string, Texture2D> TextureCache { get; set; }
+        public static Dictionary<string, Texture2D> TextureCache { get; set; }
 
         private static Dictionary<string, SpriteFont> FontCache { get; set; }
 

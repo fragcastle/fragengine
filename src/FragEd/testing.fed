@@ -1,14 +1,1 @@
-{
-  "GameLevels": [
-	"c:/temp/rockkickass/Data/intro.json",
-	"c:/temp/rockkickass/Data/lab1.json"
-  ],
-
-  "GameAssemblies": [
-	"c:/temp/rockkickass/RockKickass.Entities.dll"
-  ],
-
-  "GameContent": [
-	"c:/temp/rockkickass/Content/"
-  ]
-}
+{"$type":"FragEd.Data.ProjectConfiguration, FragEd","GameAssemblies":{"$type":"System.Linq.Enumerable+<DistinctIterator>d__81`1[[System.String, mscorlib]], System.Core","$values":["c:\\temp\\rockkickass\\RockKickass.Entities.dll"]},"GameLevels":{"$type":"System.Linq.Enumerable+WhereSelectListIterator`2[[FragEngine.Data.Level, FragEngine],[System.String, mscorlib]], System.Core","$values":["C:\\Users\\jared\\Src\\fragcastle\\fragengine\\src\\FragEd\\finally.json"]},"GameContent":{"$type":"System.Linq.Enumerable+WhereSelectListIterator`2[[System.IO.DirectoryInfo, mscorlib],[System.String, mscorlib]], System.Core","$values":["c:\\temp\\rockkickass\\Content\\"]}}
