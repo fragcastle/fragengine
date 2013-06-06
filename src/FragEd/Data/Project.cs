@@ -39,7 +39,7 @@ namespace FragEd.Data
         {
             var configuration = new ProjectConfiguration
                 {
-                    GameAssemblies = Entities.Select(e => Path.GetFullPath(e.Assembly.Location)).Distinct(),
+                    GameAssemblies = Entities.Select( e => Path.GetFullPath( e.Assembly.Location ) ).Distinct(),
                     GameContent = ContentDirectories.Select( dir => dir.FullName ),
                     GameLevels = Levels.Select( l => l.FilePath )
                 };
@@ -98,9 +98,7 @@ namespace FragEd.Data
             foreach( var assemblyPath in gameAssemblies )
             {
                 var assembly = AssemblyResolutionManager.Current.Add( assemblyPath );
-                var types = ( from type in assembly.GetTypes()
-                              where type.IsPublic && type.IsSubclassOf( typeof( EntityBase ) ) && !type.IsAbstract
-                              select type ).ToList();
+                var types = assembly.GetEntities();
 
                 Entities.AddRange( types );
 

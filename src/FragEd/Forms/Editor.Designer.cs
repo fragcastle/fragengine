@@ -166,6 +166,7 @@
             this.ux_ManageContentFolders.Name = "ux_ManageContentFolders";
             this.ux_ManageContentFolders.Size = new System.Drawing.Size(213, 22);
             this.ux_ManageContentFolders.Text = "Manage Content Folders";
+            this.ux_ManageContentFolders.Click += new System.EventHandler(this.ux_ManageContentFolders_Click);
             // 
             // ux_ManageGameAssemblies
             // 
@@ -173,6 +174,7 @@
             this.ux_ManageGameAssemblies.Name = "ux_ManageGameAssemblies";
             this.ux_ManageGameAssemblies.Size = new System.Drawing.Size(213, 22);
             this.ux_ManageGameAssemblies.Text = "Manage Game Assemblies";
+            this.ux_ManageGameAssemblies.Click += new System.EventHandler(this.ux_ManageGameAssemblies_Click);
             // 
             // toolStripSeparator1
             // 
@@ -271,7 +273,7 @@
             this.ux_LayerList.Location = new System.Drawing.Point(3, 28);
             this.ux_LayerList.MinimumSize = new System.Drawing.Size(0, 100);
             this.ux_LayerList.Name = "ux_LayerList";
-            this.ux_LayerList.Size = new System.Drawing.Size(314, 260);
+            this.ux_LayerList.Size = new System.Drawing.Size(314, 255);
             this.ux_LayerList.TabIndex = 0;
             // 
             // ux_LayersToolStrip

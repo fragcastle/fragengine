@@ -23,16 +23,6 @@ using Microsoft.Xna.Framework.Content;
 namespace FragEd.Forms {
     // TODO: Remove Level
     //
-    // TODO: Add Game Assembly
-    // TODO: Remove Game Assembly
-    //
-    // TODO: load content folders
-    // TODO: Add Content Folder
-    // TODO: Remove Content Folder
-    // 
-    // TODO: Add Layer
-    // TODO: Remove Layer
-    //
     // TODO: Add Entity
     // TODO: Remove Entity
     public partial class Editor : Form {
@@ -102,6 +92,8 @@ namespace FragEd.Forms {
 
             // TODO: disk op... show progress bar?
             ContentCacheManager.LoadContent( new ContentManager( ServiceInjector.Apply() ) );
+
+            SelectCurrentLevel();
         }
 
         private void EditLevel( Level level ) {
@@ -122,16 +114,22 @@ namespace FragEd.Forms {
 
             RefreshLayerList();
 
-            foreach(ToolStripMenuItem item in ux_GameLevels.DropDownItems )
-            {
-                if( item.Text == level.Name )
-                {
+            SelectCurrentLevel();
+
+            level.Entities.ForEach( e => ux_LevelEntityList.Items.Add( e, true ));
+        }
+
+        private void SelectCurrentLevel()
+        {
+            if( ux_LevelEditor.Level == null )
+                return;
+
+            foreach( ToolStripMenuItem item in ux_GameLevels.DropDownItems ) {
+                if( item.Text == ux_LevelEditor.Level.Name + ".json" ) {
                     item.CheckState = CheckState.Checked;
                     break;
                 }
             }
-
-            level.Entities.ForEach( e => ux_LevelEntityList.Items.Add( e, true ));
         }
 
         private void RefreshLayerList()
@@ -285,6 +283,39 @@ namespace FragEd.Forms {
                 CurrentLevel.MapLayers.Add( layer );
 
                 RefreshLayerList();
+            }
+        }
+
+        private void ux_ManageGameAssemblies_Click( object sender, EventArgs e ) {
+            var gameAssemblies = new GameAssemblies( this );
+            var result = gameAssemblies.ShowDialog();
+            if( result == DialogResult.OK)
+            {
+                foreach( var type in gameAssemblies.RemovedEntities )
+                {
+                    Project.Entities.Remove( type );
+                }
+
+                Project.Entities.AddRange( gameAssemblies.AddedEntities );
+
+                UpdateUserInterface();
+            }
+        }
+
+        private void ux_ManageContentFolders_Click( object sender, EventArgs e ) {
+            var contentFolders = new ContentFolders( this );
+            var result = contentFolders.ShowDialog();
+            if( result == DialogResult.OK )
+            {
+                var dirs = Project.ContentDirectories.Where( d => contentFolders.RemovedFolders.Contains( d.FullName ) );
+                dirs.ToList().ForEach( d => Project.ContentDirectories.Remove(d) );
+
+                foreach(var addedPath in contentFolders.AddedFolders)
+                {
+                    Project.ContentDirectories.Add( new DirectoryInfo(addedPath) );
+                }
+
+                UpdateUserInterface();
             }
         }
     }
