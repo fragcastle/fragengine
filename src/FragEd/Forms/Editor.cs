@@ -82,6 +82,8 @@ namespace FragEd.Forms {
             if( selectedEntity != null )
             {
                 // todo: open a new properties dialog for this entity
+                var dialog = new EntityProperties(selectedEntity);
+                dialog.Show();
             }
         }
 

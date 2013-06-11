@@ -129,6 +129,11 @@ namespace FragEngine.Animation
             }
         }
 
+        public List<Animation> GetAnimations()
+        {
+            return _animations.Select(entry => entry.Value).ToList();
+        } 
+
         public void Previous()
         {
             var keys = _animations.Keys.ToArray();
