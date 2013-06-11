@@ -52,6 +52,10 @@
             this.ux_LevelEntityList = new System.Windows.Forms.CheckedListBox();
             this.ux_SaveLevelDialog = new System.Windows.Forms.SaveFileDialog();
             this.ux_OpenLevelDialog = new System.Windows.Forms.OpenFileDialog();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.ux_EntitiesToolStrip = new System.Windows.Forms.ToolStrip();
+            this.ux_AddEntity = new System.Windows.Forms.ToolStripDropDownButton();
+            this.ux_RemoveEntity = new System.Windows.Forms.ToolStripButton();
             this.ux_LevelEditor = new FragEd.Controls.LevelEditorControl();
             this.ux_MenuBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ux_SplitContainer)).BeginInit();
@@ -64,6 +68,8 @@
             this.splitContainer1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.ux_LayersToolStrip.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
+            this.ux_EntitiesToolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // ux_StatusBar
@@ -239,7 +245,7 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.ux_LevelEntityList);
+            this.splitContainer1.Panel2.Controls.Add(this.tableLayoutPanel2);
             this.splitContainer1.Panel2MinSize = 100;
             this.splitContainer1.Size = new System.Drawing.Size(320, 662);
             this.splitContainer1.SplitterDistance = 291;
@@ -314,11 +320,12 @@
             // ux_LevelEntityList
             // 
             this.ux_LevelEntityList.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.tableLayoutPanel2.SetColumnSpan(this.ux_LevelEntityList, 2);
             this.ux_LevelEntityList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ux_LevelEntityList.FormattingEnabled = true;
-            this.ux_LevelEntityList.Location = new System.Drawing.Point(0, 0);
+            this.ux_LevelEntityList.Location = new System.Drawing.Point(3, 28);
             this.ux_LevelEntityList.Name = "ux_LevelEntityList";
-            this.ux_LevelEntityList.Size = new System.Drawing.Size(320, 367);
+            this.ux_LevelEntityList.Size = new System.Drawing.Size(314, 336);
             this.ux_LevelEntityList.TabIndex = 0;
             // 
             // ux_SaveLevelDialog
@@ -332,6 +339,53 @@
             this.ux_OpenLevelDialog.DefaultExt = "json";
             this.ux_OpenLevelDialog.Filter = "FragEngine Level|*.json";
             this.ux_OpenLevelDialog.Title = "Add Existing Level";
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 2;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Controls.Add(this.ux_LevelEntityList, 0, 1);
+            this.tableLayoutPanel2.Controls.Add(this.ux_EntitiesToolStrip, 0, 0);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 2;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(320, 367);
+            this.tableLayoutPanel2.TabIndex = 1;
+            // 
+            // ux_EntitiesToolStrip
+            // 
+            this.tableLayoutPanel2.SetColumnSpan(this.ux_EntitiesToolStrip, 2);
+            this.ux_EntitiesToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ux_AddEntity,
+            this.ux_RemoveEntity});
+            this.ux_EntitiesToolStrip.Location = new System.Drawing.Point(0, 0);
+            this.ux_EntitiesToolStrip.Name = "ux_EntitiesToolStrip";
+            this.ux_EntitiesToolStrip.Size = new System.Drawing.Size(320, 25);
+            this.ux_EntitiesToolStrip.TabIndex = 1;
+            this.ux_EntitiesToolStrip.Text = "toolStrip1";
+            // 
+            // ux_AddEntity
+            // 
+            this.ux_AddEntity.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.ux_AddEntity.Image = global::FragEd.Properties.Resources.action_add_16xMD;
+            this.ux_AddEntity.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ux_AddEntity.Name = "ux_AddEntity";
+            this.ux_AddEntity.Size = new System.Drawing.Size(29, 22);
+            this.ux_AddEntity.Text = "toolStripButton1";
+            // 
+            // ux_RemoveEntity
+            // 
+            this.ux_RemoveEntity.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.ux_RemoveEntity.Image = global::FragEd.Properties.Resources.Offline_16xMD;
+            this.ux_RemoveEntity.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ux_RemoveEntity.Name = "ux_RemoveEntity";
+            this.ux_RemoveEntity.Size = new System.Drawing.Size(23, 22);
+            this.ux_RemoveEntity.Text = "toolStripButton1";
+            this.ux_RemoveEntity.Click += new System.EventHandler(this.ux_RemoveEntity_Click);
             // 
             // ux_LevelEditor
             // 
@@ -370,6 +424,10 @@
             this.tableLayoutPanel1.PerformLayout();
             this.ux_LayersToolStrip.ResumeLayout(false);
             this.ux_LayersToolStrip.PerformLayout();
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.tableLayoutPanel2.PerformLayout();
+            this.ux_EntitiesToolStrip.ResumeLayout(false);
+            this.ux_EntitiesToolStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -406,5 +464,9 @@
         private System.Windows.Forms.ToolStrip ux_LayersToolStrip;
         private System.Windows.Forms.ToolStripButton ux_AddLayer;
         private System.Windows.Forms.ToolStripButton ux_RemoveLayer;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.ToolStrip ux_EntitiesToolStrip;
+        private System.Windows.Forms.ToolStripDropDownButton ux_AddEntity;
+        private System.Windows.Forms.ToolStripButton ux_RemoveEntity;
     }
 }

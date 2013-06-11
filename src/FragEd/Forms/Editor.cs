@@ -1,14 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using FragEd.Controllers;
 using FragEd.Controls;
 using FragEd.Data;
 using FragEngine;
@@ -23,8 +17,7 @@ using Microsoft.Xna.Framework.Content;
 namespace FragEd.Forms {
     // TODO: Remove Level
     //
-    // TODO: Add Entity
-    // TODO: Remove Entity
+    // TODO: edit entity properties
     public partial class Editor : Form {
         private Project _project;
         private Dictionary<Layer, int> _layerTileMap = new Dictionary<Layer, int>();
@@ -70,11 +63,31 @@ namespace FragEd.Forms {
                     var item = ux_LayerList.SelectedItem;
                 };
 
+            ux_LevelEntityList.ItemCheck += ( sender, args ) => {
+                    var entity = (EntityBase)ux_LevelEntityList.SelectedItem;
+
+                    if( entity != null )
+                        entity.IsAlive = args.NewValue == CheckState.Checked;
+                };
+
+            ux_LevelEntityList.DoubleClick += UxLevelEntityListOnDoubleClick;
+
             ux_LevelEditor.MouseDown += UxLevelEditorOnMouseDown;
+            ux_LevelEditor.MouseMove += UxLevelEditorOnMouseMove;
+        }        
+
+        private void UxLevelEntityListOnDoubleClick(object sender, EventArgs eventArgs)
+        {
+            var selectedEntity = (EntityBase)ux_LevelEntityList.SelectedItem;
+            if( selectedEntity != null )
+            {
+                // todo: open a new properties dialog for this entity
+            }
         }
 
         private void UpdateUserInterface() {
             ux_AddEntityMenu.DropDownItems.Clear();
+            ux_AddEntity.DropDownItems.Clear();
             ux_GameLevels.DropDownItems.Clear();
 
             ux_ProjectMenu.Enabled = true;
@@ -85,7 +98,7 @@ namespace FragEd.Forms {
                 item.Enabled = true;
             }
 
-            Project.Entities.ForEach( e => ux_AddEntityMenu.DropDownItems.Add( e.Name, null, ( sender, args ) => AddEntityToLevel( e ) ) );
+            Project.Entities.ForEach( AddEntityToUx );
             Project.Levels.ForEach( l => ux_GameLevels.DropDownItems.Add( Path.GetFileName( l.FilePath ), null, ( sender, args ) => EditLevel( l ) ) );
 
             Project.ContentDirectories.ForEach( ContentCacheManager.AddContentDirectory );
@@ -94,6 +107,12 @@ namespace FragEd.Forms {
             ContentCacheManager.LoadContent( new ContentManager( ServiceInjector.Apply() ) );
 
             SelectCurrentLevel();
+        }
+
+        private void AddEntityToUx( Type entity )
+        {
+            ux_AddEntityMenu.DropDownItems.Add( entity.Name, null, ( sender, args ) => AddEntityToLevel( entity ) );
+            ux_AddEntity.DropDownItems.Add( entity.Name, null, ( sender, args ) => AddEntityToLevel( entity ) );
         }
 
         private void EditLevel( Level level ) {
@@ -108,15 +127,19 @@ namespace FragEd.Forms {
                 }
             }
 
-            ux_LevelEditor.Level = level;
+            ux_LevelEditor.Level = level;            
 
-            ux_LevelEntityList.Items.Clear();            
+            RefreshLevelEntityList();
 
             RefreshLayerList();
 
             SelectCurrentLevel();
+        }
 
-            level.Entities.ForEach( e => ux_LevelEntityList.Items.Add( e, true ));
+        private void RefreshLevelEntityList()
+        {
+            ux_LevelEntityList.Items.Clear();
+            ux_LevelEditor.Level.Entities.ForEach( e => ux_LevelEntityList.Items.Add( e, true ) );
         }
 
         private void SelectCurrentLevel()
@@ -143,10 +166,24 @@ namespace FragEd.Forms {
         private void AddEntityToLevel( Type type ) {
             var entity = (EntityBase)Activator.CreateInstance( type );
             ux_LevelEditor.Level.Entities.Add( entity );
+
+            RefreshLevelEntityList();
         }
 
         private void UpdateLevelControl( Level level = null ) {
             ux_LevelEditor.Level = level;
+        }
+
+        private void UxLevelEditorOnMouseMove( object sender, MouseEventArgs mouseEventArgs ) {
+            if( mouseEventArgs.Button.HasFlag( MouseButtons.Left ) )
+            {
+                // user has an entity selected, move the entity
+                var entity = (EntityBase)ux_LevelEntityList.SelectedItem;
+                if( entity != null )
+                {
+                    entity.Position = new Vector2( mouseEventArgs.X, mouseEventArgs.Y );
+                }
+            }
         }
 
         private void UxLevelEditorOnMouseDown(object sender, MouseEventArgs mouseEventArgs)
@@ -316,6 +353,16 @@ namespace FragEd.Forms {
                 }
 
                 UpdateUserInterface();
+            }
+        }
+
+        private void ux_RemoveEntity_Click( object sender, EventArgs e ) {
+            if( ux_LevelEntityList.SelectedItem != null )
+            {
+                var entity = (EntityBase)ux_LevelEntityList.SelectedItem;
+                ux_LevelEditor.Level.Entities.Remove(entity);
+
+                RefreshLevelEntityList();
             }
         }
     }

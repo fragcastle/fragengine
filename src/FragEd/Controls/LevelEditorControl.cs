@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using FragEngine;
 using FragEngine.Data;
 using FragEngine.Forms;
@@ -52,6 +53,29 @@ namespace FragEd.Controls
                 _accumulatedElapsedTime = TimeSpan.Zero;
 
                 DrawLevel( spriteBatch );
+
+                // batch has to be started before animations/entities can be drawn
+                // if you get the "big red x" error, ctrl+alt+e and check "thrown" for
+                // Common Language Runtime: http://thewayofcoding.com/2011/08/xna-4-0-red-x-exceptions/
+                spriteBatch.Begin();
+                DrawEntities( spriteBatch );
+                spriteBatch.End();
+            }
+        }
+
+        private void DrawEntities(SpriteBatch spriteBatch)
+        {
+            if( Level.Entities.Count > 0 ) {
+                foreach( var entity in Level.Entities.Where( entity => entity.IsAlive ) ) {
+                    // update the current animation
+                    if( entity.Animations.CurrentAnimation != null ) {
+                        entity.Animations.CurrentAnimation.Update( _gameTime );
+                    }
+
+                    // I honestly have no idea why this has to be called this way
+                    // instead of calling entity.draw()...
+                    entity.Animations.CurrentAnimation.Draw( spriteBatch, entity.Position );
+                }
             }
         }
 
@@ -62,18 +86,6 @@ namespace FragEd.Controls
                 foreach( var map in Level.MapLayers )
                 {
                     map.Draw( spriteBatch );
-                }
-
-                if( Level.Entities.Count > 0 )
-                {
-                    foreach( var entity in Level.Entities )
-                    {
-                        // update the current animation
-                        if( entity.Animations.CurrentAnimation != null )
-                        {
-                            entity.Animations.CurrentAnimation.Update( _gameTime );
-                        }
-                    }
                 }
 
                 // draw the collision layer
