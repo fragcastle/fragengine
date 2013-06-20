@@ -5,7 +5,7 @@ namespace FragEngine.IO
 {
     public class Persistant
     {
-        private static JsonSerializerSettings _settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
+        private static JsonSerializerSettings _settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All, MaxDepth = 8 };
 
         public static void Persist<T>(string filePath, T obj)
         {

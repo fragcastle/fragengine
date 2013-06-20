@@ -17,7 +17,7 @@ using Microsoft.Xna.Framework.Content;
 namespace FragEd.Forms {
     // TODO: Remove Level
     //
-    // TODO: edit entity properties
+    // TODO: Undo changes
     public partial class Editor : Form {
         private Project _project;
         private Dictionary<Layer, int> _layerTileMap = new Dictionary<Layer, int>();
@@ -74,6 +74,15 @@ namespace FragEd.Forms {
 
             ux_LevelEditor.MouseDown += UxLevelEditorOnMouseDown;
             ux_LevelEditor.MouseMove += UxLevelEditorOnMouseMove;
+
+
+            Project.OnCompleteLoadContentDirectory += ( sender, args ) => {
+                var project = (Project)sender;
+                project.ContentDirectories.ForEach( ContentCacheManager.AddContentDirectory );
+
+                // TODO: disk op... show progress bar?
+                ContentCacheManager.LoadContent( new ContentManager( ServiceInjector.Apply() ) );
+            };
         }        
 
         private void UxLevelEntityListOnDoubleClick(object sender, EventArgs eventArgs)
@@ -102,11 +111,6 @@ namespace FragEd.Forms {
 
             Project.Entities.ForEach( AddEntityToUx );
             Project.Levels.ForEach( l => ux_GameLevels.DropDownItems.Add( Path.GetFileName( l.FilePath ), null, ( sender, args ) => EditLevel( l ) ) );
-
-            Project.ContentDirectories.ForEach( ContentCacheManager.AddContentDirectory );
-
-            // TODO: disk op... show progress bar?
-            ContentCacheManager.LoadContent( new ContentManager( ServiceInjector.Apply() ) );
 
             SelectCurrentLevel();
         }

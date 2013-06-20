@@ -33,7 +33,7 @@ namespace FragEngine.Entities
         public Vector2 Position { get; set; }
 
         [DataMember]
-        public Dictionary<string, string> Settings { get; set; }
+        public virtual Dictionary<string, string> Settings { get; set; }
 
         [IgnoreDataMember]
         public float GravityFactor { get; set; }

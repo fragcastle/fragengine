@@ -16,9 +16,10 @@ namespace FragEd.Data
 
         public static EventHandler OnLoad;
 
-        public EventHandler OnLoadAssembly;
-        public EventHandler OnLoadLevel;
-        public EventHandler OnLoadContentDirectory;
+        public static EventHandler OnLoadAssembly;
+        public static EventHandler OnLoadLevel;
+        public static EventHandler OnLoadContentDirectory;
+        public static EventHandler OnCompleteLoadContentDirectory;
 
         public Project( ProjectConfiguration configuration = null )
         {
@@ -57,8 +58,11 @@ namespace FragEd.Data
             if( configuration != null )
             {
                 LoadEntitiesFromAssemblies( configuration.GameAssemblies );
-                LoadLevels( configuration.GameLevels );
+
+                // must load content _before_ we attempt to load the levels!
                 LoadContentDirectories( configuration.GameContent );
+                
+                LoadLevels( configuration.GameLevels );
             }
 
         }
@@ -75,6 +79,10 @@ namespace FragEd.Data
                 {
                     OnLoadContentDirectory( dir, EventArgs.Empty );
                 }
+            }
+
+            if( OnCompleteLoadContentDirectory != null ) {
+                OnCompleteLoadContentDirectory( this, EventArgs.Empty );
             }
         }
 

@@ -114,7 +114,7 @@ namespace FragEd.Controllers
             // load the content
             LoadContent();
 
-            project.OnLoadContentDirectory += ( o, e ) =>
+            Project.OnLoadContentDirectory += ( o, e ) =>
                 {
                     var dir = (DirectoryInfo)o;
                     ContentCacheManager.AddContentDirectory( dir );

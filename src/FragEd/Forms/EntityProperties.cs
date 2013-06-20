@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using FragEd.Data;
 using FragEngine.Entities;
 
 namespace FragEd.Forms
@@ -30,6 +31,7 @@ namespace FragEd.Forms
         private void PopulateForm()
         {
             ux_AnimationList.Items.Clear();
+            ux_EntitySettings.SelectedObject = null;
             
             foreach (var animation in _entity.Animations.GetAnimations())
             {
@@ -39,11 +41,17 @@ namespace FragEd.Forms
                     ux_AnimationList.SelectedIndex = ux_AnimationList.Items.Count - 1;
                 }
             }
+
+            ux_EntitySettings.SelectedObject = new EditableEntity( _entity );
         }
 
         private void ux_Done_Click( object sender, EventArgs e )
         {
             Hide();
+
+            _entity.Settings = ( (EditableEntity)ux_EntitySettings.SelectedObject ).Settings;
+
+            Close();
         }
     }
 }
