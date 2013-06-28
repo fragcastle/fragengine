@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using FragEngine;
+using System.Windows.Forms;
+using FragEd.Forms;
 using FragEngine.Data;
-using FragEngine.Forms;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -44,6 +41,14 @@ namespace FragEd.Controls
                 var args = MouseStateHelpers.GetMouseEventArgs();
 
                 OnMouseMove( args );
+            }
+
+            // check if a key is being pressed
+            var keys = Keyboard.GetState().GetPressedKeys();
+            if( keys.Length > 0 )
+            {
+                var args = KeyboardStateHelpers.GetKeyEventArgs();
+                OnKeyDown(args);
             }
 
             if( Level != null )

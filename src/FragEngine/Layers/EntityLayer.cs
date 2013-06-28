@@ -15,14 +15,13 @@ namespace FragEngine.Layers
         public EntityLayer( Camera camera, Vector2? parallax = null )
             : base( camera, parallax )
         {
+            DrawMethod = DrawEntities;
         }
 
-        public List<EntityBase> Entities { get; set; }
+        public List<EntityBase> Entities = new List<EntityBase>();
 
-        public override void Draw( SpriteBatch spriteBatch )
+        public void DrawEntities( SpriteBatch spriteBatch )
         {
-            base.Draw( spriteBatch );
-
             foreach( var entity in Entities )
             {
                 if( entity.IsAlive )

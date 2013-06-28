@@ -67,21 +67,13 @@
     <Compile Include="Data\Level.cs" />
     <Compile Include="Entities\EntityBase.cs" />
     <Compile Include="Entities\HudBase.cs" />
-    <Compile Include="Entities\Hud\HudButton.cs" />
-    <Compile Include="Entities\Hud\LevelEditorHud.cs" />
     <Compile Include="Entities\Player.cs" />
-    <Compile Include="Entities\PlayerManager.cs" />
-    <Compile Include="Entities\UI\XboxButtonPrompt.cs" />
-    <Compile Include="Entities\Weapons\WeaponManager.cs" />
-    <Compile Include="Entities\Weapons\IWeapon.cs" />
-    <Compile Include="Entities\Weapons\WeaponBase.cs" />
     <Compile Include="Extensions\Vector2Extensions.cs" />
-    <Compile Include="Forms\Editors\FilePathEditor.cs" />
-    <Compile Include="Forms\MouseStateExtensions.cs" />
     <Compile Include="FragEngineGame.cs" />
     <Compile Include="InputState.cs" />
     <Compile Include="IO\Persistant.cs" />
     <Compile Include="Layers\EntityLayer.cs" />
+    <Compile Include="Layers\StaticLayer.cs" />
     <Compile Include="Mapping\CollisionCheckResult.cs" />
     <Compile Include="Mapping\CollisionDetector.cs" />
     <Compile Include="Mapping\CollisionMap.cs" />
@@ -104,7 +96,6 @@
     <Compile Include="View\Screens\LogoScreen.cs" />
     <Compile Include="View\Screens\PlayScreen.cs" />
     <Compile Include="View\Screens\ScreenManager.cs" />
-    <Compile Include="Layers\StaticLayer.cs" />
     <Compile Include="Layers\MapLayer.cs" />
   </ItemGroup>
   <ItemGroup>

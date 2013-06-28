@@ -25,6 +25,7 @@
         private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Editor));
             this.ux_StatusBar = new System.Windows.Forms.StatusStrip();
+            this.debugStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.ux_MenuBar = new System.Windows.Forms.MenuStrip();
             this.ux_FileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.ux_NewProjectMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,14 +50,15 @@
             this.ux_LayersToolStrip = new System.Windows.Forms.ToolStrip();
             this.ux_AddLayer = new System.Windows.Forms.ToolStripButton();
             this.ux_RemoveLayer = new System.Windows.Forms.ToolStripButton();
-            this.ux_LevelEntityList = new System.Windows.Forms.CheckedListBox();
-            this.ux_SaveLevelDialog = new System.Windows.Forms.SaveFileDialog();
-            this.ux_OpenLevelDialog = new System.Windows.Forms.OpenFileDialog();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.ux_LevelEntityList = new System.Windows.Forms.CheckedListBox();
             this.ux_EntitiesToolStrip = new System.Windows.Forms.ToolStrip();
             this.ux_AddEntity = new System.Windows.Forms.ToolStripDropDownButton();
             this.ux_RemoveEntity = new System.Windows.Forms.ToolStripButton();
             this.ux_LevelEditor = new FragEd.Controls.LevelEditorControl();
+            this.ux_SaveLevelDialog = new System.Windows.Forms.SaveFileDialog();
+            this.ux_OpenLevelDialog = new System.Windows.Forms.OpenFileDialog();
+            this.ux_StatusBar.SuspendLayout();
             this.ux_MenuBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ux_SplitContainer)).BeginInit();
             this.ux_SplitContainer.Panel1.SuspendLayout();
@@ -74,11 +76,19 @@
             // 
             // ux_StatusBar
             // 
+            this.ux_StatusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.debugStatus});
             this.ux_StatusBar.Location = new System.Drawing.Point(0, 686);
             this.ux_StatusBar.Name = "ux_StatusBar";
             this.ux_StatusBar.Size = new System.Drawing.Size(998, 22);
             this.ux_StatusBar.TabIndex = 0;
             this.ux_StatusBar.Text = "statusStrip1";
+            // 
+            // debugStatus
+            // 
+            this.debugStatus.Name = "debugStatus";
+            this.debugStatus.Size = new System.Drawing.Size(118, 17);
+            this.debugStatus.Text = "toolStripStatusLabel1";
             // 
             // ux_MenuBar
             // 
@@ -317,29 +327,6 @@
             this.ux_RemoveLayer.Text = "Remove Layer";
             this.ux_RemoveLayer.Click += new System.EventHandler(this.ux_RemoveLayer_Click);
             // 
-            // ux_LevelEntityList
-            // 
-            this.ux_LevelEntityList.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.tableLayoutPanel2.SetColumnSpan(this.ux_LevelEntityList, 2);
-            this.ux_LevelEntityList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ux_LevelEntityList.FormattingEnabled = true;
-            this.ux_LevelEntityList.Location = new System.Drawing.Point(3, 28);
-            this.ux_LevelEntityList.Name = "ux_LevelEntityList";
-            this.ux_LevelEntityList.Size = new System.Drawing.Size(314, 336);
-            this.ux_LevelEntityList.TabIndex = 0;
-            // 
-            // ux_SaveLevelDialog
-            // 
-            this.ux_SaveLevelDialog.DefaultExt = "json";
-            this.ux_SaveLevelDialog.Filter = "FragEngine Level|*.json";
-            this.ux_SaveLevelDialog.Title = "Save Level";
-            // 
-            // ux_OpenLevelDialog
-            // 
-            this.ux_OpenLevelDialog.DefaultExt = "json";
-            this.ux_OpenLevelDialog.Filter = "FragEngine Level|*.json";
-            this.ux_OpenLevelDialog.Title = "Add Existing Level";
-            // 
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.ColumnCount = 2;
@@ -355,6 +342,17 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.Size = new System.Drawing.Size(320, 367);
             this.tableLayoutPanel2.TabIndex = 1;
+            // 
+            // ux_LevelEntityList
+            // 
+            this.ux_LevelEntityList.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.tableLayoutPanel2.SetColumnSpan(this.ux_LevelEntityList, 2);
+            this.ux_LevelEntityList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ux_LevelEntityList.FormattingEnabled = true;
+            this.ux_LevelEntityList.Location = new System.Drawing.Point(3, 28);
+            this.ux_LevelEntityList.Name = "ux_LevelEntityList";
+            this.ux_LevelEntityList.Size = new System.Drawing.Size(314, 336);
+            this.ux_LevelEntityList.TabIndex = 0;
             // 
             // ux_EntitiesToolStrip
             // 
@@ -398,6 +396,18 @@
             this.ux_LevelEditor.TabIndex = 2;
             this.ux_LevelEditor.VSync = false;
             // 
+            // ux_SaveLevelDialog
+            // 
+            this.ux_SaveLevelDialog.DefaultExt = "json";
+            this.ux_SaveLevelDialog.Filter = "FragEngine Level|*.json";
+            this.ux_SaveLevelDialog.Title = "Save Level";
+            // 
+            // ux_OpenLevelDialog
+            // 
+            this.ux_OpenLevelDialog.DefaultExt = "json";
+            this.ux_OpenLevelDialog.Filter = "FragEngine Level|*.json";
+            this.ux_OpenLevelDialog.Title = "Add Existing Level";
+            // 
             // Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -410,6 +420,8 @@
             this.MainMenuStrip = this.ux_MenuBar;
             this.Name = "Editor";
             this.Text = "FragEd";
+            this.ux_StatusBar.ResumeLayout(false);
+            this.ux_StatusBar.PerformLayout();
             this.ux_MenuBar.ResumeLayout(false);
             this.ux_MenuBar.PerformLayout();
             this.ux_SplitContainer.Panel1.ResumeLayout(false);
@@ -468,5 +480,6 @@
         private System.Windows.Forms.ToolStrip ux_EntitiesToolStrip;
         private System.Windows.Forms.ToolStripDropDownButton ux_AddEntity;
         private System.Windows.Forms.ToolStripButton ux_RemoveEntity;
+        private System.Windows.Forms.ToolStripStatusLabel debugStatus;
     }
 }

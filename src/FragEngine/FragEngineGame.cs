@@ -35,8 +35,6 @@ namespace FragEngine {
 
         private IServiceContainer _services;
 
-        public static Camera Camera { get; set; }
-
         static FragEngineGame()
         {
             Gravity = 0f; // default to no gravity
@@ -45,7 +43,6 @@ namespace FragEngine {
         }
 
         public FragEngineGame() {
-
             // TODO: figure out a way to change this to use the IGraphicsDeviceManager interface
             // FIXME: this is fucked. In DIRECTX versions of this code, we _must_ instantiate GraphicsDeviceManager
             // in the initialize, but in OPENGL versions we have to do it here (check the code in Game.cs)

@@ -15,6 +15,7 @@ namespace FragEngine.Layers
         private Vector2 _start = Vector2.Zero;
         private string _tileSetTexturePath;
         protected bool _tileSetTextureIsDirty;
+        private int _tileSize;
 
         // TODO make this a dictionary and static so each map layer caches the animation
         // rectangles for each texture
@@ -46,7 +47,19 @@ namespace FragEngine.Layers
         public CompressedMapData MapData { get; set; }
 
         [DataMember]
-        public virtual int TileSize { get; set; }
+        public virtual int TileSize
+        {
+            get { return _tileSize; }
+            set
+            {
+                _tileSize = value;
+
+                // if the tilesize changes the tile set texture needs to be reloaded
+                // well, not really, but the animation sheet needs to be reloaded
+                // and refreshing the tilesheet will do that for us :D
+                _tileSetTextureIsDirty = true;
+            }
+        }
 
         public virtual Texture2D TileSetTexture { get; set; }
 
@@ -75,7 +88,7 @@ namespace FragEngine.Layers
 
             if( camera == null && FragEngineGame.ScreenManager != null )
             {
-                _camera = FragEngineGame.ScreenManager.Camera;
+                //_camera = FragEngineGame.ScreenManager.Camera;
             }
 
             SamplerState = SamplerState.PointClamp;
@@ -98,8 +111,7 @@ namespace FragEngine.Layers
                 TileSheet = new AnimationSheet( TileSetTexture, TileSize, TileSize );
 
                 // add the animations
-                var frames = ( TileSetTexture.Height * TileSetTexture.Width ) / TileSize;
-                for( int frame = 0; frame < frames; frame++ )
+                for( int frame = 0; frame < TileSheet.TotalFrames; frame++ )
                 {
                     TileSheet.Add( frame, 1f, false, frame );
                 }
@@ -114,8 +126,7 @@ namespace FragEngine.Layers
                         // adjust the vector position according to the tilesize
                         cell *= TileSize;
 
-                        TileSheet.SetCurrentAnimation( tile );
-                        TileSheet.CurrentAnimation.Draw( spriteBatch, cell, Color.White * Opacity );
+                        TileSheet[ tile ].Draw( spriteBatch, cell, Color.White * Opacity );
                     }
                 });
             }

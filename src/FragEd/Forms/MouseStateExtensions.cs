@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using Microsoft.Xna.Framework.Input;
 using ButtonState = Microsoft.Xna.Framework.Input.ButtonState;
 
-namespace FragEngine.Forms
+namespace FragEd.Forms
 {
     public static class MouseStateHelpers
     {

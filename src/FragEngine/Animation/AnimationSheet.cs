@@ -3,10 +3,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
-namespace FragEngine.Animation
-{
-    public class Animation
-    {
+namespace FragEngine.Animation {
+    public class Animation {
         private float _timeForCurrentFrame;
 
         public Texture2D SpriteSheet { get; set; }
@@ -22,14 +20,12 @@ namespace FragEngine.Animation
 
         public float Scale { get; set; }
 
-        public string Name
-        {
+        public string Name {
             get;
             private set;
         }
 
-        public Animation( Vector2 frameSize, string name = null )
-        {
+        public Animation( Vector2 frameSize, string name = null ) {
             FrameSize = frameSize;
 
             Scale = 1.0f;
@@ -37,34 +33,28 @@ namespace FragEngine.Animation
             Name = name;
         }
 
-        public void Update( GameTime time )
-        {
+        public void Update( GameTime time ) {
             _timeForCurrentFrame += (float)time.ElapsedGameTime.TotalSeconds;
 
-            if( _timeForCurrentFrame >= FrameTime )
-            {
-                if( ++CurrentFrame >= Frames.Length )
-                {
+            if( _timeForCurrentFrame >= FrameTime ) {
+                if( ++CurrentFrame >= Frames.Length ) {
                     CurrentFrame = 0;
                 }
                 _timeForCurrentFrame = 0.0f;
             }
         }
 
-        public void Draw( SpriteBatch batch, Vector2 position, float alpha = 255f )
-        {
+        public void Draw( SpriteBatch batch, Vector2 position, float alpha = 255f ) {
             var tintColor = Color.White * ( alpha / 255f );
 
-            Draw( batch, position, tintColor);
+            Draw( batch, position, tintColor );
         }
 
-        public void Draw( SpriteBatch batch, Vector2 position, Color tintColor )
-        {
+        public void Draw( SpriteBatch batch, Vector2 position, Color tintColor ) {
             int offsetX = (int)FrameSize.X * Frames[ CurrentFrame ],
                 offsetY = 0;
 
-            while( offsetX >= SpriteSheet.Width )
-            {
+            while( offsetX >= SpriteSheet.Width ) {
                 // set the x to 0 and increase the height by one whole
                 // to push the frame onto the next row
                 offsetX = offsetX - SpriteSheet.Width;
@@ -80,36 +70,43 @@ namespace FragEngine.Animation
             FlipX = false;
         }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             return Name;
         }
     }
 
-    public class AnimationSheet
-    {
+    public class AnimationSheet {
         private Animation _currentAnimation;
         private string _currentAnimationKey;
         private Dictionary<string, Animation> _animations;
 
         private string _texturePath;
 
-        protected AnimationSheet( int frameWidth, int frameHeight )
-        {
+        public Animation this[ string index ] {
+            get {
+                return _animations[ index ];
+            }
+        }
+
+        public Animation this[ int index ] {
+            get {
+                return _animations[ index.ToString() ];
+            }
+        }
+
+        protected AnimationSheet( int frameWidth, int frameHeight ) {
             FrameSize = new Vector2( frameWidth, frameHeight );
             _animations = new Dictionary<string, Animation>();
         }
 
         public AnimationSheet( string texturePath, int frameWidth, int frameHeight )
-            : this( frameWidth, frameHeight )
-        {
+            : this( frameWidth, frameHeight ) {
             _texturePath = texturePath;
             SpriteSheet = ContentCacheManager.GetTexture( texturePath );
         }
 
         public AnimationSheet( Texture2D spriteSheet, int frameWidth, int frameHeight )
-            : this( frameWidth, frameHeight )
-        {
+            : this( frameWidth, frameHeight ) {
             SpriteSheet = spriteSheet;
         }
 
@@ -117,33 +114,32 @@ namespace FragEngine.Animation
 
         public Vector2 FrameSize { get; private set; }
 
-        public Animation CurrentAnimation
-        {
-            get
-            {
-                if( _currentAnimation == null )
-                {
-                    _currentAnimation = _animations.ContainsKey( "idle" ) ? _animations[ "idle" ] : _animations.First().Value;
-                }
+        public int TotalFrames {
+            get {
+                var rows = SpriteSheet.Height / FrameSize.Y;
+                var cols = SpriteSheet.Width / FrameSize.X;
+                return (int)( rows * cols );
+            }
+        }
+
+        public Animation CurrentAnimation {
+            get {
                 return _currentAnimation;
             }
         }
 
-        public List<Animation> GetAnimations()
-        {
-            return _animations.Select(entry => entry.Value).ToList();
-        } 
+        public List<Animation> GetAnimations() {
+            return _animations.Select( entry => entry.Value ).ToList();
+        }
 
-        public void Previous()
-        {
+        public void Previous() {
             var keys = _animations.Keys.ToArray();
 
             int currentIndex = 0;
-            for( int i = 0; i < keys.Length; i++ )
-            {
-                if( keys[ i ] == _currentAnimationKey )
-                {
+            for( int i = 0; i < keys.Length; i++ ) {
+                if( keys[ i ] == _currentAnimationKey ) {
                     currentIndex = i;
+                    break;
                 }
             }
 
@@ -155,16 +151,14 @@ namespace FragEngine.Animation
             _currentAnimation = anim.Value;
         }
 
-        public void Next()
-        {
+        public void Next() {
             var keys = _animations.Keys.ToArray();
 
             int currentIndex = 0;
-            for( int i = 0; i < keys.Length; i++ )
-            {
-                if( keys[ i ] == _currentAnimationKey )
-                {
+            for( int i = 0; i < keys.Length; i++ ) {
+                if( keys[ i ] == _currentAnimationKey ) {
                     currentIndex = i;
+                    break;
                 }
             }
 
@@ -176,42 +170,42 @@ namespace FragEngine.Animation
             _currentAnimation = anim.Value;
         }
 
-        public void SetCurrentAnimation( string name )
-        {
+        public void SetCurrentAnimation( string name ) {
             _currentAnimationKey = name;
             _currentAnimation = _animations[ name ];
         }
 
-        public void SetCurrentAnimation( int id )
-        {
+        public void SetCurrentAnimation( int id ) {
             _currentAnimationKey = id.ToString();
             _currentAnimation = _animations[ id.ToString() ];
         }
 
-        public bool HasAnimation(string name)
-        {
-            return _animations.ContainsKey(name);
+        public bool HasAnimation( string name ) {
+            return _animations.ContainsKey( name );
         }
 
-        public bool HasAnimation( int id )
-        {
+        public bool HasAnimation( int id ) {
             return _animations.ContainsKey( id.ToString() );
         }
 
-        public void Add( int id, float frameTime, bool repeat, params int[] frames)
-        {
+        public void Add( int id, float frameTime, bool repeat, params int[] frames ) {
             Add( id.ToString(), frameTime, repeat, frames );
         }
 
-        public void Add( string name, float frameTime, bool repeat, params int[] frames )
-        {
-            _animations.Add( name, new Animation( FrameSize, name )
-            {
+        public void Add( string name, float frameTime, bool repeat, params int[] frames ) {
+            var animation = new Animation( FrameSize, name ) {
                 FrameTime = frameTime,
                 Frames = frames,
                 Repeat = repeat,
                 SpriteSheet = SpriteSheet
-            } );
+            };
+
+            if( _currentAnimation == null || name == "idle"  )
+            {
+                _currentAnimation = animation;
+            }
+            
+            _animations.Add( name,  animation);
         }
     }
 }

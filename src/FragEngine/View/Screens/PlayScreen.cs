@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using FragEngine.Layers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Audio;
 using FragEngine.Entities;
-using FragEngine.Entities.Weapons;
 
 namespace FragEngine.View.Screens
 {
@@ -33,7 +30,7 @@ namespace FragEngine.View.Screens
         {
             _playerLayer = new EntityLayer( _camera );
             _hudLayer = new StaticLayer( _camera ) { StaticPosition = Vector2.Zero, DrawMethod = _hud.Draw };
-            _entityLayer = new EntityLayer( _camera ) { DrawMethod = WeaponManager.Draw };
+            _entityLayer = new EntityLayer( _camera );
             _layers = new List<Layer>
             {
                 _entityLayer,
@@ -55,17 +52,12 @@ namespace FragEngine.View.Screens
 
             _gameFont = ContentCacheManager.GetFont( @"Fonts\GameFont" );
 
-            _camera.Target = _hud.Target = PlayerManager.PlayerOne;
-
-            // TODO: move this into update?!?!?
-            _playerLayer.Entities.AddRange( PlayerManager.Players.Values.Cast<EntityBase>() );
-
             _hud.Font = _gameFont;
 
             base.LoadContent();
         }
 
-        public override void Draw( Microsoft.Xna.Framework.GameTime gameTime )
+        public override void Draw( GameTime gameTime )
         {
             foreach (Layer layer in _layers)
             {
@@ -78,16 +70,14 @@ namespace FragEngine.View.Screens
         {
             _hud.Update( gameTime );
 
-            PlayerManager.Update( gameTime );
-
-            WeaponManager.Update( gameTime );
-
             foreach (var entity in _entityLayer.Entities)
             {
-                if( entity as WeaponBase == null )
-                {
-                    entity.Update( gameTime );
-                }
+                entity.Update( gameTime );
+            }
+
+            foreach( var entity in _playerLayer.Entities )
+            {
+                entity.Update( gameTime );
             }
 
             base.Update( gameTime, otherScreenHasFocus, coveredByOtherScreen );

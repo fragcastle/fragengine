@@ -122,8 +122,6 @@ namespace FragEngine.Entities
                     Initialize();
                     _initialized = true;
                 }
-
-
                 Animations.CurrentAnimation.Draw( batch, Position, Alpha );
             }
         }
