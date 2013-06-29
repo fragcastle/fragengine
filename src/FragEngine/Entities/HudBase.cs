@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using FragEngine.Services;
+using FragEngine.View;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -60,7 +62,8 @@ namespace FragEngine.Entities
 
         public Matrix GetTransformation()
         {
-            var pos = Target == null ? FragEngineGame.ScreenManager.Camera.DefaultPosition : Target.Position;
+            var camera = ServiceInjector.Get<Camera>();
+            var pos = Target == null ? camera.DefaultPosition : Target.Position;
 
             return Matrix.CreateTranslation( new Vector3( -pos.X, -pos.Y, 0 ) ) *
                     Matrix.CreateTranslation( new Vector3( _windowSize.Width * 0.5f, _windowSize.Height * 0.5f, 0 ) );

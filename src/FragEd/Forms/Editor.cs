@@ -357,7 +357,7 @@ namespace FragEd.Forms {
             var result = dialog.ShowDialog();
             if( result == DialogResult.OK ) {
                 // create a layer object
-                var layer = new MapLayer();
+                var layer = new MapLayer( ux_LevelEditor.Camera );
 
                 // TODO: make sure this is relative to one of the content directories...
                 layer.TileSetTexturePath = dialog.TileSet;

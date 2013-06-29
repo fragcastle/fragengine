@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using FragEngine.Animation;
 using FragEngine.Mapping;
+using FragEngine.Services;
 using FragEngine.View;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -88,7 +89,7 @@ namespace FragEngine.Layers
 
             if( camera == null && FragEngineGame.ScreenManager != null )
             {
-                //_camera = FragEngineGame.ScreenManager.Camera;
+                camera = ServiceInjector.Get<Camera>();
             }
 
             SamplerState = SamplerState.PointClamp;

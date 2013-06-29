@@ -34,8 +34,6 @@ namespace FragEngine.View.Screens
 
         private bool traceEnabled;
 
-        public Camera Camera { get; private set; }
-
         /// <summary>
         /// Expose access to our Game instance (this is protected in the
         /// default GameComponent, but we want to make it public).
@@ -106,8 +104,6 @@ namespace FragEngine.View.Screens
 
             if ( graphicsDeviceService == null )
                 throw new InvalidOperationException( "No graphics device service." );
-
-            Camera = new Camera( GraphicsDevice.Viewport );
         }
 
 

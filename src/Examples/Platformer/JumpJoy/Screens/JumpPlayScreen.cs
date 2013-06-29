@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using FragEngine.Data;
 using FragEngine.Entities;
+using FragEngine.Services;
+using FragEngine.View;
 using FragEngine.View.Screens;
 using JumpJoy.Entities;
 using Microsoft.Xna.Framework.Graphics;
@@ -29,7 +31,9 @@ namespace JumpJoy.Screens
 
             var jump = level.Entities.First( e => e as Jumper != null );
 
-            ScreenManager.Camera.Target = jump;
+            var camera = ServiceInjector.Get<Camera>();
+
+            camera.Target = jump;
 
             _playerLayer.Entities.Add( jump );
 

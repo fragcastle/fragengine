@@ -1,24 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using FragEd.Services;
 using FragEngine.Services;
 using FragEngine.View;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using OpenTK;
 using FragEngine;
 
 namespace FragEd.Controls
 {
-    using Color = System.Drawing.Color;
-    using Rectangle = Microsoft.Xna.Framework.Rectangle;
     using XnaColor = Microsoft.Xna.Framework.Color;
 
     public abstract class GraphicsDeviceControl : GLControl

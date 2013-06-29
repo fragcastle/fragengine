@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using FragEngine.Services;
 using FragEngine.View;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -40,7 +41,7 @@ namespace FragEngine.Layers
 
         public Layer( Camera camera, Vector2? parallax = null )
         {
-            _camera = camera;
+            _camera = camera ?? ServiceInjector.Get<Camera>();
             Parallax = parallax ?? new Vector2( 1, 1 );
 
             SamplerState = SamplerState.LinearClamp; // XNA Default

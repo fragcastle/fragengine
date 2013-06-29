@@ -62,6 +62,11 @@ namespace FragEngine {
                 ServiceInjector.Add(Graphics.GraphicsDevice);
             }
 
+            if(!ServiceInjector.Has(typeof(Camera)))
+            {
+                ServiceInjector.Add( new Camera( Graphics.GraphicsDevice.Viewport ) );
+            }
+
 #if !DEBUG
             Graphics.IsFullScreen = true;
             Graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;

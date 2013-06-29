@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using FragEngine.Layers;
+using FragEngine.Services;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using FragEngine.Entities;
@@ -23,7 +24,7 @@ namespace FragEngine.View.Screens
         public PlayScreen( HudBase hud )
         {
             _hud = hud;
-            _camera = FragEngineGame.ScreenManager.Camera;
+            _camera = ServiceInjector.Get<Camera>();
         }
 
         public virtual void Initialize()
