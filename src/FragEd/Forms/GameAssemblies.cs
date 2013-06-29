@@ -16,7 +16,7 @@ namespace FragEd.Forms {
         public GameAssemblies( Editor editor ) {
             AddedEntities = new List<Type>();
             RemovedEntities = new List<Type>();
-            
+
             InitializeComponent();
 
             Load += OnLoad;
@@ -28,12 +28,12 @@ namespace FragEd.Forms {
         {
             ux_AssemblyList.Items.Clear();
             var asmPaths = _editor.Project.Entities.Select( e => Path.GetFullPath( e.Assembly.Location ) ).Distinct().ToArray();
-            ux_AssemblyList.Items.AddRange( asmPaths );   
+            ux_AssemblyList.Items.AddRange( asmPaths );
         }
 
         public IEnumerable<Type> AddedEntities { get; private set; }
 
-        public IEnumerable<Type> RemovedEntities { get; private set; } 
+        public IEnumerable<Type> RemovedEntities { get; private set; }
 
         private void ux_Done_Click( object sender, EventArgs e ) {
             this.Hide();
