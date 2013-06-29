@@ -19,6 +19,8 @@ namespace FragEngine.View
         /// </summary>
         public EntityBase Target { get; set; }
 
+        public Vector2 Offset { get; set; }
+
         /// <summary>
         /// When there is no Target, the camera will center on this position
         /// </summary>
@@ -30,6 +32,7 @@ namespace FragEngine.View
             DefaultPosition = Vector2.Zero;
             Origin = Vector2.Zero;
             Zoom = 1.0f;
+            Offset = Vector2.Zero;
         }
 
         public Vector2 Position
@@ -60,10 +63,16 @@ namespace FragEngine.View
         {
             get
             {
-                var centerX = _viewport.Width/2;
-                var centerY = _viewport.Height/2;
+                var centerX = (float)_viewport.Width/2;
+                var centerY = (float)_viewport.Height/2;
 
-                return ScreenToGame(new Vector2(centerX, centerY));
+                if( Target != null )
+                {
+                    centerX -= Target.Animations.CurrentAnimation.FrameSize.X / 2;
+                    centerY -= Target.Animations.CurrentAnimation.FrameSize.Y / 2;
+                }
+
+                return new Vector2( centerX, centerY ) + Offset;
             }
         }
 
@@ -73,7 +82,7 @@ namespace FragEngine.View
         {
             return Matrix.CreateTranslation( new Vector3( -Position * parallax, 0.0f) ) *
                 ( FragEngineGame.SpriteScale * Zoom ) *
-                   Matrix.CreateTranslation( new Vector3( Origin, 0.0f ) ) *
+                   Matrix.CreateTranslation( new Vector3( Center, 0.0f ) ) *
                    Matrix.CreateRotationZ( Rotation );
         }
 
@@ -82,7 +91,7 @@ namespace FragEngine.View
             return ( FragEngineGame.SpriteScale * Zoom ) *
                    Matrix.CreateTranslation( new Vector3( Position * parallax, 0.0f ) ) *
                    Matrix.CreateRotationZ( Rotation ) *
-                   Matrix.CreateTranslation( new Vector3( Origin, 0.0f ) ) *
+                   Matrix.CreateTranslation( new Vector3( Center, 0.0f ) ) *
                    Matrix.CreateTranslation( new Vector3( -Position, 0.0f ) );
         }
 
@@ -97,20 +106,15 @@ namespace FragEngine.View
 
         public void ClientSizeChanged( object sender, System.EventArgs e )
         {
-            var gameWindow = sender as GameWindow;
 
-            if( gameWindow != null )
-            {
-                Origin = new Vector2( gameWindow.ClientBounds.Width / 2.0f, gameWindow.ClientBounds.Height / 2.0f );
-            }
         }
 
         public bool IsShowing( Rectangle box )
         {
-            var x1 = (int)( Origin.X - _viewport.Width / 2 );
-            var x2 = (int)( Origin.X + _viewport.Width / 2 );
-            var y1 = (int)( Origin.Y - _viewport.Height / 2 );
-            var y2 = (int)( Origin.Y + _viewport.Height / 2 );
+            var x1 = (int)( Center.X - _viewport.Width / 2 );
+            var x2 = (int)( Center.X + _viewport.Width / 2 );
+            var y1 = (int)( Center.Y - _viewport.Height / 2 );
+            var y2 = (int)( Center.Y + _viewport.Height / 2 );
 
             var completelyOffScreen = ( x1 > box.X + box.Width || x2 < box.X ) && (y1 > box.Y + box.Height || y2 < box.Y);
             return !completelyOffScreen;

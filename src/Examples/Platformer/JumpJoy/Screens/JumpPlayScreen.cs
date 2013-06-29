@@ -9,6 +9,7 @@ using FragEngine.Services;
 using FragEngine.View;
 using FragEngine.View.Screens;
 using JumpJoy.Entities;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace JumpJoy.Screens
@@ -34,6 +35,9 @@ namespace JumpJoy.Screens
             var camera = ServiceInjector.Get<Camera>();
 
             camera.Target = jump;
+
+            // this kind of works... but seems odd...
+            camera.Offset = new Vector2( 48, 256 );
 
             _playerLayer.Entities.Add( jump );
 
