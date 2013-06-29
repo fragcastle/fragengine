@@ -29,18 +29,18 @@ namespace FragEngine.View.Screens
         public virtual void Initialize()
         {
             _playerLayer = new EntityLayer( _camera );
-            _hudLayer = new StaticLayer( _camera ) { StaticPosition = Vector2.Zero, DrawMethod = _hud.Draw };
             _entityLayer = new EntityLayer( _camera );
             _layers = new List<Layer>
             {
                 _entityLayer,
-                _playerLayer,
-                _hudLayer
+                _playerLayer
             };
 
-            // TODO: move this into Hud.LoadContent()????
-            ScreenManager.Game.Window.ClientSizeChanged += _hud.ClientSizeChanged;
-            ScreenManager.Game.Window.ClientSizeChanged += _camera.ClientSizeChanged;
+            if( _hud != null )
+            {
+                _hudLayer = new StaticLayer( _camera ) { StaticPosition = Vector2.Zero, DrawMethod = _hud.Draw };
+                _layers.Add(_hudLayer);
+            }
         }
 
         public override void LoadContent()
@@ -50,9 +50,13 @@ namespace FragEngine.View.Screens
             // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch( ScreenManager.GraphicsDevice );
 
-            _gameFont = ContentCacheManager.GetFont( @"Fonts\GameFont" );
 
-            _hud.Font = _gameFont;
+            if( _hud != null )
+            {
+                _gameFont = ContentCacheManager.GetFont( @"Fonts\GameFont" );
+                _hud.Font = _gameFont;
+            }
+
 
             base.LoadContent();
         }
@@ -68,7 +72,8 @@ namespace FragEngine.View.Screens
 
         public override void Update( GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen )
         {
-            _hud.Update( gameTime );
+            if( _hud != null )
+                _hud.Update( gameTime );
 
             foreach (var entity in _entityLayer.Entities)
             {
