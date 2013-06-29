@@ -89,7 +89,7 @@ namespace FragEd.Forms {
             if( ux_LayerList.SelectedItem == null ) return;
             var name = (string)ux_LayerList.SelectedItem;
             var layer = name == "Collision" ? ux_LevelEditor.Level.CollisionLayer : ux_LevelEditor.Level.MapLayers.First( ml => ml.Name == name );
-            
+
             if( keyEventArgs.KeyCode == Keys.Q || keyEventArgs.KeyCode == Keys.E ) {
                 var maxTiles = layer.TileSheet.GetAnimations().Count;
                 var currentTile = _layerTileMap.ContainsKey( layer ) ? _layerTileMap[ layer ] : 0;
@@ -219,7 +219,16 @@ namespace FragEd.Forms {
 
                     var layer = GetLayerByName( name );
 
-                    PaintTile( layer, new Vector2( mouseEventArgs.X, mouseEventArgs.Y ) );
+                    var position = new Vector2( mouseEventArgs.X, mouseEventArgs.Y );
+
+                    if( mouseEventArgs.Button == MouseButtons.Right )
+                    {
+                        UnPaintTile( layer, position );
+                    }
+                    else
+                    {
+                        PaintTile( layer, position );
+                    }
                 }
             }
         }
@@ -228,10 +237,16 @@ namespace FragEd.Forms {
             if( ux_LayerList.SelectedItem == null ) return;
 
             var name = (string)ux_LayerList.SelectedItem;
+            var position = new Vector2( mouseEventArgs.X, mouseEventArgs.Y );
+            var layer = GetLayerByName( name );
 
-            var layer = GetLayerByName(name);
-
-            PaintTile( layer, new Vector2( mouseEventArgs.X, mouseEventArgs.Y ) );
+            if( mouseEventArgs.Button == MouseButtons.Right )
+            {
+                UnPaintTile( layer, position );
+            } else
+            {
+                PaintTile( layer, position );
+            }
         }
 
         private void ux_NewProjectMenu_Click( object sender, EventArgs e ) {
@@ -246,6 +261,14 @@ namespace FragEd.Forms {
                     return;
                 }
             }
+
+            // ask the user to pick a new project file
+            var projectNameResult = ux_SaveProjectDialog.ShowDialog();
+            if( projectNameResult == DialogResult.OK )
+            {
+                CurrentProjectFile = ux_SaveProjectDialog.FileName;
+            }
+
             Project = new Project();
         }
 
@@ -387,10 +410,10 @@ namespace FragEd.Forms {
 
         private MapLayer GetLayerByName( string name )
         {
-            var layer = name == "Collision" ? 
-                    ux_LevelEditor.Level.CollisionLayer : 
+            var layer = name == "Collision" ?
+                    ux_LevelEditor.Level.CollisionLayer :
                     ux_LevelEditor.Level.MapLayers.First( ml => ml.Name == name );
-            return layer;            
+            return layer;
         }
 
         private void PaintTile( MapLayer layer, Vector2 position ) {
@@ -399,6 +422,11 @@ namespace FragEd.Forms {
             }
 
             layer.SetTile( position, _layerTileMap[ layer ] );
+        }
+
+        private void UnPaintTile( MapLayer layer, Vector2 position )
+        {
+            layer.SetTile( position, -1 );
         }
     }
 }
