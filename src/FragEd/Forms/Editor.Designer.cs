@@ -55,9 +55,9 @@
             this.ux_EntitiesToolStrip = new System.Windows.Forms.ToolStrip();
             this.ux_AddEntity = new System.Windows.Forms.ToolStripDropDownButton();
             this.ux_RemoveEntity = new System.Windows.Forms.ToolStripButton();
+            this.ux_LevelEditor = new FragEd.Controls.LevelEditorControl();
             this.ux_SaveLevelDialog = new System.Windows.Forms.SaveFileDialog();
             this.ux_OpenLevelDialog = new System.Windows.Forms.OpenFileDialog();
-            this.ux_LevelEditor = new FragEd.Controls.LevelEditorControl();
             this.ux_StatusBar.SuspendLayout();
             this.ux_MenuBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ux_SplitContainer)).BeginInit();
@@ -385,6 +385,17 @@
             this.ux_RemoveEntity.Text = "toolStripButton1";
             this.ux_RemoveEntity.Click += new System.EventHandler(this.ux_RemoveEntity_Click);
             //
+            // ux_LevelEditor
+            //
+            this.ux_LevelEditor.BackColor = System.Drawing.Color.Black;
+            this.ux_LevelEditor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ux_LevelEditor.Level = null;
+            this.ux_LevelEditor.Location = new System.Drawing.Point(0, 0);
+            this.ux_LevelEditor.Name = "ux_LevelEditor";
+            this.ux_LevelEditor.Size = new System.Drawing.Size(674, 662);
+            this.ux_LevelEditor.TabIndex = 2;
+            this.ux_LevelEditor.VSync = false;
+            //
             // ux_SaveLevelDialog
             //
             this.ux_SaveLevelDialog.DefaultExt = "json";
@@ -396,17 +407,6 @@
             this.ux_OpenLevelDialog.DefaultExt = "json";
             this.ux_OpenLevelDialog.Filter = "FragEngine Level|*.json";
             this.ux_OpenLevelDialog.Title = "Add Existing Level";
-            //
-            // ux_LevelEditor
-            //
-            this.ux_LevelEditor.BackColor = System.Drawing.Color.Black;
-            this.ux_LevelEditor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ux_LevelEditor.Level = null;
-            this.ux_LevelEditor.Location = new System.Drawing.Point(0, 0);
-            this.ux_LevelEditor.Name = "ux_LevelEditor";
-            this.ux_LevelEditor.Size = new System.Drawing.Size(674, 662);
-            this.ux_LevelEditor.TabIndex = 2;
-            this.ux_LevelEditor.VSync = false;
             //
             // Editor
             //

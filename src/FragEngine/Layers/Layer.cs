@@ -51,7 +51,7 @@ namespace FragEngine.Layers
 
         public virtual void Initialize()
         {
-
+            // children can override this
         }
 
         public virtual void Draw( SpriteBatch spriteBatch )

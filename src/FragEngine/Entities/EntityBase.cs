@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using FragEngine.Services;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using FragEngine.Animation;
@@ -11,6 +12,8 @@ namespace FragEngine.Entities
     public abstract class EntityBase
     {
         private bool _initialized;
+        protected ICollisionService CollisionService;
+        protected IEntityService EntityService;
 
         protected EntityBase()
             : this( Vector2.Zero, Vector2.Zero )
@@ -24,9 +27,11 @@ namespace FragEngine.Entities
 
             TintColor = Color.White;
 
-            IsAlive = true;
-
             Settings = new Dictionary<string, string>();
+
+            // FIXES: bug where entities were invisible in fragEd.
+            Alpha = 255f; // entities are visible by default
+            IsAlive = true;
         }
 
         [DataMember]
@@ -95,6 +100,7 @@ namespace FragEngine.Entities
                 if( !_initialized )
                 {
                     Initialize();
+                    InternalInitialize();
                     _initialized = true;
                 }
 
@@ -103,9 +109,19 @@ namespace FragEngine.Entities
                     (float)( Velocity.Y + FragEngineGame.Gravity * time.ElapsedGameTime.TotalMilliseconds * GravityFactor )
                 );
 
-                Position += Velocity;
+                var newPosition = Position + Velocity;
+
+                // ask the collision system if we're going to have a collision at that co-ord
+                Position = CollisionService.Check( Position, newPosition );
+
                 Animations.CurrentAnimation.Update( time );
             }
+        }
+
+        private void InternalInitialize()
+        {
+            CollisionService = ServiceInjector.Get<ICollisionService>();
+            EntityService = ServiceInjector.Get<IEntityService>();
         }
 
         protected virtual void Initialize()
@@ -120,6 +136,7 @@ namespace FragEngine.Entities
                 if( !_initialized )
                 {
                     Initialize();
+                    InternalInitialize();
                     _initialized = true;
                 }
                 Animations.CurrentAnimation.Draw( batch, Position, Alpha );
@@ -137,30 +154,6 @@ namespace FragEngine.Entities
             {
                 Health -= amount;
             }
-        }
-
-        public virtual bool CollidesWith( EntityBase other )
-        {
-            var otherRect = new Rectangle( (int)other.Position.X, (int)other.Position.Y, other.BoundingBox.Width, other.BoundingBox.Height );
-
-            return CollidesWith( otherRect );
-        }
-
-        public virtual bool CollidesWith( Rectangle other )
-        {
-            if (!IsAlive)
-            {
-                return false;
-            }
-
-            if( BoundingBox.IsEmpty )
-            {
-                BoundingBox = new Rectangle( 0, 0, (int)Animations.FrameSize.X, (int)Animations.FrameSize.Y );
-            }
-
-            var currentRect = new Rectangle( (int)Position.X, (int)Position.Y, BoundingBox.Width, BoundingBox.Height );
-
-            return currentRect.Intersects( other );
         }
 
         public virtual void Kill()

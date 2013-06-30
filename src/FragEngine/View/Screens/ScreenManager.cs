@@ -23,7 +23,7 @@ namespace FragEngine.View.Screens
         private List<GameScreenBase> screensToUpdate = new List<GameScreenBase>();
         private List<GameScreenBase> screensToDraw = new List<GameScreenBase>();
 
-        private InputState input = new InputState();
+        private InputState input = new InputState( PlayerIndex.One) ; // by default, player one controls menus
 
         private IGraphicsDeviceService graphicsDeviceService;
 

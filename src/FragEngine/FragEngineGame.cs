@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FragEngine.Entities;
+using FragEngine.Mapping;
 using FragEngine.Services;
 using FragEngine.View;
 using FragEngine.View.Screens;
@@ -57,15 +59,17 @@ namespace FragEngine {
 
             ServiceInjector.Apply( Services );
 
-            if (!ServiceInjector.Has(typeof (GraphicsDevice)))
-            {
+            if( !ServiceInjector.Has<GraphicsDevice>() )
                 ServiceInjector.Add(Graphics.GraphicsDevice);
-            }
 
-            if(!ServiceInjector.Has(typeof(Camera)))
-            {
+            if( !ServiceInjector.Has<Camera>() )
                 ServiceInjector.Add( new Camera( Graphics.GraphicsDevice.Viewport ) );
-            }
+
+            if( !ServiceInjector.Has<IEntityService>() )
+                ServiceInjector.Add<IEntityService>( new EntityService() );
+
+            if( !ServiceInjector.Has<ICollisionService>() )
+                ServiceInjector.Add<ICollisionService>( new CollisionService() );
 
 #if !DEBUG
             Graphics.IsFullScreen = true;

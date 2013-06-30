@@ -80,10 +80,11 @@ namespace FragEngine.View
 
         public Matrix GetViewMatrix( Vector2 parallax )
         {
+            var scale = FragEngineGame.SpriteScale * Zoom;
             return Matrix.CreateTranslation( new Vector3( -Position * parallax, 0.0f) ) *
-                ( FragEngineGame.SpriteScale * Zoom ) *
-                   Matrix.CreateTranslation( new Vector3( Center, 0.0f ) ) *
-                   Matrix.CreateRotationZ( Rotation );
+                   Matrix.CreateRotationZ( Rotation ) *
+                   Matrix.CreateScale( new Vector3(Zoom, Zoom, 1f ) ) *
+                   Matrix.CreateTranslation( new Vector3( Center, 0.0f ) );
         }
 
         public Matrix GetStaticViewMatrix( Vector2 parallax )
@@ -98,8 +99,8 @@ namespace FragEngine.View
         public Matrix GetStaticViewMatrixFromOrigin( Vector2 parallax, Vector2 origin )
         {
             return Matrix.CreateTranslation( new Vector3( Position * parallax, 0.0f ) ) *
-                   Matrix.CreateScale( 1f ) *
                    Matrix.CreateRotationZ( Rotation ) *
+                   Matrix.CreateScale( 1f ) *
                    Matrix.CreateTranslation( new Vector3( origin, 0.0f ) ) *
                    Matrix.CreateTranslation( new Vector3( -Position, 0.0f ) );
         }

@@ -18,6 +18,14 @@ namespace FragEngine
     /// </remarks>
     public class InputState
     {
+
+        private PlayerIndex _index;
+
+        public InputState( PlayerIndex index )
+        {
+            _index = index;
+        }
+
         public static Dictionary<Keys, char> KeyCharacterMap = new Dictionary<Keys, char>()
             {
                 { Keys.A, 'a' }, { Keys.B, 'b' },
@@ -41,7 +49,6 @@ namespace FragEngine
 
         public KeyboardState LastKeyboardState;
         public GamePadState LastGamePadState;
-
 
         /// <summary>
         /// Checks for a "menu up" input action (on either keyboard or gamepad).
@@ -145,9 +152,18 @@ namespace FragEngine
             LastGamePadState = CurrentGamePadState;
 
             CurrentKeyboardState = Keyboard.GetState();
-            CurrentGamePadState = GamePad.GetState( PlayerIndex.One );
+            CurrentGamePadState = GamePad.GetState( _index );
         }
 
+        public bool GamePadStateDirty()
+        {
+            return LastGamePadState == CurrentGamePadState;
+        }
+
+        public bool KeyboardStateDirty()
+        {
+            return LastKeyboardState == CurrentKeyboardState;
+        }
 
         /// <summary>
         /// Helper for checking if a key was newly pressed during this update.

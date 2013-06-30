@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Windows.Forms;
 using FragEd.Forms;
 using FragEngine.Data;
+using FragEngine.Services;
+using FragEngine.View;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -33,15 +34,17 @@ namespace FragEd.Controls
                 _accumulatedElapsedTime = _maxElapsedTime;
 
             var mouse = Mouse.GetState();
+            var mouse_args = MouseStateHelpers.GetMouseEventArgs();
             var currentMousePosition = new Vector2( mouse.X, mouse.Y );
             if( currentMousePosition != _lastMousePosition )
             {
                 _lastMousePosition = new Vector2( mouse.X, mouse.Y );
 
-                var args = MouseStateHelpers.GetMouseEventArgs();
-
-                OnMouseMove( args );
+                OnMouseMove( mouse_args );
             }
+
+            if( mouse.ScrollWheelValue != 0 )
+                OnMouseWheel( mouse_args );
 
             // check if a key is being pressed
             var keys = Keyboard.GetState().GetPressedKeys();
@@ -62,7 +65,8 @@ namespace FragEd.Controls
                 // batch has to be started before animations/entities can be drawn
                 // if you get the "big red x" error, ctrl+alt+e and check "thrown" for
                 // Common Language Runtime: http://thewayofcoding.com/2011/08/xna-4-0-red-x-exceptions/
-                spriteBatch.Begin();
+                var _camera = ServiceInjector.Get<Camera>();
+                spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, null, null, null, _camera.GetViewMatrix( new Vector2( 1, 1 ) ) );
                 DrawEntities( spriteBatch );
                 spriteBatch.End();
             }
@@ -72,14 +76,9 @@ namespace FragEd.Controls
         {
             if( Level.Entities.Count > 0 ) {
                 foreach( var entity in Level.Entities.Where( entity => entity.IsAlive ) ) {
-                    // update the current animation
-                    if( entity.Animations.CurrentAnimation != null ) {
-                        entity.Animations.CurrentAnimation.Update( _gameTime );
-                    }
-
-                    // I honestly have no idea why this has to be called this way
-                    // instead of calling entity.draw()...
-                    entity.Animations.CurrentAnimation.Draw( spriteBatch, entity.Position );
+                    // update the current animation and draw the entity
+                    entity.Update( _gameTime );
+                    entity.Draw( spriteBatch );
                 }
             }
         }

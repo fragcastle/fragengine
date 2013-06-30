@@ -66,6 +66,7 @@
     <Compile Include="ContentCacheManager.cs" />
     <Compile Include="Data\Level.cs" />
     <Compile Include="Entities\EntityBase.cs" />
+    <Compile Include="Entities\EntityService.cs" />
     <Compile Include="Entities\HudBase.cs" />
     <Compile Include="Entities\Player.cs" />
     <Compile Include="Extensions\Vector2Extensions.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="Mapping\CollisionCheckResult.cs" />
     <Compile Include="Mapping\CollisionDetector.cs" />
     <Compile Include="Mapping\CollisionMap.cs" />
+    <Compile Include="Mapping\CollisionService.cs" />
     <Compile Include="Mapping\CompressedMapData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -84,6 +86,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\ICollisionService.cs" />
+    <Compile Include="Services\IEntityService.cs" />
     <Compile Include="Services\ServiceContainerExtensions.cs" />
     <Compile Include="Services\ServiceInjector.cs" />
     <Compile Include="Utility.cs" />

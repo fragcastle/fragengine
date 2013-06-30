@@ -82,7 +82,15 @@ namespace FragEd.Forms {
                 ContentCacheManager.LoadContent( new ContentManager( ServiceInjector.Apply() ) );
             };
 
+            ux_LevelEditor.MouseWheel += UxLevelEditorOnMouseWheel;
+        }
 
+        private void UxLevelEditorOnMouseWheel(object sender, MouseEventArgs mouseEventArgs)
+        {
+            // TODO: handle the zoom in/out here
+            var zoom = ux_LevelEditor.Camera.Zoom + mouseEventArgs.Delta;
+            zoom = zoom > 500 ? 500 : zoom;
+            ux_LevelEditor.Camera.Zoom = zoom;
         }
 
         private void UxLevelEditorOnKeyDown( object sender, KeyEventArgs keyEventArgs ) {
@@ -231,6 +239,8 @@ namespace FragEd.Forms {
                     }
                 }
             }
+
+            debugStatus.Text = string.Format( "{0}, {1}", mouseEventArgs.X, mouseEventArgs.Y );
         }
 
         private void UxLevelEditorOnMouseDown( object sender, MouseEventArgs mouseEventArgs ) {

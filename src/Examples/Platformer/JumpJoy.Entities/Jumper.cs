@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using FragEngine;
+﻿using FragEngine;
 using FragEngine.Animation;
 using FragEngine.Entities;
 using Microsoft.Xna.Framework;
@@ -12,7 +8,7 @@ namespace JumpJoy.Entities
 {
     public class Jumper : Player
     {
-        public Jumper()
+        protected override void Initialize()
         {
             Collision = CollisionType.A;
 
@@ -25,31 +21,37 @@ namespace JumpJoy.Entities
             Animations.Add( "idle", 1f, true, 0, 1 );
 
             Animations.Add( "run", 0.07f, true, 12, 13, 14, 15, 16, 17, 18, 19, 20 );
+
+            Index = PlayerIndex.One;
+
+            base.Initialize();
         }
 
-        public override void Update( GameTime time )
+        public override void HandleKeyboardInput(KeyboardState keyboard)
         {
             float velocity_x = 0, velocity_y = 0;
 
             Animations.SetCurrentAnimation( "idle" );
-            var keyState = Keyboard.GetState();
 
-            if( keyState.IsKeyDown( Keys.Left ) )
+            if( keyboard.IsKeyDown( Keys.Left ) )
             {
                 Animations.SetCurrentAnimation( "run" );
                 Animations.CurrentAnimation.FlipX = true;
                 velocity_x = -Acceleration;
             }
 
-            if( keyState.IsKeyDown( Keys.Right ) )
+            if( keyboard.IsKeyDown( Keys.Right ) )
             {
                 Animations.SetCurrentAnimation( "run" );
                 velocity_x = Acceleration;
             }
 
             Velocity = new Vector2( velocity_x, velocity_y );
+        }
 
-            base.Update( time );
+        public override void HandleGamePadInput(GamePadState gamepad)
+        {
+            // no gamepad bindings yet
         }
     }
 }

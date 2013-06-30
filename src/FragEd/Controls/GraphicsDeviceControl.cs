@@ -5,6 +5,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using FragEd.Services;
+using FragEngine.Entities;
+using FragEngine.Mapping;
 using FragEngine.Services;
 using FragEngine.View;
 using Microsoft.Xna.Framework.Graphics;
@@ -66,13 +68,22 @@ namespace FragEd.Controls
 
                 _services.AddService<IGraphicsDeviceService>( _deviceService );
 
-                if( !ServiceInjector.Has( typeof( IGraphicsDeviceService ) ) )
-                    ServiceInjector.Add( typeof( IGraphicsDeviceService ), _deviceService );
+                if( !ServiceInjector.Has<IGraphicsDeviceService>() )
+                    ServiceInjector.Add<IGraphicsDeviceService>( _deviceService );
 
-                if( !ServiceInjector.Has( typeof(GraphicsDevice) ) )
+                if( !ServiceInjector.Has<GraphicsDevice>() )
                     ServiceInjector.Add( _deviceService.GraphicsDevice );
 
+                if( !ServiceInjector.Has<IEntityService>() )
+                    ServiceInjector.Add<IEntityService>( new EntityService() );
+
+                if( !ServiceInjector.Has<ICollisionService>() )
+                    ServiceInjector.Add<ICollisionService>( new CollisionService() );
+
                 _camera = new Camera( _deviceService.GraphicsDevice.Viewport );
+
+                if( !ServiceInjector.Has<Camera>() )
+                    ServiceInjector.Add( _camera );
 
                 if( ControlInitializing != null )
                 {
@@ -89,13 +100,8 @@ namespace FragEd.Controls
                     ControlInitialized( this, EventArgs.Empty );
                 }
 
-                Application.Idle += ApplicationOnIdle;
+                Application.Idle += ( o, args ) => Invalidate( true );
             }
-        }
-
-        private void ApplicationOnIdle(object sender, EventArgs eventArgs)
-        {
-            Invalidate( true );
         }
 
         protected override void Dispose( bool disposing )
@@ -177,7 +183,13 @@ namespace FragEd.Controls
             viewport.MaxDepth = 1;
 
             if( GraphicsDevice.Viewport.Equals( viewport ) == false )
+            {
                 GraphicsDevice.Viewport = viewport;
+                _camera = new Camera( viewport );
+
+                ServiceInjector.Add( _camera );
+            }
+
 
             return null;
         }

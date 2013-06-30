@@ -31,7 +31,7 @@ namespace FragEd.Forms
                 buttons = buttons | MouseButtons.Right;
             }
 
-            return new MouseEventArgs( buttons, 0, mouseState.X, mouseState.Y, 0 );
+            return new MouseEventArgs( buttons, 0, mouseState.X, mouseState.Y, mouseState.ScrollWheelValue );
         }
     }
 }
