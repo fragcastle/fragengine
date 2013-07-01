@@ -18,6 +18,8 @@ namespace FragEngine.Animation {
 
         public bool FlipX { get; set; }
 
+        public int LoopCount { get; private set; }
+
         public float Scale { get; set; }
 
         public string Name {
@@ -31,15 +33,21 @@ namespace FragEngine.Animation {
             Scale = 1.0f;
 
             Name = name;
+
+            LoopCount = 0;
         }
 
         public void Update( GameTime time ) {
             _timeForCurrentFrame += (float)time.ElapsedGameTime.TotalSeconds;
 
             if( _timeForCurrentFrame >= FrameTime ) {
-                if( ++CurrentFrame >= Frames.Length ) {
-                    CurrentFrame = 0;
+                CurrentFrame++;
+                if( (LoopCount < 1 && Repeat) || CurrentFrame >= Frames.Length )
+                {
+                    LoopCount++;
+                    CurrentFrame = Repeat ? 0 : Frames.Length - 1;
                 }
+
                 _timeForCurrentFrame = 0.0f;
             }
         }
@@ -76,7 +84,6 @@ namespace FragEngine.Animation {
     }
 
     public class AnimationSheet {
-        private Animation _currentAnimation;
         private string _currentAnimationKey;
         private Dictionary<string, Animation> _animations;
 
@@ -124,7 +131,7 @@ namespace FragEngine.Animation {
 
         public Animation CurrentAnimation {
             get {
-                return _currentAnimation;
+                return _animations[_currentAnimationKey];
             }
         }
 
@@ -148,7 +155,6 @@ namespace FragEngine.Animation {
 
             var anim = _animations.ElementAt( --currentIndex );
             _currentAnimationKey = anim.Key;
-            _currentAnimation = anim.Value;
         }
 
         public void Next() {
@@ -167,17 +173,15 @@ namespace FragEngine.Animation {
 
             var anim = _animations.ElementAt( ++currentIndex );
             _currentAnimationKey = anim.Key;
-            _currentAnimation = anim.Value;
         }
 
         public void SetCurrentAnimation( string name ) {
-            _currentAnimationKey = name;
-            _currentAnimation = _animations[ name ];
+            if( _currentAnimationKey != name )
+                _currentAnimationKey = name;
         }
 
         public void SetCurrentAnimation( int id ) {
-            _currentAnimationKey = id.ToString();
-            _currentAnimation = _animations[ id.ToString() ];
+            SetCurrentAnimation( id.ToString() );
         }
 
         public bool HasAnimation( string name ) {
@@ -200,11 +204,9 @@ namespace FragEngine.Animation {
                 SpriteSheet = SpriteSheet
             };
 
-            if( _currentAnimation == null || name == "idle"  )
-            {
-                _currentAnimation = animation;
-            }
-            
+            if( _currentAnimationKey == null || name == "idle"  )
+                _currentAnimationKey = name;
+
             _animations.Add( name,  animation);
         }
     }

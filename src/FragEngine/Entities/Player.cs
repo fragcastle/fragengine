@@ -28,19 +28,15 @@ namespace FragEngine.Entities
 
         public override void Update( GameTime time )
         {
-            // allow player objects to respond to game input before their update is done
+            base.Update( time );
+
             if( inputState != null )
             {
                 inputState.Update();
 
-                if( inputState.KeyboardStateDirty() )
-                    HandleKeyboardInput( inputState.CurrentKeyboardState );
-
-                if( inputState.GamePadStateDirty() )
-                    HandleGamePadInput( inputState.CurrentGamePadState );
+                HandleKeyboardInput( inputState.CurrentKeyboardState );
+                HandleGamePadInput( inputState.CurrentGamePadState );
             }
-
-            base.Update( time );
         }
 
         public abstract void HandleKeyboardInput( KeyboardState keyboard );

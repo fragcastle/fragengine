@@ -139,9 +139,9 @@ namespace FragEngine.Mapping
                 {
                     for( var tileX = firstTileX; tileX < lastTileX; tileX++ )
                     {
-                        t = _map.MapData.GetCellIndex( tileX, tileY );
+                        t = _map.MapData.GetTile( new Vector2( tileX, tileY ) );
 
-                        if( t == 0 )
+                        if( t != -1 )
                         {
                             // full tile collision!
 

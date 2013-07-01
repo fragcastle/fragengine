@@ -61,6 +61,10 @@ namespace FragEngine.View.Screens
 
             _layers.InsertRange( 0, CurrentLevel.MapLayers );
 
+#if DEBUG
+            _layers.Add( CurrentLevel.CollisionLayer );
+#endif
+
             // replace the collision service with one setup for this level
             var collisionMap = new CollisionMap( CurrentLevel );
             var collisionService = new CollisionService( collisionMap );

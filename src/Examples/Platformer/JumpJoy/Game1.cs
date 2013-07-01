@@ -1,6 +1,7 @@
 ﻿#region Using Statements
 using System;
 using System.Collections.Generic;
+using FragEngine;
 using FragEngine.View.Screens;
 using JumpJoy.Screens;
 using Microsoft.Xna.Framework;
@@ -36,6 +37,9 @@ namespace JumpJoy
         protected override void Initialize()
         {
             ScreenManager.AddScreen( new JumpPlayScreen( null ) );
+
+            Gravity = 300f;
+
             base.Initialize();
         }
 

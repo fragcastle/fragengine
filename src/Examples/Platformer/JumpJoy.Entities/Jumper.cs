@@ -1,4 +1,5 @@
-﻿using FragEngine;
+﻿using System;
+using FragEngine;
 using FragEngine.Animation;
 using FragEngine.Entities;
 using Microsoft.Xna.Framework;
@@ -22,6 +23,8 @@ namespace JumpJoy.Entities
 
             Animations.Add( "run", 0.07f, true, 12, 13, 14, 15, 16, 17, 18, 19, 20 );
 
+            Animations.Add( "jump", 0.09f, false, 21, 22 );
+
             Index = PlayerIndex.One;
 
             base.Initialize();
@@ -33,18 +36,28 @@ namespace JumpJoy.Entities
 
             Animations.SetCurrentAnimation( "idle" );
 
-            if( keyboard.IsKeyDown( Keys.Left ) )
+            if( keyboard.IsKeyDown( Keys.Left ) || keyboard.IsKeyDown( Keys.Right ) )
             {
                 Animations.SetCurrentAnimation( "run" );
-                Animations.CurrentAnimation.FlipX = true;
-                velocity_x = -Acceleration;
+
+                var mod = keyboard.IsKeyDown( Keys.Left ) ? -1 : 1;
+                velocity_x += Acceleration * mod;
+
+                if( Math.Abs(velocity_x) > MaxVelocity.X )
+                    velocity_x = MaxVelocity.X * mod;
             }
 
-            if( keyboard.IsKeyDown( Keys.Right ) )
+            if( keyboard.IsKeyDown( Keys.Up ) && Standing )
             {
-                Animations.SetCurrentAnimation( "run" );
-                velocity_x = Acceleration;
+                velocity_y -= 100;
             }
+
+            if( Velocity.Y != 0 && !Standing )
+            {
+                Animations.SetCurrentAnimation( "jump" );
+            }
+
+            Animations.CurrentAnimation.FlipX = Velocity.X < 0;
 
             Velocity = new Vector2( velocity_x, velocity_y );
         }

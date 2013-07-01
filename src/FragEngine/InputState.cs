@@ -155,16 +155,6 @@ namespace FragEngine
             CurrentGamePadState = GamePad.GetState( _index );
         }
 
-        public bool GamePadStateDirty()
-        {
-            return LastGamePadState == CurrentGamePadState;
-        }
-
-        public bool KeyboardStateDirty()
-        {
-            return LastKeyboardState == CurrentKeyboardState;
-        }
-
         /// <summary>
         /// Helper for checking if a key was newly pressed during this update.
         /// </summary>
