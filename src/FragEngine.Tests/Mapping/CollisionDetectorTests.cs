@@ -35,7 +35,7 @@ namespace FragEngine.Tests.Mapping
 
             var result = detector.Check( _startPosition, new Vector2( 0, -2 ), _size );
 
-            Assert.Equal( 0f, result.Position.X );
+            Assert.Equal( 100f, result.Position.X );
             Assert.Equal( 98f, result.Position.Y );
         }
 

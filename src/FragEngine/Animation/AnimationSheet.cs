@@ -204,6 +204,9 @@ namespace FragEngine.Animation {
                 SpriteSheet = SpriteSheet
             };
 
+            if( frames.Length == 1 )
+                animation.Repeat = false; // no need to repeat if there is one frame
+
             if( _currentAnimationKey == null || name == "idle"  )
                 _currentAnimationKey = name;
 

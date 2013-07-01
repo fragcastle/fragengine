@@ -19,6 +19,7 @@ namespace JumpJoy.Screens
     {
         public JumpPlayScreen(HudBase hud) : base(hud)
         {
+
         }
 
         public override void Initialize()
@@ -59,6 +60,17 @@ namespace JumpJoy.Screens
             {
                 camera.Zoom -= 0.1f;
             }
+
+            if( input.CurrentKeyboardState.IsKeyDown( Keys.NumPad1 ) ) camera.Zoom = 1f;
+            if( input.CurrentKeyboardState.IsKeyDown( Keys.NumPad2 ) ) camera.Zoom = 2f;
+            if( input.CurrentKeyboardState.IsKeyDown( Keys.NumPad3 ) ) camera.Zoom = 3f;
+            if( input.CurrentKeyboardState.IsKeyDown( Keys.NumPad4 ) ) camera.Zoom = 4f;
+            if( input.CurrentKeyboardState.IsKeyDown( Keys.NumPad5 ) ) camera.Zoom = 5f;
+            if( input.CurrentKeyboardState.IsKeyDown( Keys.NumPad6 ) ) camera.Zoom = 6f;
+            if( input.CurrentKeyboardState.IsKeyDown( Keys.NumPad7 ) ) camera.Zoom = 7f;
+            if( input.CurrentKeyboardState.IsKeyDown( Keys.NumPad8 ) ) camera.Zoom = 8f;
+            if( input.CurrentKeyboardState.IsKeyDown( Keys.NumPad9 ) ) camera.Zoom = 9f;
+            if( input.CurrentKeyboardState.IsKeyDown( Keys.NumPad0 ) ) camera.Zoom = 10f;
         }
     }
 }

@@ -40,5 +40,25 @@ namespace FragEngine {
                 }
             };
         }
+
+        public static float Limit( float target, float min, float max )
+        {
+            return Math.Min( max, Math.Max( min, target ) );
+        }
+
+        public static int Limit( int target, int min, int max )
+        {
+            return Math.Min( max, Math.Max( min, target ) );
+        }
+
+        public static double Limit( double target, double min, double max )
+        {
+            return Math.Min( max, Math.Max( min, target ) );
+        }
+
+        public static Vector2 Limit( Vector2 target, Vector2 Range)
+        {
+            return new Vector2( Limit( target.X, -Range.X, Range.X ), Limit( target.Y, -Range.Y, Range.Y ) );
+        }
     }
 }

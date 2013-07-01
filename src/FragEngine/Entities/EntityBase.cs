@@ -10,6 +10,10 @@ using FragEngine.Animation;
 namespace FragEngine.Entities
 {
     [DataContract]
+
+    // TODO: add distanceTo, angleTo, touches calculations
+    // TODO: add bounciness
+    // TODO: add support for entities with no animations (logical entities)
     public abstract class EntityBase
     {
         private bool _initialized;
@@ -36,6 +40,9 @@ namespace FragEngine.Entities
 
             // by default, gravity will affect entities
             GravityFactor = 1f;
+
+            // entities are moved by changing the acceleration vector...
+            Acceleration = Vector2.Zero;
         }
 
         [DataMember]
@@ -66,7 +73,10 @@ namespace FragEngine.Entities
         public Vector2 MaxVelocity { get; set; }
 
         [IgnoreDataMember]
-        public float Acceleration { get; set; }
+        public Vector2 Acceleration { get; set; }
+
+        [IgnoreDataMember]
+        public Vector2 Friction { get; set; }
 
         [IgnoreDataMember]
         public Color TintColor { get; set; }
@@ -76,6 +86,9 @@ namespace FragEngine.Entities
 
         [IgnoreDataMember]
         public int Health { get; set; }
+
+        [IgnoreDataMember]
+        protected bool Standing { get; set; }
 
         [IgnoreDataMember]
         public string CurrentAnimation
@@ -97,10 +110,9 @@ namespace FragEngine.Entities
             }
         }
 
-        [IgnoreDataMember]
-        protected bool Standing { get; set; }
 
-        public virtual void Update( GameTime time )
+
+        public virtual void Update( GameTime gameTime )
         {
             if (IsAlive)
             {
@@ -111,30 +123,70 @@ namespace FragEngine.Entities
                     _initialized = true;
                 }
 
-                var gravityVector = new Vector2( 0, FragEngineGame.Gravity * (float)time.ElapsedGameTime.TotalSeconds * GravityFactor );
+                CalculateVelocity( gameTime );
 
-                // modify our velocity with our gravity vector
-                Velocity += gravityVector;
+                var partialVelocity = Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                 // ask the collision system if we're going to have a collision at that co-ord
-                var result = CollisionService.Check( Position, Velocity, Animations.CurrentAnimation.FrameSize );
+                var result = CollisionService.Check( Position, partialVelocity, Animations.CurrentAnimation.FrameSize );
 
                 UpdateEntityState( result );
 
                 Position = result.Position;
 
-                Animations.CurrentAnimation.Update( time );
+                Animations.CurrentAnimation.Update( gameTime );
 
                 BoundingBox = new Rectangle( (int)Position.X, (int)Position.Y, BoundingBox.Width, BoundingBox.Height );
             }
         }
 
-        private void UpdateEntityState(CollisionCheckResult result)
+        private void CalculateVelocity( GameTime gameTime )
+        {
+            var tick = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+
+            // apply gravity
+            var gravityVector = new Vector2( 0, FragEngineGame.Gravity * (float)gameTime.ElapsedGameTime.TotalSeconds * GravityFactor );
+
+            Velocity += gravityVector;
+
+            // apply acceleration or friction
+            if( Acceleration != Vector2.Zero )
+            {
+                Velocity += (Acceleration * tick);
+            } else if ( Friction != Vector2.Zero )
+            {
+                var delta = Friction * tick;
+
+                var subtract = Velocity - delta;
+                var add = Velocity + delta;
+
+                if( subtract.X > 0 )
+                    Velocity -= new Vector2( delta.X, 0 );
+                else if( add.X < 0)
+                    Velocity += new Vector2( delta.X, 0 );
+                else Velocity = new Vector2( 0, Velocity.Y );
+
+                if( subtract.Y > 0 )
+                    Velocity -= new Vector2( 0, delta.Y );
+                else if( add.Y < 0)
+                    Velocity += new Vector2( 0, delta.Y );
+                else Velocity = new Vector2( Velocity.X, 0 );
+            }
+
+            Velocity = Utility.Limit( Velocity, MaxVelocity );
+        }
+
+        protected virtual void UpdateEntityState(CollisionCheckResult result)
         {
             Standing = false;
             if( result.YAxis )
             {
                 Standing = Velocity.Y > 0;
+            }
+
+            if( result.XAxis )
+            {
+                Velocity = Vector2.Zero;
             }
         }
 

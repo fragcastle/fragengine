@@ -26,9 +26,9 @@ namespace FragEngine.Entities
             inputState = new InputState( Index );
         }
 
-        public override void Update( GameTime time )
+        public override void Update( GameTime gameTime )
         {
-            base.Update( time );
+            base.Update( gameTime );
 
             if( inputState != null )
             {
