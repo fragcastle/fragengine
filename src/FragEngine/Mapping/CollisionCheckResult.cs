@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace FragEngine.Mapping
 {
-    public struct CollisionCheckResult
+    public class CollisionCheckResult
     {
         public bool YAxis { get; set; }
         public bool XAxis { get; set; }

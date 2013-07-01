@@ -109,10 +109,10 @@ namespace FragEngine.Entities
                     (float)( Velocity.Y + FragEngineGame.Gravity * time.ElapsedGameTime.TotalMilliseconds * GravityFactor )
                 );
 
-                var newPosition = Position + Velocity;
-
                 // ask the collision system if we're going to have a collision at that co-ord
-                Position = CollisionService.Check( Position, newPosition );
+                var result = CollisionService.Check( Position, Velocity, Animations.CurrentAnimation.FrameSize );
+
+                Position = result.Position;
 
                 Animations.CurrentAnimation.Update( time );
             }

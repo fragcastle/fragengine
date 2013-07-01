@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace FragEngine.Mapping
 {
-    public class CollisionDetector : IDisposable
+    public class CollisionDetector
     {
 
         private EntityBase _entity;
@@ -15,33 +15,33 @@ namespace FragEngine.Mapping
 
         private Vector2 _positionDelta;
         private Vector2 _finalPosition;
-        private Vector2 _entityPosition;
+        private Vector2 _currentPosition;
+        private Vector2 _objectSize;
 
         public CollisionCheckResult Result { get; private set; }
 
-        public CollisionDetector( EntityBase entity, Vector2 positionDelta, CollisionMap map )
+        public CollisionDetector( CollisionMap map )
         {
-            Result = new CollisionCheckResult();
-
-            _entity = entity;
-
-            // positionDelta is the change in position from the entitys current position.
-            _positionDelta = positionDelta;
             _map = map;
-
-            // copy the entitys position otherwise when we update this in Check() the entity will actually move o_O
-            _entityPosition = entity.Position;
         }
 
-        public CollisionCheckResult Check()
+        public CollisionCheckResult Check( Vector2 currentPosition, Vector2 positionDelta, Vector2 objectSize  )
         {
-            var collision = new CollisionCheckResult();
+            Result = new CollisionCheckResult() { Position = currentPosition };
+
+            _currentPosition = currentPosition;
+            _positionDelta = positionDelta;
+            _objectSize = objectSize;
 
             _finalPosition = new Vector2( _positionDelta.X, _positionDelta.Y );
 
+            // short-circuit if there is nothing to do
+            if( positionDelta == Vector2.Zero )
+                return Result;
+
             // determine if we need to perform multiple checks, e.g. the entitys proposed
             // position is more than one tile away.
-            var steps = (float)Math.Ceiling( Math.Max( Math.Abs( _entity.Position.X ), Math.Abs( _entity.Position.Y ) ) / _map.TileSize );
+            var steps = (float)Math.Ceiling( Math.Max( Math.Abs( _positionDelta.X ), Math.Abs( _positionDelta.Y ) ) / _map.TileSize );
 
             if( steps > 1 )
             {
@@ -51,70 +51,109 @@ namespace FragEngine.Mapping
                 {
                     for( var i = 0; i < steps; i++ )
                     {
-                        collision = PeekStep( stepDelta, i );
-
-                        // "move" the entity along the path
-                        collision.Position = _entityPosition = _finalPosition;
+                        PeekStep( stepDelta, i );
 
                         // if the trace finds a collision anywhere along the way, zero out the offending part of the vector
-                        if( collision.XAxis )
+                        if( Result.XAxis )
                         {
                             stepDelta.X = 0;
-                            _positionDelta.X = 0;
+                            positionDelta.X = 0;
                         }
-                        if( collision.YAxis )
+                        if( Result.YAxis )
                         {
                             stepDelta.Y = 0;
-                            _positionDelta.Y = 0;
+                            positionDelta.Y = 0;
                         }
                     }
                 }
             }
             else
             {
-                collision = PeekStep( _positionDelta, 0f );
+                PeekStep( positionDelta, 0f );
             }
-
-            Result = collision;
 
             return Result;
         }
 
-        public void Dispose()
+        private void PeekStep( Vector2 stepDelta, float stepIndex )
         {
+            var resultPosition = Result.Position + stepDelta;
 
-        }
+            var t = 0;
 
-        private CollisionCheckResult PeekStep( Vector2 stepDelta, float stepIndex )
-        {
-            _finalPosition += stepDelta;
+            var mapHeight = _map.MapData.Data.Length / _map.MapData.Width;
 
-            var correctedPos = _finalPosition / _map.TileSize; // convert gameworld pos to map pos
-
-            var tileIndex = _map.MapData.GetCellIndex( correctedPos );
-
-
-            if( IsMovingHorizontally() )
+            if( stepDelta.X != 0f )
             {
+                var pxOffsetX = ( stepDelta.X > 0 ? _objectSize.X : 0 );
+                var tileOffsetX = ( stepDelta.X < 0 ? _map.TileSize : 0 );
 
+                var firstTileY = (int)Math.Max( Math.Floor( _currentPosition.Y / _map.TileSize ), 0 );
+                var lastTileY = (int)Math.Min( Math.Ceiling( ( _currentPosition.Y + _objectSize.Y ) / _map.TileSize ), mapHeight );
+                var tileX = (int)Math.Floor( ( Result.Position.X + pxOffsetX ) / _map.TileSize );
+
+                // We need to test the new tile position as well as the current one, as we
+                // could still collide with the current tile if it's a line def.
+                // We can skip this test if this is not the first step or the new tile position
+                // is the same as the current one.
+                var prevTileX = (int)Math.Floor( ( _currentPosition.X + pxOffsetX ) / _map.TileSize );
+                if( stepIndex > 0 || tileX == prevTileX || prevTileX < 0 || prevTileX >= _map.MapData.Width )
+                {
+                    prevTileX = -1;
+                }
+
+                if( tileX >= 0 && tileX < _map.MapData.Width )
+                {
+                    for( var tileY = firstTileY; tileY < lastTileY; tileY++ )
+                    {
+                        t = _map.MapData.GetTile( new Vector2( tileX, tileY ) );
+
+                        if( t != -1 )
+                        {
+                            // full tile collision!
+
+                            Result.XAxis = true;
+                            resultPosition.X = tileX * _map.TileSize - pxOffsetX + tileOffsetX;
+                            break;
+                        }
+                    }
+                }
             }
 
-            if( IsMovingHorizontally() )
+            if( stepDelta.Y != 0f )
             {
+                var pxOffsetY = ( stepDelta.Y > 0 ? _objectSize.Y : 0 );
+                var tileOffsetY = ( stepDelta.Y < 0 ? _map.TileSize : 0 );
 
+                var firstTileX = (int)Math.Max( Math.Floor( _currentPosition.X / _map.TileSize ), 0 );
+                var lastTileX = (int)Math.Min( Math.Ceiling( ( _currentPosition.X + _objectSize.X ) / _map.TileSize ), _map.MapData.Width );
+                var tileY = (int)Math.Floor( ( Result.Position.Y + pxOffsetY ) / _map.TileSize );
+
+                var prevTileY = Math.Floor( ( _currentPosition.Y + pxOffsetY ) / _map.TileSize );
+                if( stepIndex > 0 || tileY == prevTileY || prevTileY < 0 || prevTileY >= mapHeight )
+                {
+                    prevTileY = -1;
+                }
+
+                if( tileY >= 0 && tileY < mapHeight )
+                {
+                    for( var tileX = firstTileX; tileX < lastTileX; tileX++ )
+                    {
+                        t = _map.MapData.GetCellIndex( tileX, tileY );
+
+                        if( t == 0 )
+                        {
+                            // full tile collision!
+
+                            Result.YAxis = true;
+                            resultPosition.Y = tileY * _map.TileSize - pxOffsetY + tileOffsetY;
+                            break;
+                        }
+                    }
+                }
             }
 
-            return new CollisionCheckResult();
-        }
-
-        private bool IsMovingHorizontally()
-        {
-            return _positionDelta.X != 0f;
-        }
-
-        private bool IsMovingVertically()
-        {
-            return _positionDelta.Y != 0f;
+            Result.Position = resultPosition;
         }
     }
 }

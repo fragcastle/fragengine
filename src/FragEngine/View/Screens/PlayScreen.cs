@@ -1,5 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using FragEngine.Data;
 using FragEngine.Layers;
+using FragEngine.Mapping;
 using FragEngine.Services;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -43,6 +48,27 @@ namespace FragEngine.View.Screens
                 _layers.Add(_hudLayer);
             }
         }
+
+        public void LoadLevel( string levelName )
+        {
+            var path = Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "Data\\" + levelName + ".json" );
+
+            CurrentLevel = Level.Load( new FileInfo( path ) );
+
+            var players = CurrentLevel.Entities.Where( e => e is Player );
+
+            _playerLayer.Entities.AddRange( players );
+
+            _layers.InsertRange( 0, CurrentLevel.MapLayers );
+
+            // replace the collision service with one setup for this level
+            var collisionMap = new CollisionMap( CurrentLevel );
+            var collisionService = new CollisionService( collisionMap );
+
+            ServiceInjector.Add<ICollisionService>( collisionService );
+        }
+
+        protected Level CurrentLevel { get; private set; }
 
         public override void LoadContent()
         {

@@ -27,11 +27,9 @@ namespace JumpJoy.Screens
 
             // load the level
 
-            var path = Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "Data\\jumpjoy_1.json" );
+            LoadLevel( "jumpjoy_1" );
 
-            var level = Level.Load( new FileInfo( path ) );
-
-            var jump = level.Entities.First( e => e as Jumper != null );
+            var jump = CurrentLevel.Entities.First( e => e as Jumper != null );
 
             var camera = ServiceInjector.Get<Camera>();
 
@@ -39,10 +37,6 @@ namespace JumpJoy.Screens
 
             // this kind of works... but seems odd...
             camera.Offset = new Vector2( 48, 256 );
-
-            _playerLayer.Entities.Add( jump );
-
-            _layers.InsertRange( 0, level.MapLayers );
 
             // tell XNA not to apply any texture filtering to our sprites
             _layers.ForEach( l => l.SamplerState = SamplerState.PointWrap );

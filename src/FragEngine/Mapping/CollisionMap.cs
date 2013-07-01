@@ -10,6 +10,13 @@ namespace FragEngine.Mapping
 {
     public class CollisionMap
     {
+        public static CollisionMap Empty
+        {
+            get
+            {
+                return new CollisionMap();
+            }
+        }
 
         public CompressedMapData MapData;
 
@@ -21,16 +28,16 @@ namespace FragEngine.Mapping
             TileSize = level.CollisionLayer.TileSize;
         }
 
-        public CollisionCheckResult Peek( EntityBase entity, Vector2 proposedPosition )
+        // private initializer for an "empty" collision map
+        private CollisionMap()
         {
-            var collision = new CollisionCheckResult();
+            MapData = new CompressedMapData() { Data = new int[800], Width = 80 };
+            TileSize = 16;
 
-            using( var detector = new CollisionDetector(entity, proposedPosition, this ) )
+            for( int i = 0; i < MapData.Data.Length; i++ )
             {
-                collision = detector.Result;
+                MapData.Data[ i ] = -1;
             }
-
-            return collision;
         }
     }
 }
