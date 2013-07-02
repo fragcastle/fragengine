@@ -182,12 +182,24 @@ namespace FragEd.Controls
             viewport.MinDepth = 0;
             viewport.MaxDepth = 1;
 
+
+            Viewport viewport2 = new Viewport();
+
+            viewport2.X = 0;
+            viewport2.Y = 0;
+
+            viewport2.Width = 0;
+            viewport2.Height = 0;
+
+            viewport2.MinDepth = 0;
+            viewport2.MaxDepth = 1;
+
             if( GraphicsDevice.Viewport.Equals( viewport ) == false )
             {
                 GraphicsDevice.Viewport = viewport;
-                _camera = new Camera( viewport );
+                _camera = new Camera(viewport2);
 
-                ServiceInjector.Add( _camera );
+                ServiceInjector.Add(_camera);
             }
 
 
