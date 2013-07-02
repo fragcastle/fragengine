@@ -216,16 +216,14 @@ namespace FragEngine.Entities
                     InternalInitialize();
                     _initialized = true;
                 }
+
                 Animations.CurrentAnimation.Draw( batch, Position, Alpha );
 
 #if DEBUG
-                var WhiteTexture = new Texture2D( FragEngineGame.Graphics.GraphicsDevice, 1, 1 );
-                WhiteTexture.SetData( new Color[] { Color.White } );
-
-                batch.Draw( WhiteTexture, new Rectangle( BoundingBox.Left,  BoundingBox.Top,    BoundingBox.Width, 1),   Color.White);
-                batch.Draw( WhiteTexture, new Rectangle( BoundingBox.Left,  BoundingBox.Bottom, BoundingBox.Width, 1),   Color.White);
-                batch.Draw( WhiteTexture, new Rectangle( BoundingBox.Left,  BoundingBox.Top, 1, BoundingBox.Height),     Color.White);
-                batch.Draw( WhiteTexture, new Rectangle( BoundingBox.Right, BoundingBox.Top, 1, BoundingBox.Height + 1), Color.White);
+                batch.Draw( Primitives.WhiteTexture, new Rectangle( BoundingBox.Left, BoundingBox.Top, BoundingBox.Width, 1 ), Color.White );
+                batch.Draw( Primitives.WhiteTexture, new Rectangle( BoundingBox.Left, BoundingBox.Bottom, BoundingBox.Width, 1 ), Color.White );
+                batch.Draw( Primitives.WhiteTexture, new Rectangle( BoundingBox.Left, BoundingBox.Top, 1, BoundingBox.Height ), Color.White );
+                batch.Draw( Primitives.WhiteTexture, new Rectangle( BoundingBox.Right, BoundingBox.Top, 1, BoundingBox.Height + 1 ), Color.White );
 #endif
             }
         }

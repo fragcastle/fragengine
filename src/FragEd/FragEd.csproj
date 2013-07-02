@@ -114,6 +114,12 @@
     <Compile Include="Forms\ContentFolders.Designer.cs">
       <DependentUpon>ContentFolders.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Debug.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Debug.Designer.cs">
+      <DependentUpon>Debug.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -152,6 +158,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ContentFolders.resx">
       <DependentUpon>ContentFolders.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Debug.resx">
+      <DependentUpon>Debug.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editor.resx">
       <DependentUpon>Editor.cs</DependentUpon>

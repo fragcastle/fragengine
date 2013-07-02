@@ -25,13 +25,24 @@ namespace FragEngine {
         public static GraphicsDeviceManager Graphics;
         public static Matrix SpriteScale { get; protected set; }
 
-        public static float Scale { get; set; }
-
         public static ScreenManager ScreenManager { get; private set; }
 
         public static DirectoryInfo DataDirectory { get; private set; }
 
+        /// <summary>
+        /// Affects the size of sprites when they are rendered to the <see cref="GraphicsDevice"/>
+        /// </summary>
+        public static float Scale { get; set; }
+
+        /// <summary>
+        /// The gravitational constant of your game.
+        /// </summary>
         public static float Gravity { get; set; }
+
+        /// <summary>
+        /// Affects the passage of time in your game.
+        /// </summary>
+        public static float TimeScale { get; set; }
 
         private bool _isPauseKeyDown;
 
@@ -42,6 +53,8 @@ namespace FragEngine {
             Gravity = 0f; // default to no gravity
 
             Scale = 1.2f;
+
+            TimeScale = 1f;
         }
 
         public FragEngineGame() {
@@ -117,7 +130,41 @@ namespace FragEngine {
             // Check to see if the user has paused or unpaused
             checkPauseKey( Keyboard.GetState(), GamePad.GetState( PlayerIndex.One ) );
 
-            base.Update( gameTime );
+            var keys = Keyboard.GetState();
+            if( keys.IsKeyDown( Keys.I ) )
+                TimeScale = 0.1f;
+            if( keys.IsKeyDown( Keys.O ) )
+                TimeScale = 0.25f;
+            if( keys.IsKeyDown( Keys.P ) )
+                TimeScale = 1f;
+
+            if( keys.IsKeyDown(Keys.F))
+            {
+                Graphics.PreferredBackBufferWidth = 1024;
+                Graphics.PreferredBackBufferHeight = 768;
+
+                // set our resolution into the viewport, otherwise camera calculations will be fucked.
+                GraphicsDevice.Viewport = new Viewport( 0, 0, Graphics.PreferredBackBufferWidth, Graphics.PreferredBackBufferHeight );
+
+                var camera = new Camera( GraphicsDevice.Viewport );
+
+                ServiceInjector.Add(camera);
+            }
+
+            if( keys.IsKeyDown( Keys.G ) )
+            {
+                Graphics.PreferredBackBufferWidth = 1280;
+                Graphics.PreferredBackBufferHeight = 720;
+
+                // set our resolution into the viewport, otherwise camera calculations will be fucked.
+                GraphicsDevice.Viewport = new Viewport( 0, 0, Graphics.PreferredBackBufferWidth, Graphics.PreferredBackBufferHeight );
+
+                var camera = new Camera( GraphicsDevice.Viewport );
+
+                ServiceInjector.Add( camera );
+            }
+
+            base.Update( AdjustGameTime(gameTime) );
         }
 
         protected override void Draw( GameTime gameTime ) {
@@ -131,7 +178,19 @@ namespace FragEngine {
                 GamePad.SetVibration( PlayerIndex.Three, 0f, 0f );
                 GamePad.SetVibration( PlayerIndex.Four, 0f, 0f );
             }
-            base.Draw( gameTime );
+
+            base.Draw( AdjustGameTime( gameTime ) );
+        }
+
+        private GameTime AdjustGameTime( GameTime gameTime )
+        {
+            var msDelta = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+
+            var adjustedMsDelta = msDelta * TimeScale;
+
+            var totalTime = gameTime.TotalGameTime.TotalMilliseconds - msDelta + adjustedMsDelta;
+
+            return new GameTime( new TimeSpan( 0, 0, 0, 0, (int)totalTime ), new TimeSpan( 0, 0, 0, 0, (int)adjustedMsDelta ), gameTime.IsRunningSlowly );
         }
 
         private void SetSpriteScale()

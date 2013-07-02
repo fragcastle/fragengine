@@ -39,12 +39,7 @@ namespace FragEngine.View
         {
             get
             {
-                if( Target != null )
-                {
-                    return Target.Position;
-                }
-
-                return DefaultPosition;
+                return Target != null ? Target.Position : DefaultPosition;
             }
         }
 
@@ -59,40 +54,22 @@ namespace FragEngine.View
             set { _zoom = value; if( _zoom < 0.1f ) _zoom = 0.1f; } // Negative zoom will flip image
         }
 
-        public Vector2 Center
-        {
-            get
-            {
-                var centerX = (float)_viewport.Width/2;
-                var centerY = (float)_viewport.Height/2;
-
-                if( Target != null )
-                {
-                    centerX -= Target.Animations.CurrentAnimation.FrameSize.X / 2;
-                    centerY -= Target.Animations.CurrentAnimation.FrameSize.Y / 2;
-                }
-
-                return new Vector2( centerX, centerY ) + Offset;
-            }
-        }
-
         public float Rotation { get; set; }
 
         public Matrix GetViewMatrix( Vector2 parallax )
         {
-            var scale = FragEngineGame.SpriteScale * Zoom;
             return Matrix.CreateTranslation( new Vector3( -Position * parallax, 0.0f) ) *
                    Matrix.CreateRotationZ( Rotation ) *
                    Matrix.CreateScale( new Vector3(Zoom, Zoom, 1f ) ) *
-                   Matrix.CreateTranslation( new Vector3( Center, 0.0f ) );
+                   Matrix.CreateTranslation( new Vector3( Origin, 0.0f ) );
         }
 
         public Matrix GetStaticViewMatrix( Vector2 parallax )
         {
-            return ( FragEngineGame.SpriteScale * Zoom ) *
-                   Matrix.CreateTranslation( new Vector3( Position * parallax, 0.0f ) ) *
+            return Matrix.CreateTranslation( new Vector3( Position * parallax, 0.0f ) ) *
                    Matrix.CreateRotationZ( Rotation ) *
-                   Matrix.CreateTranslation( new Vector3( Center, 0.0f ) ) *
+                   Matrix.CreateScale( new Vector3( Zoom, Zoom, 1f ) ) *
+                   Matrix.CreateTranslation( new Vector3( Origin, 0.0f ) ) *
                    Matrix.CreateTranslation( new Vector3( -Position, 0.0f ) );
         }
 
@@ -112,10 +89,10 @@ namespace FragEngine.View
 
         public bool IsShowing( Rectangle box )
         {
-            var x1 = (int)( Center.X - _viewport.Width / 2 );
-            var x2 = (int)( Center.X + _viewport.Width / 2 );
-            var y1 = (int)( Center.Y - _viewport.Height / 2 );
-            var y2 = (int)( Center.Y + _viewport.Height / 2 );
+            var x1 = (int)( Origin.X - _viewport.Width / 2 );
+            var x2 = (int)( Origin.X + _viewport.Width / 2 );
+            var y1 = (int)( Origin.Y - _viewport.Height / 2 );
+            var y2 = (int)( Origin.Y + _viewport.Height / 2 );
 
             var completelyOffScreen = ( x1 > box.X + box.Width || x2 < box.X ) && (y1 > box.Y + box.Height || y2 < box.Y);
             return !completelyOffScreen;

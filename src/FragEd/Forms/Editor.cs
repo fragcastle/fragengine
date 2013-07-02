@@ -18,7 +18,6 @@ using Microsoft.Xna.Framework.Content;
 namespace FragEd.Forms {
     // TODO: Remove Level
     // TODO: Undo changes
-    // TODO: collision layers - test inside the game!
     // TODO: organize this massive file
     public partial class Editor : Form {
         private Project _project;
