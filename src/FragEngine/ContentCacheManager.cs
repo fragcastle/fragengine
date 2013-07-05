@@ -90,6 +90,9 @@ namespace FragEngine
             if( fallbackToResource && texture == null )
             {
                 texture = GetTextureFromResource( path, Assembly.GetCallingAssembly() );
+
+                // cache the texture for future calls!
+                TextureCache[ path ] = texture;
             }
             return texture;
         }
