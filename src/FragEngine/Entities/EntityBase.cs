@@ -14,6 +14,7 @@ namespace FragEngine.Entities
     // TODO: add distanceTo, angleTo, touches calculations
     // TODO: add bounciness
     // TODO: add support for entities with no animations (logical entities)
+    //          thinking that an "entity" with animations is an Actor.
     public abstract class EntityBase
     {
         private bool _initialized;
@@ -95,14 +96,10 @@ namespace FragEngine.Entities
         {
             get
             {
+                var val = String.Empty;
                 if( Animations.CurrentAnimation != null )
-                {
-                    return Animations.CurrentAnimation.Name;
-                }
-                else
-                {
-                    return String.Empty;
-                }
+                    val = Animations.CurrentAnimation.Name;
+                return val;
             }
             set
             {
@@ -132,8 +129,6 @@ namespace FragEngine.Entities
 
                 UpdateEntityState( result );
 
-                Position = result.Position;
-
                 Animations.CurrentAnimation.Update( gameTime );
 
                 BoundingBox = new Rectangle( (int)Position.X, (int)Position.Y, BoundingBox.Width, BoundingBox.Height );
@@ -142,35 +137,32 @@ namespace FragEngine.Entities
 
         private void CalculateVelocity( GameTime gameTime )
         {
-            var tick = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            var tick = gameTime.GetGameTick();
 
             // apply gravity
-            var gravityVector = new Vector2( 0, FragEngineGame.Gravity * (float)gameTime.ElapsedGameTime.TotalSeconds * GravityFactor );
+            var gravityVector = new Vector2( 0, FragEngineGame.Gravity * tick * GravityFactor );
 
             Velocity += gravityVector;
 
             // apply acceleration or friction
             if( Acceleration != Vector2.Zero )
             {
-                Velocity += (Acceleration * tick);
-            } else if ( Friction != Vector2.Zero )
+                Velocity += Utility.Limit( Acceleration * tick, MaxVelocity );
+            }
+            else if ( Friction != Vector2.Zero )
             {
                 var delta = Friction * tick;
 
                 var subtract = Velocity - delta;
                 var add = Velocity + delta;
 
-                if( subtract.X > 0 )
-                    Velocity -= new Vector2( delta.X, 0 );
-                else if( add.X < 0)
-                    Velocity += new Vector2( delta.X, 0 );
-                else Velocity = new Vector2( 0, Velocity.Y );
+                if( subtract.X > 0 )    Velocity -= new Vector2( delta.X, 0 );
+                else if( add.X < 0)     Velocity += new Vector2( delta.X, 0 );
+                else                    Velocity = new Vector2( 0, Velocity.Y );
 
-                if( subtract.Y > 0 )
-                    Velocity -= new Vector2( 0, delta.Y );
-                else if( add.Y < 0)
-                    Velocity += new Vector2( 0, delta.Y );
-                else Velocity = new Vector2( Velocity.X, 0 );
+                if( subtract.Y > 0 )    Velocity -= new Vector2( 0, delta.Y );
+                else if( add.Y < 0)     Velocity += new Vector2( 0, delta.Y );
+                else                    Velocity = new Vector2( Velocity.X, 0 );
             }
 
             Velocity = Utility.Limit( Velocity, MaxVelocity );
@@ -182,12 +174,15 @@ namespace FragEngine.Entities
             if( result.YAxis )
             {
                 Standing = Velocity.Y > 0;
+                Velocity = new Vector2( Velocity.X, 0 );
             }
 
             if( result.XAxis )
             {
-                Velocity = Vector2.Zero;
+                Velocity = new Vector2( 0, Velocity.Y );
             }
+
+            Position = result.Position;
         }
 
         private void InternalInitialize()

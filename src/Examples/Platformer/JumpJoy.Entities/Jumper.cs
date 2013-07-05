@@ -19,7 +19,7 @@ namespace JumpJoy.Entities
         {
             Collision = CollisionType.A;
 
-            MaxVelocity = new Vector2 { X = 250, Y = 250 };
+            MaxVelocity = new Vector2 { X = 300, Y = 450 };
 
             Animations = new AnimationSheet( @"Textures\player", 64, 64 );
 
@@ -42,11 +42,11 @@ namespace JumpJoy.Entities
 
         public override void Update( GameTime gameTime )
         {
-            base.Update( gameTime );
-
             // we made contact with the ground, reset the jump count
             if( Standing )
                 _jumpCount = 0;
+
+            base.Update( gameTime );
         }
 
         // custom method to do some extra work after the collision check
@@ -68,10 +68,11 @@ namespace JumpJoy.Entities
 
             if( keyboard.IsKeyDown( Keys.Left ) || keyboard.IsKeyDown( Keys.Right ) )
             {
-                Animations.SetCurrentAnimation( "run" );
+                if( Standing )
+                    Animations.SetCurrentAnimation( "run" );
 
                 var mod = keyboard.IsKeyDown( Keys.Left ) ? -1 : 1;
-                velocity_x += 300 * mod;
+                velocity_x += Standing ? 2000 : 1250 * mod;
 
                 if( Math.Abs(velocity_x) > MaxVelocity.X )
                     velocity_x = MaxVelocity.X * mod;
@@ -92,9 +93,9 @@ namespace JumpJoy.Entities
                 }
             }
 
-            if( keyboard.IsKeyDown( Keys.Up ) && ( Standing || _jumpCount <= 1 ) )
+            if( keyboard.IsKeyDown( Keys.Up ) && ( _jumpCount <= 1 ) )
             {
-                velocity_y -= 100;
+                Velocity = new Vector2( Velocity.X, -350 );
 
                 if( _againstWallLeft || _againstWallRight )
                 {
@@ -106,14 +107,12 @@ namespace JumpJoy.Entities
                 _jumpCount++;
             }
 
-            if( Velocity.Y != 0 && !Standing )
-            {
+            if( Velocity.Y != 0f && CurrentAnimation != "jump" )
                 Animations.SetCurrentAnimation( "jump" );
-            }
 
-            Animations.CurrentAnimation.FlipX = Velocity.X < 0;
+            Animations.CurrentAnimation.FlipX = keyboard.IsKeyDown( Keys.Left );
 
-            Acceleration = new Vector2( velocity_x, velocity_y );
+            Acceleration = new Vector2( velocity_x, 0 );
         }
 
         public override void HandleGamePadInput(GamePadState gamepad)

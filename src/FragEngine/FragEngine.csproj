@@ -69,6 +69,7 @@
     <Compile Include="Entities\EntityService.cs" />
     <Compile Include="Entities\HudBase.cs" />
     <Compile Include="Entities\Player.cs" />
+    <Compile Include="Extensions\GameTimeExtensions.cs" />
     <Compile Include="Extensions\Vector2Extensions.cs" />
     <Compile Include="FragEngineGame.cs" />
     <Compile Include="InputState.cs" />

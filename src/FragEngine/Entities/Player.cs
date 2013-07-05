@@ -28,7 +28,8 @@ namespace FragEngine.Entities
 
         public override void Update( GameTime gameTime )
         {
-            base.Update( gameTime );
+            // zero out the acceleration
+            Acceleration = Vector2.Zero;
 
             if( inputState != null )
             {
@@ -37,6 +38,8 @@ namespace FragEngine.Entities
                 HandleKeyboardInput( inputState.CurrentKeyboardState );
                 HandleGamePadInput( inputState.CurrentGamePadState );
             }
+
+            base.Update( gameTime );
         }
 
         public abstract void HandleKeyboardInput( KeyboardState keyboard );

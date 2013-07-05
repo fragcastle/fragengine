@@ -114,6 +114,12 @@ namespace FragEngine.Mapping
 
                             Result.XAxis = true;
                             resultPosition.X = tileX * _map.TileSize - pxOffsetX + tileOffsetX;
+
+                            // assign the new result X to the currentPosition
+                            // so our checks against vertical collision will
+                            // start from the position that the character /will/
+                            // be at.
+                            _currentPosition = resultPosition;
                             break;
                         }
                     }
@@ -147,6 +153,8 @@ namespace FragEngine.Mapping
 
                             Result.YAxis = true;
                             resultPosition.Y = tileY * _map.TileSize - pxOffsetY + tileOffsetY;
+
+                            _currentPosition = resultPosition;
                             break;
                         }
                     }
