@@ -41,13 +41,13 @@ namespace FragEngine.Data
             // levels always have a collision layer
             MapLayers = new List<MapLayer>();
 
-            Entities = new List<EntityBase>();
+            Entities = new List<Entity>();
 
             CollisionLayer = new CollisionLayer();
         }
 
         [DataMember]
-        public List<EntityBase> Entities { get; set; }
+        public List<Entity> Entities { get; set; }
 
         [DataMember]
         public List<MapLayer> MapLayers { get; set; }

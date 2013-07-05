@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace FragEngine.Entities
 {
-    public abstract class Player: EntityBase
+    public abstract class Player: Actor
     {
 
         protected InputState inputState;

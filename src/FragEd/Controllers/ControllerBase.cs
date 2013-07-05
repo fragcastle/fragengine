@@ -31,17 +31,17 @@ namespace FragEd.Controllers
             return level;
         }
 
-        protected EntityBase GetEntityFromNode( TreeNode node )
+        protected Entity GetEntityFromNode( TreeNode node )
         {
-            EntityBase entity = null;
+            Entity entity = null;
             if( node.Tag as Type != null )
             {
-                entity = (EntityBase)Activator.CreateInstance( (Type)node.Tag );
+                entity = (Entity)Activator.CreateInstance( (Type)node.Tag );
             }
 
-            if( node.Tag as EntityBase != null )
+            if( node.Tag as Entity != null )
             {
-                entity = (EntityBase)node.Tag;
+                entity = (Entity)node.Tag;
             }
             return entity;
         }

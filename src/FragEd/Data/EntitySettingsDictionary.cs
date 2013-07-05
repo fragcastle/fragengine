@@ -9,9 +9,9 @@ using FragEngine.Entities;
 using Wexman.Design;
 
 namespace FragEd.Data {
-    public class EditableEntity 
+    public class EditableEntity
     {
-        private EntityBase _entity;
+        private Entity _entity;
 
         [Editor(typeof(GenericDictionaryEditor<string,string>), typeof(UITypeEditor))]
         public Dictionary<string, string> Settings
@@ -20,7 +20,7 @@ namespace FragEd.Data {
             set { _entity.Settings = value; }
         }
 
-        public EditableEntity( EntityBase entity )
+        public EditableEntity( Entity entity )
         {
             _entity = entity;
         }

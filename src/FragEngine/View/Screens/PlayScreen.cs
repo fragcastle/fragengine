@@ -20,13 +20,13 @@ namespace FragEngine.View.Screens
 
         protected Camera _camera;
         protected List<Layer> _layers;
-        protected HudBase _hud;
+        protected Hud _hud;
 
         protected EntityLayer _playerLayer;
         protected Layer _hudLayer;
         private EntityLayer _entityLayer;
 
-        public PlayScreen( HudBase hud )
+        public PlayScreen( Hud hud )
         {
             _hud = hud;
             _camera = ServiceInjector.Get<Camera>();

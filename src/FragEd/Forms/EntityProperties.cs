@@ -14,9 +14,9 @@ namespace FragEd.Forms
 {
     public partial class EntityProperties : Form
     {
-        private EntityBase _entity;
+        private Entity _entity;
 
-        public EntityProperties( EntityBase entity )
+        public EntityProperties( Entity entity )
         {
             InitializeComponent();
 
@@ -32,7 +32,7 @@ namespace FragEd.Forms
         {
             ux_AnimationList.Items.Clear();
             ux_EntitySettings.SelectedObject = null;
-            
+
             foreach (var animation in _entity.Animations.GetAnimations())
             {
                 ux_AnimationList.Items.Add(animation.Name);

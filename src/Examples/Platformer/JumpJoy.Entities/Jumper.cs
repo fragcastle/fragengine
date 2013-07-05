@@ -55,7 +55,7 @@ namespace JumpJoy.Entities
             base.UpdateEntityState( result );
 
             _againstWallLeft = result.XAxis && Velocity.X < 0;
-            _againstWallRight = result.XAxis && Velocity.X >= 0;
+            _againstWallRight = result.XAxis && Velocity.X > 0;
         }
 
         public override void HandleKeyboardInput(KeyboardState keyboard)
@@ -72,10 +72,7 @@ namespace JumpJoy.Entities
                     Animations.SetCurrentAnimation( "run" );
 
                 var mod = keyboard.IsKeyDown( Keys.Left ) ? -1 : 1;
-                velocity_x += Standing ? 2000 : 1250 * mod;
-
-                if( Math.Abs(velocity_x) > MaxVelocity.X )
-                    velocity_x = MaxVelocity.X * mod;
+                velocity_x += (Standing ? 2000 : 1250) * mod;
 
                 if( !Standing && ( _againstWallLeft && keyboard.IsKeyDown( Keys.Left ) || _againstWallRight && keyboard.IsKeyDown( Keys.Right ) ) )
                 {
@@ -110,7 +107,7 @@ namespace JumpJoy.Entities
             if( Velocity.Y != 0f && CurrentAnimation != "jump" )
                 Animations.SetCurrentAnimation( "jump" );
 
-            Animations.CurrentAnimation.FlipX = keyboard.IsKeyDown( Keys.Left );
+            FlipAnimation = keyboard.IsKeyDown( Keys.Left );
 
             Acceleration = new Vector2( velocity_x, 0 );
         }

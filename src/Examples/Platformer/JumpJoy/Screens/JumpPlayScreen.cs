@@ -17,7 +17,7 @@ namespace JumpJoy.Screens
 {
     public class JumpPlayScreen : PlayScreen
     {
-        public JumpPlayScreen(HudBase hud) : base(hud)
+        public JumpPlayScreen(Hud hud) : base(hud)
         {
 
         }

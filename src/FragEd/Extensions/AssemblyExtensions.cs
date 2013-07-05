@@ -10,7 +10,7 @@ namespace FragEd {
         public static IEnumerable<Type> GetEntities( this Assembly asm )
         {
             var types = ( from type in asm.GetTypes()
-                          where type.IsPublic && type.IsSubclassOf( typeof( EntityBase ) ) && !type.IsAbstract
+                          where type.IsPublic && type.IsSubclassOf( typeof( Entity ) ) && !type.IsAbstract
                           select type ).ToList();
 
             return types;

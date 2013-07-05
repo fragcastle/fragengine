@@ -10,7 +10,7 @@ namespace FragEngine.Mapping
     public class CollisionDetector
     {
 
-        private EntityBase _entity;
+        private Entity _entity;
         private CollisionMap _map;
 
         private Vector2 _positionDelta;
@@ -29,9 +29,9 @@ namespace FragEngine.Mapping
         {
             Result = new CollisionCheckResult() { Position = currentPosition };
 
-            _currentPosition = currentPosition;
-            _positionDelta = positionDelta;
-            _objectSize = objectSize;
+            _currentPosition = currentPosition.Ceiling();
+            _positionDelta = positionDelta.Ceiling();
+            _objectSize = objectSize.Ceiling();
 
             _finalPosition = new Vector2( _positionDelta.X, _positionDelta.Y );
 

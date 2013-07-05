@@ -18,7 +18,7 @@ namespace FragEngine.Layers
             DrawMethod = DrawEntities;
         }
 
-        public List<EntityBase> Entities = new List<EntityBase>();
+        public List<Entity> Entities = new List<Entity>();
 
         public void DrawEntities( SpriteBatch spriteBatch )
         {

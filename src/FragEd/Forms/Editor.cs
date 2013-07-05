@@ -59,7 +59,7 @@ namespace FragEd.Forms {
             };
 
             ux_LevelEntityList.ItemCheck += ( sender, args ) => {
-                var entity = (EntityBase)ux_LevelEntityList.SelectedItem;
+                var entity = (Entity)ux_LevelEntityList.SelectedItem;
 
                 if( entity != null )
                     entity.IsAlive = args.NewValue == CheckState.Checked;
@@ -124,7 +124,7 @@ namespace FragEd.Forms {
         }
 
         private void UxLevelEntityListOnDoubleClick( object sender, EventArgs eventArgs ) {
-            var selectedEntity = (EntityBase)ux_LevelEntityList.SelectedItem;
+            var selectedEntity = (Entity)ux_LevelEntityList.SelectedItem;
             if( selectedEntity != null ) {
                 // todo: open a new properties dialog for this entity
                 var dialog = new EntityProperties( selectedEntity );
@@ -202,7 +202,7 @@ namespace FragEd.Forms {
         }
 
         private void AddEntityToLevel( Type type ) {
-            var entity = (EntityBase)Activator.CreateInstance( type );
+            var entity = (Entity)Activator.CreateInstance( type );
             ux_LevelEditor.Level.Entities.Add( entity );
 
             RefreshLevelEntityList();
@@ -215,7 +215,7 @@ namespace FragEd.Forms {
         private void UxLevelEditorOnMouseMove( object sender, MouseEventArgs mouseEventArgs ) {
             if( mouseEventArgs.Button.HasFlag( MouseButtons.Left ) ) {
                 // user has an entity selected, move the entity
-                var entity = (EntityBase)ux_LevelEntityList.SelectedItem;
+                var entity = (Entity)ux_LevelEntityList.SelectedItem;
                 if( entity != null ) {
                     entity.Position = new Vector2( mouseEventArgs.X, mouseEventArgs.Y );
                 }
@@ -410,7 +410,7 @@ namespace FragEd.Forms {
 
         private void ux_RemoveEntity_Click( object sender, EventArgs e ) {
             if( ux_LevelEntityList.SelectedItem != null ) {
-                var entity = (EntityBase)ux_LevelEntityList.SelectedItem;
+                var entity = (Entity)ux_LevelEntityList.SelectedItem;
                 ux_LevelEditor.Level.Entities.Remove( entity );
 
                 RefreshLevelEntityList();

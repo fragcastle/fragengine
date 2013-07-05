@@ -9,9 +9,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace FragEngine.Entities
 {
-    public abstract class HudBase : EntityBase
+    public abstract class Hud : Entity
     {
-        public EntityBase Target { get; set; }
+        public Entity Target { get; set; }
         public bool ShowPauseMessage { get; set; }
         public SpriteFont Font { get; set; }
 
@@ -19,7 +19,7 @@ namespace FragEngine.Entities
 
         protected Rectangle _windowSize;
 
-        public HudBase( Rectangle windowSize ) : base( Vector2.Zero, Vector2.Zero )
+        public Hud( Rectangle windowSize ) : base( Vector2.Zero, Vector2.Zero )
         {
             _windowSize = windowSize;
             _text = new Dictionary<Vector2, string>();

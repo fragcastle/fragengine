@@ -15,18 +15,18 @@ namespace FragEngine.Entities
     // TODO: add bounciness
     // TODO: add support for entities with no animations (logical entities)
     //          thinking that an "entity" with animations is an Actor.
-    public abstract class EntityBase
+    public abstract class Entity
     {
         private bool _initialized;
         protected ICollisionService CollisionService;
         protected IEntityService EntityService;
 
-        protected EntityBase()
+        protected Entity()
             : this( Vector2.Zero, Vector2.Zero )
         {
         }
 
-        protected EntityBase( Vector2 initialLocation, Vector2 initialVelocity )
+        protected Entity( Vector2 initialLocation, Vector2 initialVelocity )
         {
             Position = initialLocation;
             Velocity = initialVelocity;
@@ -135,39 +135,6 @@ namespace FragEngine.Entities
             }
         }
 
-        private void CalculateVelocity( GameTime gameTime )
-        {
-            var tick = gameTime.GetGameTick();
-
-            // apply gravity
-            var gravityVector = new Vector2( 0, FragEngineGame.Gravity * tick * GravityFactor );
-
-            Velocity += gravityVector;
-
-            // apply acceleration or friction
-            if( Acceleration != Vector2.Zero )
-            {
-                Velocity += Utility.Limit( Acceleration * tick, MaxVelocity );
-            }
-            else if ( Friction != Vector2.Zero )
-            {
-                var delta = Friction * tick;
-
-                var subtract = Velocity - delta;
-                var add = Velocity + delta;
-
-                if( subtract.X > 0 )    Velocity -= new Vector2( delta.X, 0 );
-                else if( add.X < 0)     Velocity += new Vector2( delta.X, 0 );
-                else                    Velocity = new Vector2( 0, Velocity.Y );
-
-                if( subtract.Y > 0 )    Velocity -= new Vector2( 0, delta.Y );
-                else if( add.Y < 0)     Velocity += new Vector2( 0, delta.Y );
-                else                    Velocity = new Vector2( Velocity.X, 0 );
-            }
-
-            Velocity = Utility.Limit( Velocity, MaxVelocity );
-        }
-
         protected virtual void UpdateEntityState(CollisionCheckResult result)
         {
             Standing = false;
@@ -183,17 +150,6 @@ namespace FragEngine.Entities
             }
 
             Position = result.Position;
-        }
-
-        private void InternalInitialize()
-        {
-            CollisionService = ServiceInjector.Get<ICollisionService>();
-            EntityService = ServiceInjector.Get<IEntityService>();
-
-            if( BoundingBox.Width == 0 || BoundingBox.Height == 0 )
-            {
-                BoundingBox = new Rectangle( 0, 0, (int)Animations.FrameSize.X, (int)Animations.FrameSize.Y );
-            }
         }
 
         protected virtual void Initialize()
@@ -223,7 +179,7 @@ namespace FragEngine.Entities
             }
         }
 
-        public virtual void ReceiveDamage( EntityBase from, int amount )
+        public virtual void ReceiveDamage( Entity from, int amount )
         {
             if( Health < amount )
             {
@@ -244,6 +200,56 @@ namespace FragEngine.Entities
         public override string ToString()
         {
             return string.Format("{0} ( {1} )", this.GetType().Name, this.GetType().Namespace);
+        }
+
+
+        private void InternalInitialize()
+        {
+            CollisionService = ServiceInjector.Get<ICollisionService>();
+            EntityService = ServiceInjector.Get<IEntityService>();
+
+            if( BoundingBox.Width == 0 || BoundingBox.Height == 0 )
+            {
+                BoundingBox = new Rectangle( 0, 0, (int)Animations.FrameSize.X, (int)Animations.FrameSize.Y );
+            }
+        }
+
+        private void CalculateVelocity( GameTime gameTime )
+        {
+            var tick = gameTime.GetGameTick();
+
+            // apply gravity
+            var gravityVector = new Vector2( 0, FragEngineGame.Gravity * tick * GravityFactor );
+
+            Velocity += gravityVector;
+
+            // are we speeding up, or slowing down?
+            if( Acceleration != Vector2.Zero )
+                Velocity = ApplyAcceleration( gameTime );
+            else if( Friction != Vector2.Zero )
+                Velocity = ApplyFriction( gameTime );
+        }
+
+        private Vector2 ApplyFriction( GameTime gameTime )
+        {
+            var frictionDelta = Friction * gameTime.GetGameTick();
+
+            var newVelocity = Velocity;
+
+            if( Velocity.X - frictionDelta.X > 0 ) newVelocity.X -= frictionDelta.X;
+            else if( Velocity.X + frictionDelta.X < 0 ) newVelocity.X += frictionDelta.X;
+            else newVelocity.X = 0;
+
+            if( Velocity.Y - frictionDelta.Y > 0 ) newVelocity.Y -= frictionDelta.Y;
+            else if( Velocity.Y + frictionDelta.Y < 0 ) newVelocity.Y += frictionDelta.Y;
+            else newVelocity.Y = 0;
+
+            return Utility.Limit( newVelocity, MaxVelocity );
+        }
+
+        private Vector2 ApplyAcceleration( GameTime gameTime )
+        {
+            return Velocity += Utility.Limit( Acceleration * gameTime.GetGameTick(), MaxVelocity );
         }
     }
 }
