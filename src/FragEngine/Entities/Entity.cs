@@ -107,8 +107,6 @@ namespace FragEngine.Entities
             }
         }
 
-
-
         public virtual void Update( GameTime gameTime )
         {
             if (IsAlive)
@@ -122,7 +120,7 @@ namespace FragEngine.Entities
 
                 CalculateVelocity( gameTime );
 
-                var partialVelocity = Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                var partialVelocity = Velocity * gameTime.GetGameTick();
 
                 // ask the collision system if we're going to have a collision at that co-ord
                 var result = CollisionService.Check( Position, partialVelocity, Animations.CurrentAnimation.FrameSize );
@@ -145,9 +143,7 @@ namespace FragEngine.Entities
             }
 
             if( result.XAxis )
-            {
                 Velocity = new Vector2( 0, Velocity.Y );
-            }
 
             Position = result.Position;
         }
@@ -249,7 +245,7 @@ namespace FragEngine.Entities
 
         private Vector2 ApplyAcceleration( GameTime gameTime )
         {
-            return Velocity += Utility.Limit( Acceleration * gameTime.GetGameTick(), MaxVelocity );
+            return Velocity = Utility.Limit( Velocity + Acceleration * gameTime.GetGameTick(), MaxVelocity );
         }
     }
 }
