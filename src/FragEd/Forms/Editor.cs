@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -43,6 +44,10 @@ namespace FragEd.Forms
                 return ux_LevelEditor.Level;
             }
         }
+
+        // statusbar variables
+        private ToolStripStatusLabel _zoomText;
+        private int[] _zoomLevels = new int [] { 50, 100, 200, 300, 400, 600, 800, 1200, 1400, 1600 };
 
         protected string CurrentProjectFile { get; set; }
 
@@ -96,6 +101,9 @@ namespace FragEd.Forms
             };
 
             ux_LevelEditor.MouseWheel += UxLevelEditorOnMouseWheel;
+
+            // setup status bar controls
+            AddZoomControlsToStatusBar( ux_StatusBar );
         }
 
         private void UxLevelEditorOnMouseWheel( object sender, MouseEventArgs mouseEventArgs )
@@ -252,31 +260,29 @@ namespace FragEd.Forms
             debugStatus.Text = string.Format( "{0}, {1}", mouseEventArgs.X, mouseEventArgs.Y );
 
             var name = (string)ux_LayerList.SelectedItem;
-
-            if( name == null )
-                return;
-
-            var layer = GetLayerByName( name );
             var position = new Vector2( mouseEventArgs.X, mouseEventArgs.Y );
 
-
-            if( mouseEventArgs.Button.HasFlag( MouseButtons.Right ) )
-            {
-                if( ux_LayerList.SelectedItem != null )
-                    UnPaintTile( layer, position );
-            }
+            if( mouseEventArgs.Button.HasFlag( MouseButtons.Right ) && ux_LayerList.SelectedItem != null )
+                UnPaintTile( GetLayerByName( name ), position );
 
             if( mouseEventArgs.Button.HasFlag( MouseButtons.Left ) )
             {
                 // user has an entity selected, move the entity
                 var entity = (Entity)ux_LevelEntityList.SelectedItem;
                 if( entity != null )
-                {
                     entity.Position = new Vector2( mouseEventArgs.X, mouseEventArgs.Y );
-                }
 
                 if( ux_LayerList.SelectedItem != null )
-                    PaintTile( layer, position );
+                    PaintTile( GetLayerByName( name ), position );
+            }
+
+            if( mouseEventArgs.Button.HasFlag( MouseButtons.Middle ) )
+            {
+                var centerOfEditorPane = new Vector2( ux_LevelEditor.Width/2, ux_LevelEditor.Height/2 );
+
+                var delta = position - centerOfEditorPane;
+
+                ux_LevelEditor.Camera.Origin += delta * ux_LevelEditor.LatestTick;
             }
         }
 
@@ -427,12 +433,12 @@ namespace FragEd.Forms
             if( result == DialogResult.OK )
             {
                 // create a layer object
-                var layer = new MapLayer( ux_LevelEditor.Camera );
-
                 // TODO: make sure this is relative to one of the content directories...
-                layer.TileSetTexturePath = dialog.TileSet;
-                layer.TileSize = dialog.TileSize;
-                layer.Name = dialog.LayerName;
+                var layer = new MapLayer {
+                    TileSetTexturePath = dialog.TileSet,
+                    TileSize = dialog.TileSize,
+                    Name = dialog.LayerName
+                };
 
                 CurrentLevel.MapLayers.Add( layer );
 
@@ -447,9 +453,7 @@ namespace FragEd.Forms
             if( result == DialogResult.OK )
             {
                 foreach( var type in gameAssemblies.RemovedEntities )
-                {
                     Project.Entities.Remove( type );
-                }
 
                 Project.Entities.AddRange( gameAssemblies.AddedEntities );
 
@@ -467,9 +471,7 @@ namespace FragEd.Forms
                 dirs.ToList().ForEach( d => Project.ContentDirectories.Remove( d ) );
 
                 foreach( var addedPath in contentFolders.AddedFolders )
-                {
                     Project.ContentDirectories.Add( new DirectoryInfo( addedPath ) );
-                }
 
                 UpdateUserInterface();
             }
@@ -497,9 +499,7 @@ namespace FragEd.Forms
         private void PaintTile( MapLayer layer, Vector2 position )
         {
             if( !_layerTileMap.ContainsKey( layer ) )
-            {
                 _layerTileMap.Add( layer, 0 ); // the first tile is the default
-            }
 
             layer.SetTile( position, _layerTileMap[ layer ] );
         }
@@ -507,6 +507,48 @@ namespace FragEd.Forms
         private void UnPaintTile( MapLayer layer, Vector2 position )
         {
             layer.SetTile( position, -1 );
+        }
+
+        private void AddZoomControlsToStatusBar( StatusStrip statusBar )
+        {
+
+            _zoomText = new ToolStripStatusLabel( "100%" ) { AutoSize = false, Width = 35, Padding = new Padding( 6, 3, 0, 2 ), TextAlign = ContentAlignment.MiddleRight };
+
+            var trackBarZoom = new TrackBar
+                {
+                    AutoSize = false,
+                    Height = 22,
+                    TickStyle = TickStyle.None,
+                    Anchor = AnchorStyles.Right,
+                    Minimum = 0,
+                    Maximum = _zoomLevels.Length - 1,
+                    Value = 1,
+                    BackColor = SystemColors.ControlLightLight
+                };
+
+            trackBarZoom.ValueChanged += TrackBarZoomOnValueChanged;
+
+            var trackBarZoomItem = new ToolStripControlHost( trackBarZoom );
+
+            debugStatus.Width = 80;
+            debugStatus.AutoSize = false;
+            debugStatus.BorderSides = ToolStripStatusLabelBorderSides.Right;
+
+            statusBar.Items.AddRange( new ToolStripItem[] {
+                debugStatus,
+                _zoomText,
+                trackBarZoomItem
+            });
+        }
+
+        private void TrackBarZoomOnValueChanged(object sender, EventArgs eventArgs)
+        {
+            var trackBar = (TrackBar)sender;
+            var zoom = _zoomLevels[ trackBar.Value ];
+
+            ux_LevelEditor.Camera.Zoom = zoom/100f;
+
+            _zoomText.Text = zoom + "%";
         }
     }
 }

@@ -13,8 +13,6 @@ namespace FragEngine.Layers
     [DataContract]
     public class Layer
     {
-        protected Camera _camera;
-
         protected bool _initialized;
 
         [DataMember]
@@ -39,9 +37,8 @@ namespace FragEngine.Layers
             }
         }
 
-        public Layer( Camera camera, Vector2? parallax = null )
+        public Layer( Vector2? parallax = null )
         {
-            _camera = camera ?? ServiceInjector.Get<Camera>();
             Parallax = parallax ?? new Vector2( 1, 1 );
 
             SamplerState = SamplerState.LinearClamp; // XNA Default
@@ -62,21 +59,15 @@ namespace FragEngine.Layers
                 _initialized = true;
             }
 
+            var _camera = ServiceInjector.Get<Camera>();
+
             if( _camera != null )
-            {
                 spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState, null, null, null, _camera.GetViewMatrix( Parallax ) );
-            }
             else
-            {
-                // the editor will not set the camera (static layering)
-                // TODO: change this to rely on a RenderMode enum?
                 spriteBatch.Begin( SpriteSortMode.Deferred, null, SamplerState, null, null );
-            }
 
             if( DrawMethod != null )
-            {
                 DrawMethod( spriteBatch );
-            }
 
             spriteBatch.End();
         }

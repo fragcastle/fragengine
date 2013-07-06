@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using FragEd.Forms;
+using FragEngine;
 using FragEngine.Data;
 using FragEngine.Services;
 using FragEngine.View;
@@ -22,6 +23,8 @@ namespace FragEd.Controls
         private TimeSpan _accumulatedElapsedTime;
 
         private readonly TimeSpan _maxElapsedTime = TimeSpan.FromMilliseconds( 500 );
+
+        public float LatestTick { get; private set; }
 
         protected override void Draw(SpriteBatch spriteBatch)
         {
@@ -66,10 +69,12 @@ namespace FragEd.Controls
                 // if you get the "big red x" error, ctrl+alt+e and check "thrown" for
                 // Common Language Runtime: http://thewayofcoding.com/2011/08/xna-4-0-red-x-exceptions/
                 var _camera = ServiceInjector.Get<Camera>();
-                spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, null, null, null, _camera.GetViewMatrix( new Vector2( 1, 1 ) ) );
+                spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, _camera.GetViewMatrix( new Vector2( 1, 1 ) ) );
                 DrawEntities( spriteBatch );
                 spriteBatch.End();
             }
+
+            LatestTick = _gameTime.GetGameTick();
         }
 
         private void DrawEntities(SpriteBatch spriteBatch)

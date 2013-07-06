@@ -33,7 +33,7 @@ namespace FragEngine.Layers
             {
                 _tileSetTexturePath = value;
 
-                if (!String.IsNullOrWhiteSpace(value))
+                if( !String.IsNullOrWhiteSpace( value ) )
                 {
                     // don't load the animation sheet yet as we can't garauntee that the TileSize
                     // is correct, which will throw off our frame calculations.
@@ -69,32 +69,23 @@ namespace FragEngine.Layers
 
         public MapLayer()
             : this( null )
-        {
+        { }
 
-        }
-
-        public MapLayer(Camera camera, int tileSize = 16, int[] mapData = null, Vector2? parallax = null)
-            : base(camera, parallax)
+        public MapLayer( Vector2? parallax, int tileSize = 16, int[] mapData = null )
+            : base( parallax )
         {
             MapData = new CompressedMapData();
 
             TileSize = tileSize;
 
-            if (mapData != null)
-            {
+            if( mapData != null )
                 MapData.Data = mapData;
-            }
 
             DrawMethod = DrawMap;
 
-            if( camera == null && FragEngineGame.ScreenManager != null )
-            {
-                camera = ServiceInjector.Get<Camera>();
-            }
-
             SamplerState = SamplerState.PointClamp;
 
-            if (MapData.Data == null || MapData.IsEmpty())
+            if( MapData.Data == null || MapData.IsEmpty() )
             {
                 MapData.Data = new int[ 45 * 80 ];
                 MapData.Width = 80;
@@ -102,7 +93,7 @@ namespace FragEngine.Layers
             }
         }
 
-        public void DrawMap(SpriteBatch spriteBatch)
+        public void DrawMap( SpriteBatch spriteBatch )
         {
 
             if( _tileSetTextureIsDirty )
@@ -118,34 +109,35 @@ namespace FragEngine.Layers
                 }
             }
 
-            if (TileSetTexture != null)
+            if( TileSetTexture != null )
             {
-                MapData.EachCell( (cell, tile) => {
+                MapData.EachCell( ( cell, tile ) =>
+                {
                     // only draw tiles that have data
-                    if (tile > -1)
+                    if( tile > -1 )
                     {
                         // adjust the vector position according to the tilesize
                         cell *= TileSize;
 
                         TileSheet[ tile ].Draw( spriteBatch, cell, Color.White * Opacity );
                     }
-                });
+                } );
             }
         }
 
-        public int? GetTile(int x, int y)
+        public int? GetTile( int x, int y )
         {
-            var tx = (int)Math.Floor((double)x / TileSize);
-            var ty = (int)Math.Floor((double)y / TileSize);
+            var tx = (int)Math.Floor( (double)x / TileSize );
+            var ty = (int)Math.Floor( (double)y / TileSize );
 
-            return MapData.GetTile(new Vector2(tx, ty));
+            return MapData.GetTile( new Vector2( tx, ty ) );
         }
 
         public void SetTile( Vector2 gameWorldPosition, int tileValue )
         {
             // truncate both the values, keeping as floats will produce unexpected tile placements
             var correctedPosition = new Vector2(
-                (int)(gameWorldPosition.X / TileSize),
+                (int)( gameWorldPosition.X / TileSize ),
                 (int)( gameWorldPosition.Y / TileSize ) );
 
             var index = MapData.GetCellIndex( correctedPosition );
@@ -153,17 +145,17 @@ namespace FragEngine.Layers
             MapData[ index ] = tileValue;
         }
 
-        public void SetTile(int x, int y, int tile)
+        public void SetTile( int x, int y, int tile )
         {
-            var tx = (int)Math.Floor((double)x / TileSize);
-            var ty = (int)Math.Floor((double)y / TileSize);
+            var tx = (int)Math.Floor( (double)x / TileSize );
+            var ty = (int)Math.Floor( (double)y / TileSize );
 
-            var position = new Vector2(tx, ty);
+            var position = new Vector2( tx, ty );
 
-            MapData[position] = tile;
+            MapData[ position ] = tile;
         }
 
-        private void Prefill(int dummy = -1)
+        private void Prefill( int dummy = -1 )
         {
             MapData.EachCell( ( cell, index ) => dummy );
         }

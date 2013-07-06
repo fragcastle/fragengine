@@ -34,8 +34,8 @@ namespace FragEngine.View.Screens
 
         public virtual void Initialize()
         {
-            _playerLayer = new EntityLayer( _camera );
-            _entityLayer = new EntityLayer( _camera );
+            _playerLayer = new EntityLayer();
+            _entityLayer = new EntityLayer();
             _layers = new List<Layer>
             {
                 _entityLayer,
@@ -44,7 +44,7 @@ namespace FragEngine.View.Screens
 
             if( _hud != null )
             {
-                _hudLayer = new StaticLayer( _camera ) { StaticPosition = Vector2.Zero, DrawMethod = _hud.Draw };
+                _hudLayer = new StaticLayer() { StaticPosition = Vector2.Zero, DrawMethod = _hud.Draw };
                 _layers.Add(_hudLayer);
             }
         }

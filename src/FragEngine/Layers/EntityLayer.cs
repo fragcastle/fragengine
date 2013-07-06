@@ -12,8 +12,8 @@ namespace FragEngine.Layers
     // EntityLayer is never serialized. It's only used by the game engine
     public class EntityLayer : Layer
     {
-        public EntityLayer( Camera camera, Vector2? parallax = null )
-            : base( camera, parallax )
+        public EntityLayer( Vector2? parallax = null )
+            : base( parallax )
         {
             DrawMethod = DrawEntities;
         }

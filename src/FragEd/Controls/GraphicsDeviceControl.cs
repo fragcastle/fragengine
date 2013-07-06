@@ -197,7 +197,10 @@ namespace FragEd.Controls
             if( GraphicsDevice.Viewport.Equals( viewport ) == false )
             {
                 GraphicsDevice.Viewport = viewport;
+                var zoom = _camera.Zoom;
                 _camera = new Camera(viewport2);
+
+                _camera.Zoom = zoom;
 
                 ServiceInjector.Add(_camera);
             }
