@@ -22,6 +22,12 @@ namespace FragEngine {
     }
 
     public abstract class FragEngineGame : Game {
+
+        /// <summary>
+        /// Use in your games to get a close approximation of the Gravitational Constant
+        /// </summary>
+        public const float GRAVITY_CONSTANT = 613f;
+
         public static GraphicsDeviceManager Graphics;
         public static Matrix SpriteScale { get; protected set; }
 
