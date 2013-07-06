@@ -90,17 +90,7 @@ namespace FragEngine.Mapping
 
                 var firstTileY = (int)Math.Max( Math.Floor( _currentPosition.Y / _map.TileSize ), 0 );
                 var lastTileY = (int)Math.Min( Math.Ceiling( ( _currentPosition.Y + _objectSize.Y ) / _map.TileSize ), mapHeight );
-                var tileX = (int)Math.Floor( ( Result.Position.X + pxOffsetX ) / _map.TileSize );
-
-                // We need to test the new tile position as well as the current one, as we
-                // could still collide with the current tile if it's a line def.
-                // We can skip this test if this is not the first step or the new tile position
-                // is the same as the current one.
-                var prevTileX = (int)Math.Floor( ( _currentPosition.X + pxOffsetX ) / _map.TileSize );
-                if( stepIndex > 0 || tileX == prevTileX || prevTileX < 0 || prevTileX >= _map.MapData.Width )
-                {
-                    prevTileX = -1;
-                }
+                var tileX = (int)Math.Floor( ( resultPosition.X + pxOffsetX ) / _map.TileSize );
 
                 if( tileX >= 0 && tileX < _map.MapData.Width )
                 {
@@ -133,13 +123,7 @@ namespace FragEngine.Mapping
 
                 var firstTileX = (int)Math.Max( Math.Floor( _currentPosition.X / _map.TileSize ), 0 );
                 var lastTileX = (int)Math.Min( Math.Ceiling( ( _currentPosition.X + _objectSize.X ) / _map.TileSize ), _map.MapData.Width );
-                var tileY = (int)Math.Floor( ( Result.Position.Y + pxOffsetY ) / _map.TileSize );
-
-                var prevTileY = Math.Floor( ( _currentPosition.Y + pxOffsetY ) / _map.TileSize );
-                if( stepIndex > 0 || tileY == prevTileY || prevTileY < 0 || prevTileY >= mapHeight )
-                {
-                    prevTileY = -1;
-                }
+                var tileY = (int)Math.Floor( ( resultPosition.Y + pxOffsetY ) / _map.TileSize );
 
                 if( tileY >= 0 && tileY < mapHeight )
                 {
