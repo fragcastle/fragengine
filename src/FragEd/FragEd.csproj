@@ -217,6 +217,17 @@
   <ItemGroup>
     <None Include="Resources\action_add_16xMD.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Clearallrequests_8816.png" />
+    <Content Include="Resources\NewFile_6276.png" />
+    <Content Include="Resources\Rules.png" />
+    <Content Include="Resources\Saveall_6518.png" />
+    <Content Include="Resources\SendFeedback_7256.png" />
+    <Content Include="Resources\ToggleGrid_5588.png" />
+    <Content Include="Resources\ViewDesigner_6280.png" />
+    <Content Include="Resources\ZoomOut_12927.png" />
+    <Content Include="Resources\Zoom_5442.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
