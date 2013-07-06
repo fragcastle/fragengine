@@ -213,6 +213,23 @@ namespace FragEd.Forms {
         }
 
         private void UxLevelEditorOnMouseMove( object sender, MouseEventArgs mouseEventArgs ) {
+            debugStatus.Text = string.Format( "{0}, {1}", mouseEventArgs.X, mouseEventArgs.Y );
+
+            var name = (string)ux_LayerList.SelectedItem;
+
+            if( name == null )
+                return;
+
+            var layer = GetLayerByName( name );
+            var position = new Vector2( mouseEventArgs.X, mouseEventArgs.Y );
+
+
+            if( mouseEventArgs.Button.HasFlag( MouseButtons.Right ) )
+            {
+                if( ux_LayerList.SelectedItem != null  )
+                    UnPaintTile( layer, position );
+            }
+
             if( mouseEventArgs.Button.HasFlag( MouseButtons.Left ) ) {
                 // user has an entity selected, move the entity
                 var entity = (Entity)ux_LevelEntityList.SelectedItem;
@@ -221,25 +238,8 @@ namespace FragEd.Forms {
                 }
 
                 if( ux_LayerList.SelectedItem != null )
-                {
-                    var name = (string)ux_LayerList.SelectedItem;
-
-                    var layer = GetLayerByName( name );
-
-                    var position = new Vector2( mouseEventArgs.X, mouseEventArgs.Y );
-
-                    if( mouseEventArgs.Button == MouseButtons.Right )
-                    {
-                        UnPaintTile( layer, position );
-                    }
-                    else
-                    {
-                        PaintTile( layer, position );
-                    }
-                }
+                    PaintTile( layer, position );
             }
-
-            debugStatus.Text = string.Format( "{0}, {1}", mouseEventArgs.X, mouseEventArgs.Y );
         }
 
         private void UxLevelEditorOnMouseDown( object sender, MouseEventArgs mouseEventArgs ) {
