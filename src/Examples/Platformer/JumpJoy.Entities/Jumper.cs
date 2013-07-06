@@ -1,5 +1,4 @@
-﻿using System;
-using FragEngine;
+﻿using FragEngine;
 using FragEngine.Animation;
 using FragEngine.Entities;
 using Microsoft.Xna.Framework;
@@ -14,6 +13,13 @@ namespace JumpJoy.Entities
         private bool _againstWallRight;
 
         private int _jumpCount;
+
+        private int _airAccel = 1250;
+        private int _groundAccel = 2000;
+
+        private int _jumpSpeed = 350;
+
+        private bool _againstWall = false;
 
         protected override void Initialize()
         {
@@ -52,69 +58,91 @@ namespace JumpJoy.Entities
         // custom method to do some extra work after the collision check
         protected override void UpdateEntityState( FragEngine.Mapping.CollisionCheckResult result )
         {
+
             base.UpdateEntityState( result );
 
-            _againstWallLeft = result.XAxis && Velocity.X < 0;
-            _againstWallRight = result.XAxis && Velocity.X > 0;
+            _againstWall = result.XAxis;
+            _againstWallLeft = !Standing && result.XAxis && Acceleration.X < 0;
+            _againstWallRight = !Standing && result.XAxis && Acceleration.X > 0;
         }
 
         public override void HandleKeyboardInput(KeyboardState keyboard)
         {
-            Acceleration = Vector2.Zero;
+            var left = keyboard.IsKeyDown( Keys.Left );
+            var right = keyboard.IsKeyDown( Keys.Right );
+            var jumped = keyboard.IsKeyDown( Keys.Up );
 
-            float velocity_x = 0, velocity_y = 0;
+            if( left )
+                GoLeft();
+            else if( right )
+                GoRight();
 
-            Animations.SetCurrentAnimation( "idle" );
+            if( jumped )
+                Jump();
 
-            if( keyboard.IsKeyDown( Keys.Left ) || keyboard.IsKeyDown( Keys.Right ) )
+
+            if( !Standing && !jumped && _againstWall && ( left || right ) )
             {
-                if( Standing )
-                    Animations.SetCurrentAnimation( "run" );
+                _jumpCount = 0;
 
-                var mod = keyboard.IsKeyDown( Keys.Left ) ? -1 : 1;
-                velocity_x += (Standing ? 2000 : 1250) * mod;
+                if( _againstWallLeft && left )
+                    CurrentAnimation = "wallSlideLeft";
+                else if( _againstWallRight && right )
+                    CurrentAnimation = "wallSlideRight";
 
-                if( !Standing && ( _againstWallLeft && keyboard.IsKeyDown( Keys.Left ) || _againstWallRight && keyboard.IsKeyDown( Keys.Right ) ) )
-                {
-                    _jumpCount = 0;
+                GravityFactor = 1.0f;
 
-                    if( _againstWallLeft && keyboard.IsKeyDown( Keys.Left ) )
-                        Animations.SetCurrentAnimation( "wallSlideLeft" );
-
-                    if( _againstWallRight && keyboard.IsKeyDown( Keys.Right ) )
-                        Animations.SetCurrentAnimation( "wallSlideRight" );
-
-                    GravityFactor = 1.0f;
-
-                    Velocity *= new Vector2(1, 0.8f);
-                }
+                Velocity *= new Vector2( 1, 0.8f );
             }
-
-            if( keyboard.IsKeyDown( Keys.Up ) && ( _jumpCount <= 1 ) )
+            else
             {
-                Velocity = new Vector2( Velocity.X, -350 );
-
-                if( _againstWallLeft || _againstWallRight )
-                {
-                    Velocity = new Vector2( _againstWallRight ? -500 : 500, Velocity.Y );
-
-                    _againstWallRight = _againstWallLeft = false;
-                }
-
-                _jumpCount++;
+                // pick animation based on what the actor is doing
+                if( !Standing && Velocity.Y != 0 && !_againstWallRight && !_againstWallLeft )
+                    CurrentAnimation = "jump";
+                else if( Acceleration.X != 0f )
+                    CurrentAnimation = "run";
+                else if( Standing && CurrentAnimation != "talking" )
+                    CurrentAnimation = "idle";
             }
-
-            if( Velocity.Y != 0f && CurrentAnimation != "jump" )
-                Animations.SetCurrentAnimation( "jump" );
-
-            FlipAnimation = keyboard.IsKeyDown( Keys.Left );
-
-            Acceleration = new Vector2( velocity_x, 0 );
         }
 
         public override void HandleGamePadInput(GamePadState gamepad)
         {
             // no gamepad bindings yet
+        }
+
+        private void GoLeft()
+        {
+            var accel = Standing ? _groundAccel : _airAccel;
+            Acceleration = new Vector2( -accel, Acceleration.Y );
+            FlipAnimation = true;
+        }
+
+        private void GoRight()
+        {
+            var accel = Standing ? _groundAccel : _airAccel;
+            Acceleration = new Vector2( accel, Acceleration.Y );
+            FlipAnimation = false;
+        }
+
+        private void Jump()
+        {
+            if( _jumpCount >= 2 )
+                return;
+
+            Velocity = new Vector2( Velocity.X, -_jumpSpeed );
+
+            if( _againstWallLeft || _againstWallRight )
+            {
+                Velocity = new Vector2( _againstWallRight ? -500 : 500, Velocity.Y );
+
+                _againstWallRight = _againstWallLeft = false;
+            }
+
+            if( CurrentAnimation != "jump" )
+                Animations.SetCurrentAnimation( "jump" );
+
+            _jumpCount++;
         }
     }
 }
