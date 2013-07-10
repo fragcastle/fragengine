@@ -51,16 +51,18 @@ namespace JumpJoy.Screens
 
             var camera = ServiceInjector.Get<Camera>();
 
-            if( input.CurrentKeyboardState.IsKeyDown( Keys.Q ) )
-            {
-                camera.Zoom += 0.1f;
-            }
 
-            if( input.CurrentKeyboardState.IsKeyDown( Keys.E ) )
-            {
-                camera.Zoom -= 0.1f;
-            }
+            // Zooming
+            if( input.CurrentKeyboardState.IsKeyDown( Keys.Q ) ) camera.Zoom += 0.1f;
+            if( input.CurrentKeyboardState.IsKeyDown( Keys.W ) ) camera.Zoom = 1f;
+            if( input.CurrentKeyboardState.IsKeyDown( Keys.E ) ) camera.Zoom -= 0.1f;
 
+            // Rotation
+            if( input.CurrentKeyboardState.IsKeyDown( Keys.A ) ) camera.Rotation -= 0.1f;
+            if( input.CurrentKeyboardState.IsKeyDown( Keys.S ) ) camera.Rotation = 0f;
+            if( input.CurrentKeyboardState.IsKeyDown( Keys.D ) ) camera.Rotation += 0.1f;
+
+            // Zoom Presets
             if( input.CurrentKeyboardState.IsKeyDown( Keys.NumPad1 ) ) camera.Zoom = 1f;
             if( input.CurrentKeyboardState.IsKeyDown( Keys.NumPad2 ) ) camera.Zoom = 2f;
             if( input.CurrentKeyboardState.IsKeyDown( Keys.NumPad3 ) ) camera.Zoom = 3f;
