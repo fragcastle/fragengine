@@ -41,6 +41,8 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.ux_AddLevel = new System.Windows.Forms.ToolStripMenuItem();
             this.ux_AddExistingLevel = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ux_ShowGrid = new System.Windows.Forms.ToolStripMenuItem();
             this.ux_OpenProjectDialog = new System.Windows.Forms.OpenFileDialog();
             this.ux_SaveProjectDialog = new System.Windows.Forms.SaveFileDialog();
             this.ux_SplitContainer = new System.Windows.Forms.SplitContainer();
@@ -94,7 +96,8 @@
             //
             this.ux_MenuBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ux_FileMenu,
-            this.ux_ProjectMenu});
+            this.ux_ProjectMenu,
+            this.viewToolStripMenuItem});
             this.ux_MenuBar.Location = new System.Drawing.Point(0, 0);
             this.ux_MenuBar.Name = "ux_MenuBar";
             this.ux_MenuBar.Size = new System.Drawing.Size(998, 24);
@@ -212,6 +215,21 @@
             this.ux_AddExistingLevel.Size = new System.Drawing.Size(213, 22);
             this.ux_AddExistingLevel.Text = "Add Existing Level";
             this.ux_AddExistingLevel.Click += new System.EventHandler(this.ux_AddExistingLevel_Click);
+            //
+            // viewToolStripMenuItem
+            //
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ux_ShowGrid});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Text = "View";
+            //
+            // ux_ShowGrid
+            //
+            this.ux_ShowGrid.Name = "ux_ShowGrid";
+            this.ux_ShowGrid.Size = new System.Drawing.Size(128, 22);
+            this.ux_ShowGrid.Text = "Show Grid";
+            this.ux_ShowGrid.Click += new System.EventHandler(this.ux_ShowGrid_Click);
             //
             // ux_OpenProjectDialog
             //
@@ -481,5 +499,7 @@
         private System.Windows.Forms.ToolStripDropDownButton ux_AddEntity;
         private System.Windows.Forms.ToolStripButton ux_RemoveEntity;
         private System.Windows.Forms.ToolStripStatusLabel debugStatus;
+        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ux_ShowGrid;
     }
 }

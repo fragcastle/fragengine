@@ -26,6 +26,11 @@ namespace FragEd.Controls
 
         public float LatestTick { get; private set; }
 
+        public void SetGridState( bool drawGrid )
+        {
+            Level.MapLayers.ForEach( m => m.DrawGrid = drawGrid );
+        }
+
         protected override void Draw(SpriteBatch spriteBatch)
         {
             _accumulatedElapsedTime += _gameTimer.Elapsed;
