@@ -48,6 +48,7 @@ namespace FragEd.Forms
         // statusbar variables
         private ToolStripStatusLabel _zoomText;
         private int[] _zoomLevels = new int [] { 50, 100, 200, 300, 400, 600, 800, 1200, 1400, 1600 };
+        private bool _showGrid;
 
         protected string CurrentProjectFile { get; set; }
 
@@ -104,6 +105,8 @@ namespace FragEd.Forms
 
             // setup status bar controls
             AddZoomControlsToStatusBar( ux_StatusBar );
+
+            ux_ShowGrid.Enabled = false;
         }
 
         private void UxLevelEditorOnMouseWheel( object sender, MouseEventArgs mouseEventArgs )
@@ -232,6 +235,8 @@ namespace FragEd.Forms
                     break;
                 }
             }
+
+            ux_ShowGrid.Enabled = true;
         }
 
         private void RefreshLayerList()
@@ -549,6 +554,15 @@ namespace FragEd.Forms
             ux_LevelEditor.Camera.Zoom = zoom/100f;
 
             _zoomText.Text = zoom + "%";
+        }
+
+        private void ux_ShowGrid_Click( object sender, EventArgs e )
+        {
+            _showGrid = !_showGrid;
+            ux_ShowGrid.Checked = _showGrid;
+            ux_ShowGrid.CheckState = _showGrid ? CheckState.Checked : CheckState.Unchecked;
+
+            ux_LevelEditor.SetGridState( _showGrid );
         }
     }
 }

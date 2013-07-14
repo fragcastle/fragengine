@@ -62,6 +62,9 @@ namespace FragEngine.Layers
             }
         }
 
+        [IgnoreDataMember]
+        public bool DrawGrid { get; set; }
+
         public virtual Texture2D TileSetTexture { get; set; }
 
         [IgnoreDataMember]
@@ -113,13 +116,20 @@ namespace FragEngine.Layers
             {
                 MapData.EachCell( ( cell, tile ) =>
                 {
+                    // adjust the vector position according to the tilesize
+                    cell *= TileSize;
+
                     // only draw tiles that have data
                     if( tile > -1 )
-                    {
-                        // adjust the vector position according to the tilesize
-                        cell *= TileSize;
-
                         TileSheet[ tile ].Draw( spriteBatch, cell, Color.White * Opacity );
+
+                    if( DrawGrid )
+                    {
+                        var frame = new Rectangle( (int)cell.X, (int)cell.Y, TileSize, TileSize );
+                        spriteBatch.Draw( Primitives.WhiteTexture, new Rectangle( frame.Left, frame.Top, frame.Width, 1 ), Color.White );
+                        spriteBatch.Draw( Primitives.WhiteTexture, new Rectangle( frame.Left, frame.Bottom, frame.Width, 1 ), Color.White );
+                        spriteBatch.Draw( Primitives.WhiteTexture, new Rectangle( frame.Left, frame.Top, 1, frame.Height ), Color.White );
+                        spriteBatch.Draw( Primitives.WhiteTexture, new Rectangle( frame.Right, frame.Top, 1, frame.Height + 1 ), Color.White );
                     }
                 } );
             }

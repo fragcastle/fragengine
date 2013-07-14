@@ -14,24 +14,22 @@ namespace FragEd.Forms
         {
             var mouseState = Mouse.GetState();
 
-            var buttons = MouseButtons.None;
-
-            if( mouseState.LeftButton == ButtonState.Pressed )
-            {
-                buttons = buttons | MouseButtons.Left;
-            }
-
-            if( mouseState.MiddleButton == ButtonState.Pressed )
-            {
-                buttons = buttons | MouseButtons.Middle;
-            }
-
-            if( mouseState.RightButton == ButtonState.Pressed )
-            {
-                buttons = buttons | MouseButtons.Right;
-            }
+            var buttons = GetActiveMouseButtons();
 
             return new MouseEventArgs( buttons, 0, mouseState.X, mouseState.Y, mouseState.ScrollWheelValue );
+        }
+
+        public static MouseButtons GetActiveMouseButtons()
+        {
+            var mouseState = Mouse.GetState();
+
+            var buttons = MouseButtons.None;
+
+            if( mouseState.LeftButton == ButtonState.Pressed ) buttons = buttons | MouseButtons.Left;
+            if( mouseState.MiddleButton == ButtonState.Pressed ) buttons = buttons | MouseButtons.Middle;
+            if( mouseState.RightButton == ButtonState.Pressed ) buttons = buttons | MouseButtons.Right;
+
+            return buttons;
         }
     }
 }

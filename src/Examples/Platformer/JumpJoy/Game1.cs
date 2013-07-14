@@ -74,7 +74,7 @@ namespace JumpJoy
             if( GamePad.GetState( PlayerIndex.One ).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown( Keys.Escape ) )
                 Exit();
 
-
+            // example of time scaling
             var keys = Keyboard.GetState();
             if( keys.IsKeyDown( Keys.I ) )
                 TimeScale = 0.1f;

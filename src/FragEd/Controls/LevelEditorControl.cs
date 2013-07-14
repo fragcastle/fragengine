@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows.Forms;
 using FragEd.Forms;
 using FragEngine;
 using FragEngine.Data;
@@ -26,6 +27,11 @@ namespace FragEd.Controls
 
         public float LatestTick { get; private set; }
 
+        public void SetGridState( bool drawGrid )
+        {
+            Level.MapLayers.ForEach( m => m.DrawGrid = drawGrid );
+        }
+
         protected override void Draw(SpriteBatch spriteBatch)
         {
             _accumulatedElapsedTime += _gameTimer.Elapsed;
@@ -37,17 +43,19 @@ namespace FragEd.Controls
                 _accumulatedElapsedTime = _maxElapsedTime;
 
             var mouse = Mouse.GetState();
-            var mouse_args = MouseStateHelpers.GetMouseEventArgs();
             var currentMousePosition = new Vector2( mouse.X, mouse.Y );
+            var zoomedMousePosition = currentMousePosition / Camera.Zoom;
+            var mouseArgs = new MouseEventArgs( MouseStateHelpers.GetActiveMouseButtons(), 0, (int)zoomedMousePosition.X, (int)zoomedMousePosition.Y, mouse.ScrollWheelValue );
+
             if( currentMousePosition != _lastMousePosition )
             {
-                _lastMousePosition = new Vector2( mouse.X, mouse.Y );
+                _lastMousePosition = currentMousePosition;
 
-                OnMouseMove( mouse_args );
+                OnMouseMove( mouseArgs );
             }
 
             if( mouse.ScrollWheelValue != 0 )
-                OnMouseWheel( mouse_args );
+                OnMouseWheel( mouseArgs );
 
             // check if a key is being pressed
             var keys = Keyboard.GetState().GetPressedKeys();
