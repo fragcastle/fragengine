@@ -74,7 +74,14 @@ namespace JumpJoy
             if( GamePad.GetState( PlayerIndex.One ).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown( Keys.Escape ) )
                 Exit();
 
-            // TODO: Add your update logic here
+
+            var keys = Keyboard.GetState();
+            if( keys.IsKeyDown( Keys.I ) )
+                TimeScale = 0.1f;
+            if( keys.IsKeyDown( Keys.O ) )
+                TimeScale = 0.25f;
+            if( keys.IsKeyDown( Keys.P ) )
+                TimeScale = 1f;
 
             base.Update( gameTime );
         }

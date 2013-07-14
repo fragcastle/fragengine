@@ -136,40 +136,6 @@ namespace FragEngine {
             // Check to see if the user has paused or unpaused
             checkPauseKey( Keyboard.GetState(), GamePad.GetState( PlayerIndex.One ) );
 
-            var keys = Keyboard.GetState();
-            if( keys.IsKeyDown( Keys.I ) )
-                TimeScale = 0.1f;
-            if( keys.IsKeyDown( Keys.O ) )
-                TimeScale = 0.25f;
-            if( keys.IsKeyDown( Keys.P ) )
-                TimeScale = 1f;
-
-            if( keys.IsKeyDown(Keys.F))
-            {
-                Graphics.PreferredBackBufferWidth = 1024;
-                Graphics.PreferredBackBufferHeight = 768;
-
-                // set our resolution into the viewport, otherwise camera calculations will be fucked.
-                GraphicsDevice.Viewport = new Viewport( 0, 0, Graphics.PreferredBackBufferWidth, Graphics.PreferredBackBufferHeight );
-
-                var camera = new Camera( GraphicsDevice.Viewport );
-
-                ServiceInjector.Add(camera);
-            }
-
-            if( keys.IsKeyDown( Keys.G ) )
-            {
-                Graphics.PreferredBackBufferWidth = 1280;
-                Graphics.PreferredBackBufferHeight = 720;
-
-                // set our resolution into the viewport, otherwise camera calculations will be fucked.
-                GraphicsDevice.Viewport = new Viewport( 0, 0, Graphics.PreferredBackBufferWidth, Graphics.PreferredBackBufferHeight );
-
-                var camera = new Camera( GraphicsDevice.Viewport );
-
-                ServiceInjector.Add( camera );
-            }
-
             base.Update( AdjustGameTime(gameTime) );
         }
 
