@@ -35,8 +35,7 @@ namespace JumpJoy.Entities
 
             Animations.Add( "jump", 0.09f, false, 21, 22 );
 
-            Animations.Add( "wallSlideRight", 1f, true, 2 );
-            Animations.Add( "wallSlideLeft", 1f, true, 3 );
+            Animations.Add( "wallSlide", 1f, true, 2 );
 
             Index = PlayerIndex.One;
 
@@ -62,8 +61,6 @@ namespace JumpJoy.Entities
             base.UpdateEntityState( result );
 
             _againstWall = result.XAxis;
-            _againstWallLeft = !Standing && result.XAxis && Acceleration.X < 0;
-            _againstWallRight = !Standing && result.XAxis && Acceleration.X > 0;
         }
 
         public override void HandleKeyboardInput(KeyboardState keyboard)
@@ -80,15 +77,12 @@ namespace JumpJoy.Entities
             if( jumped )
                 Jump();
 
-
+            // time to pick the current animation
             if( !Standing && !jumped && _againstWall && ( left || right ) )
             {
                 _jumpCount = 0;
 
-                if( _againstWallLeft && left )
-                    CurrentAnimation = "wallSlideLeft";
-                else if( _againstWallRight && right )
-                    CurrentAnimation = "wallSlideRight";
+                CurrentAnimation = "wallSlide";
 
                 GravityFactor = 1.0f;
 
@@ -132,11 +126,11 @@ namespace JumpJoy.Entities
 
             Velocity = new Vector2( Velocity.X, -_jumpSpeed );
 
-            if( _againstWallLeft || _againstWallRight )
+            if( _againstWall )
             {
-                Velocity = new Vector2( _againstWallRight ? -500 : 500, Velocity.Y );
+                Velocity = new Vector2( Acceleration.X > 0 ? -500 : 500, Velocity.Y );
 
-                _againstWallRight = _againstWallLeft = false;
+                _againstWall = false;
             }
 
             if( CurrentAnimation != "jump" )
