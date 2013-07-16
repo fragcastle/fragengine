@@ -18,6 +18,7 @@ namespace FragEngine.Entities
     public abstract class Entity
     {
         private bool _initialized;
+        private Vector2 _size = new Vector2( 16, 16 );
         protected ICollisionService CollisionService;
         protected IEntityService EntityService;
 
@@ -107,6 +108,18 @@ namespace FragEngine.Entities
             }
         }
 
+        [IgnoreDataMember]
+        /// Returns the FrameSize of the CurrentAnimation
+        public Vector2 Size
+        {
+            get
+            {
+                if( Animations == null )
+                    return _size;
+                return Animations.CurrentAnimation.FrameSize;
+            }
+        }
+
         public virtual void Update( GameTime gameTime )
         {
             if (IsAlive)
@@ -191,6 +204,13 @@ namespace FragEngine.Entities
         public virtual void Kill()
         {
             IsAlive = false;
+        }
+
+        public float DistanceTo( Entity gameObject )
+        {
+            var xd = ( Position.X + Size.X / 2 ) - ( gameObject.Position.X + gameObject.Size.X / 2 );
+            var yd = ( Position.Y + Size.Y / 2 ) - ( gameObject.Position.Y + gameObject.Size.Y / 2 );
+            return (float)Math.Sqrt( xd * xd + yd * yd );
         }
 
         public override string ToString()
