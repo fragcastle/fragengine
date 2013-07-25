@@ -2,12 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using FragEd.Controllers;
-using FragEngine;
 using FragEngine.Data;
-using FragEngine.Entities;
 
 namespace FragEd.Data
 {

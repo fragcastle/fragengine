@@ -69,6 +69,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\AssemblyResolutionManager.cs" />
     <Compile Include="Data\EntitySettingsDictionary.cs" />
     <Compile Include="Extensions\AssemblyExtensions.cs" />
     <Compile Include="Forms\AddLayer.cs">
@@ -77,14 +78,6 @@
     <Compile Include="Forms\AddLayer.Designer.cs">
       <DependentUpon>AddLayer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controllers\AssemblyResolutionManager.cs" />
-    <Compile Include="Controllers\Controller.cs" />
-    <Compile Include="Controllers\ControllerBase.cs" />
-    <Compile Include="Controllers\LevelController.cs" />
-    <Compile Include="Controllers\LevelRendererController.cs" />
-    <Compile Include="Controllers\OldProjectController.cs" />
-    <Compile Include="Controllers\ProjectController.cs" />
-    <Compile Include="Controllers\StateController.cs" />
     <Compile Include="Controls\GLControl\CarbonGLControl.cs" />
     <Compile Include="Controls\GLControl\DummyGLControl.cs" />
     <Compile Include="Controls\GLControl\GLControl.cs">
@@ -108,11 +101,23 @@
     </Compile>
     <Compile Include="Data\Project.cs" />
     <Compile Include="Data\ProjectConfiguration.cs" />
+    <Compile Include="Forms\AppContainer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AppContainer.Designer.cs">
+      <DependentUpon>AppContainer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ContentFolders.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ContentFolders.Designer.cs">
       <DependentUpon>ContentFolders.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\LevelEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\LevelEditorForm.Designer.cs">
+      <DependentUpon>LevelEditorForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Debug.cs">
       <SubType>Form</SubType>
@@ -139,12 +144,6 @@
       <DependentUpon>GameAssemblies.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\KeyboardStateExtensions.cs" />
-    <Compile Include="Forms\Main.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Main.Designer.cs">
-      <DependentUpon>Main.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\MouseStateExtensions.cs" />
     <Compile Include="FragEdProgram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -156,8 +155,14 @@
     <EmbeddedResource Include="Controls\GLControl\GLControl.resx">
       <DependentUpon>GLControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AppContainer.resx">
+      <DependentUpon>AppContainer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ContentFolders.resx">
       <DependentUpon>ContentFolders.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\LevelEditorForm.resx">
+      <DependentUpon>LevelEditorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Debug.resx">
       <DependentUpon>Debug.cs</DependentUpon>
@@ -170,10 +175,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\GameAssemblies.resx">
       <DependentUpon>GameAssemblies.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Main.resx">
-      <DependentUpon>Main.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -228,6 +229,7 @@
     <Content Include="Resources\ZoomOut_12927.png" />
     <Content Include="Resources\Zoom_5442.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

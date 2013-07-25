@@ -25,8 +25,6 @@ namespace FragEd.Controls
         protected GraphicsDeviceService _deviceService;
         protected Stopwatch _timer;
 
-        private readonly ServiceContainer _services = new ServiceContainer();
-
         private Camera _camera;
         private SpriteBatch _spriteBatch;
 
@@ -40,11 +38,6 @@ namespace FragEd.Controls
         public GraphicsDeviceService GraphicsDeviceService
         {
             get { return _deviceService; }
-        }
-
-        public ServiceContainer Services
-        {
-            get { return _services; }
         }
 
         public Camera Camera
@@ -66,19 +59,10 @@ namespace FragEd.Controls
             {
                 _deviceService = GraphicsDeviceService.AddRef( Handle, ClientSize.Width, ClientSize.Height );
 
-                _services.AddService<IGraphicsDeviceService>( _deviceService );
-
-                if( !ServiceInjector.Has<IGraphicsDeviceService>() )
-                    ServiceInjector.Add<IGraphicsDeviceService>( _deviceService );
-
-                if( !ServiceInjector.Has<GraphicsDevice>() )
-                    ServiceInjector.Add( _deviceService.GraphicsDevice );
-
-                if( !ServiceInjector.Has<IEntityService>() )
-                    ServiceInjector.Add<IEntityService>( new EntityService() );
-
-                if( !ServiceInjector.Has<ICollisionService>() )
-                    ServiceInjector.Add<ICollisionService>( new CollisionService() );
+                ServiceInjector.Add<IGraphicsDeviceService>( _deviceService );
+                ServiceInjector.Add( _deviceService.GraphicsDevice );
+                ServiceInjector.Add<IEntityService>( new EntityService() );
+                ServiceInjector.Add<ICollisionService>( new CollisionService() );
 
                 _camera = new Camera( _deviceService.GraphicsDevice.Viewport );
 

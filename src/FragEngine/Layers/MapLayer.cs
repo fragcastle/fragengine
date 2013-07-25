@@ -98,7 +98,6 @@ namespace FragEngine.Layers
 
         public void DrawMap( SpriteBatch spriteBatch )
         {
-
             if( _tileSetTextureIsDirty )
             {
                 TileSetTexture = ContentCacheManager.GetTexture( TileSetTexturePath );

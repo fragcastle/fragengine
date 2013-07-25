@@ -22,7 +22,7 @@ namespace FragEd
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault( false );
-            Application.Run( new Editor() );
+            Application.Run( new AppContainer() );
         }
     }
 }

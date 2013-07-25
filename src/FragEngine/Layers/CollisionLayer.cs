@@ -9,7 +9,7 @@ namespace FragEngine.Layers
 {
     public sealed class CollisionLayer : MapLayer
     {
-        private readonly Texture2D _collisionTiles;
+        private Texture2D _collisionTiles;
 
         [IgnoreDataMember]
         public override string TileSetTexturePath
@@ -66,9 +66,13 @@ namespace FragEngine.Layers
         public CollisionLayer()
             : base()
         {
+            _tileSetTextureIsDirty = true;
+        }
+
+        public override void Initialize() {
             _collisionTiles = ContentCacheManager.GetTextureFromResource( TileSetTexturePath );
 
-            _tileSetTextureIsDirty = true;
+            base.Initialize();
         }
 
         public override string ToString()

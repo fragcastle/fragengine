@@ -22,7 +22,6 @@ namespace FragEngine.Tests.Entities
             var entityA = new GameObject1();
             var entityB = new GameObject2();
 
-
             entityA.Position = new Vector2( 100, 0 );
 
             entityA.DistanceTo( entityB ).ShouldEqual( 100 );
