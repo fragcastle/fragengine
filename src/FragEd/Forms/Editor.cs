@@ -130,22 +130,23 @@ namespace FragEd.Forms
                 var previousButtonPressed = keyEventArgs.KeyData.HasFlag( Keys.Q );
                 var nextButtonPressed = keyEventArgs.KeyData.HasFlag( Keys.E );
 
-                if( currentTile == 0 && previousButtonPressed )
+                if( currentTile == -1 && previousButtonPressed )
                 {
                     currentTile = maxTiles;
                 }
-
-                if( currentTile == maxTiles - 1 && nextButtonPressed )
+                else if (currentTile == maxTiles - 1 && nextButtonPressed)
                 {
                     currentTile = -1;
+                }
+                else
+                {
+                    currentTile += ( nextButtonPressed ? 1 : -1 );    
                 }
 
                 if( !_layerTileMap.ContainsKey( layer ) )
                 {
                     _layerTileMap.Add( layer, currentTile );
                 }
-
-                currentTile += ( nextButtonPressed ? 1 : -1 );
 
                 _layerTileMap[ layer ] = currentTile;
 
