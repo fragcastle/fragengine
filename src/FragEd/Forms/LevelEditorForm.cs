@@ -26,17 +26,6 @@ namespace FragEd.Forms
         private Project _project;
         private Dictionary<Layer, int> _layerTileMap = new Dictionary<Layer, int>();
 
-        public Project Project
-        {
-            get { return _project; }
-            set
-            {
-                _project = value;
-                UpdateLevelControl();
-                UpdateUserInterface();
-            }
-        }
-
         public Level CurrentLevel
         {
             get
@@ -47,7 +36,7 @@ namespace FragEd.Forms
 
         // statusbar variables
         private ToolStripStatusLabel _zoomText;
-        private int[] _zoomLevels = new int [] { 50, 100, 200, 300, 400, 600, 800, 1200, 1400, 1600 };
+        private int[] _zoomLevels = new int[] { 50, 100, 200, 300, 400, 600, 800, 1200, 1400, 1600 };
         private bool _showGrid;
 
         protected string CurrentProjectFile { get; set; }
@@ -58,26 +47,19 @@ namespace FragEd.Forms
 
             EditLevel( level );
 
-            ux_LayerList.ItemCheck += ( sender, args ) =>
-            {
+            ux_LayerList.ItemCheck += ( sender, args ) => {
                 var name = (string)ux_LayerList.Items[ args.Index ];
                 if( name == "Collision" )
-                {
                     ux_LevelEditor.Level.CollisionLayer.Alpha = args.NewValue == CheckState.Checked ? 255f : 0f;
-                }
                 else
-                {
                     ux_LevelEditor.Level.MapLayers.First( ml => ml.Name == name ).Alpha = args.NewValue == CheckState.Checked ? 255f : 0f;
-                }
 
             };
-            ux_LayerList.SelectedIndexChanged += ( sender, args ) =>
-            {
+            ux_LayerList.SelectedIndexChanged += ( sender, args ) => {
                 var item = ux_LayerList.SelectedItem;
             };
 
-            ux_LevelEntityList.ItemCheck += ( sender, args ) =>
-            {
+            ux_LevelEntityList.ItemCheck += ( sender, args ) => {
                 var entity = (Entity)ux_LevelEntityList.SelectedItem;
 
                 if( entity != null )
@@ -97,7 +79,18 @@ namespace FragEd.Forms
             // setup status bar controls
             AddZoomControlsToStatusBar( ux_StatusBar );
 
-            Text = Path.GetFileName(level.FilePath);
+            Text = Path.GetFileName( level.FilePath );
+
+            Project.OnChange += ( sender, args ) => UpdateUserInterface();
+
+            LostFocus += ( sender, args ) => {
+                ( (AppContainer)MdiParent ).ux_AddEntity.Visible = false;
+            };
+
+            GotFocus += ( sender, args ) => {
+                ( (AppContainer)MdiParent ).ux_AddEntity.Visible = true;
+                UpdateUserInterface();
+            };
         }
 
         private void UxLevelEditorOnMouseWheel( object sender, MouseEventArgs mouseEventArgs )
@@ -121,22 +114,23 @@ namespace FragEd.Forms
                 var previousButtonPressed = keyEventArgs.KeyData.HasFlag( Keys.Q );
                 var nextButtonPressed = keyEventArgs.KeyData.HasFlag( Keys.E );
 
-                if( currentTile == 0 && previousButtonPressed )
+                if( currentTile == -1 && previousButtonPressed )
                 {
                     currentTile = maxTiles;
                 }
-
-                if( currentTile == maxTiles - 1 && nextButtonPressed )
+                else if( currentTile == maxTiles - 1 && nextButtonPressed )
                 {
                     currentTile = -1;
+                }
+                else
+                {
+                    currentTile += ( nextButtonPressed ? 1 : -1 );
                 }
 
                 if( !_layerTileMap.ContainsKey( layer ) )
                 {
                     _layerTileMap.Add( layer, currentTile );
                 }
-
-                currentTile += ( nextButtonPressed ? 1 : -1 );
 
                 _layerTileMap[ layer ] = currentTile;
 
@@ -158,13 +152,13 @@ namespace FragEd.Forms
         private void UpdateUserInterface()
         {
             ux_AddEntity.DropDownItems.Clear();
-            
-            Project.Entities.ForEach( AddEntityToUx );
+
+            ( (AppContainer)MdiParent ).Project.Entities.ForEach( AddEntityToUx );
         }
 
         private void AddEntityToUx( Type entity )
         {
-            ux_AddEntity.DropDownItems.Add( entity.Name, null, ( sender, args ) => AddEntityToLevel( entity ) );
+            ( (AppContainer)MdiParent ).ux_AddEntity.DropDownItems.Add( entity.Name, null, ( sender, args ) => AddEntityToLevel( entity ) );
         }
 
         private void EditLevel( Level level )
@@ -173,14 +167,10 @@ namespace FragEd.Forms
             {
                 var result = MessageBox.Show( "Do you want to save changes to the current level?", "Save Changes?", MessageBoxButtons.YesNoCancel );
                 if( result == DialogResult.Yes )
-                {
                     ux_LevelEditor.Level.Save();
-                }
 
                 if( result == DialogResult.Cancel )
-                {
                     return;
-                }
             }
 
             ux_LevelEditor.Level = level;
@@ -240,7 +230,7 @@ namespace FragEd.Forms
 
             if( mouseEventArgs.Button.HasFlag( MouseButtons.Middle ) )
             {
-                var centerOfEditorPane = new Vector2( ux_LevelEditor.Width/2, ux_LevelEditor.Height/2 );
+                var centerOfEditorPane = new Vector2( ux_LevelEditor.Width / 2, ux_LevelEditor.Height / 2 );
 
                 var delta = position - centerOfEditorPane;
 
@@ -257,19 +247,15 @@ namespace FragEd.Forms
             var layer = GetLayerByName( name );
 
             if( mouseEventArgs.Button == MouseButtons.Right )
-            {
                 UnPaintTile( layer, position );
-            }
             else
-            {
                 PaintTile( layer, position );
-            }
         }
 
         private void ux_RemoveLayer_Click( object sender, EventArgs e )
         {
             var name = ux_LayerList.SelectedItem;
-            if( name == "Collision" )
+            if( name.ToString().ToLowerInvariant() == "collision" )
             {
                 MessageBox.Show( "Sorry, you can't remove the Collision layer.", "Sorry Dave...", MessageBoxButtons.OK, MessageBoxIcon.Hand );
                 return;
@@ -282,22 +268,22 @@ namespace FragEd.Forms
 
         private void ux_AddLayer_Click( object sender, EventArgs e )
         {
-            //var dialog = new AddLayer( this );
-            //var result = dialog.ShowDialog();
-            //if( result == DialogResult.OK )
-            //{
-            //    // create a layer object
-            //    // TODO: make sure this is relative to one of the content directories...
-            //    var layer = new MapLayer {
-            //        TileSetTexturePath = dialog.TileSet,
-            //        TileSize = dialog.TileSize,
-            //        Name = dialog.LayerName
-            //    };
+            var dialog = new AddLayer( CurrentLevel.MapLayers );
+            var result = dialog.ShowDialog();
+            if( result == DialogResult.OK )
+            {
+                // create a layer object
+                // TODO: make sure this is relative to one of the content directories...
+                var layer = new MapLayer {
+                    TileSetTexturePath = dialog.TileSet,
+                    TileSize = dialog.TileSize,
+                    Name = dialog.LayerName
+                };
 
-            //    CurrentLevel.MapLayers.Add( layer );
+                CurrentLevel.MapLayers.Add( layer );
 
-            //    RefreshLayerList();
-            //}
+                RefreshLayerList();
+            }
         }
 
         private void ux_RemoveEntity_Click( object sender, EventArgs e )
@@ -337,17 +323,16 @@ namespace FragEd.Forms
 
             _zoomText = new ToolStripStatusLabel( "100%" ) { AutoSize = false, Width = 35, Padding = new Padding( 6, 3, 0, 2 ), TextAlign = ContentAlignment.MiddleRight };
 
-            var trackBarZoom = new TrackBar
-                {
-                    AutoSize = false,
-                    Height = 22,
-                    TickStyle = TickStyle.None,
-                    Anchor = AnchorStyles.Right,
-                    Minimum = 0,
-                    Maximum = _zoomLevels.Length - 1,
-                    Value = 1,
-                    BackColor = SystemColors.ControlLightLight
-                };
+            var trackBarZoom = new TrackBar {
+                AutoSize = false,
+                Height = 22,
+                TickStyle = TickStyle.None,
+                Anchor = AnchorStyles.Right,
+                Minimum = 0,
+                Maximum = _zoomLevels.Length - 1,
+                Value = 1,
+                BackColor = SystemColors.ControlLightLight
+            };
 
             trackBarZoom.ValueChanged += TrackBarZoomOnValueChanged;
 
@@ -361,15 +346,15 @@ namespace FragEd.Forms
                 debugStatus,
                 _zoomText,
                 trackBarZoomItem
-            });
+            } );
         }
 
-        private void TrackBarZoomOnValueChanged(object sender, EventArgs eventArgs)
+        private void TrackBarZoomOnValueChanged( object sender, EventArgs eventArgs )
         {
             var trackBar = (TrackBar)sender;
             var zoom = _zoomLevels[ trackBar.Value ];
 
-            ux_LevelEditor.Camera.Zoom = zoom/100f;
+            ux_LevelEditor.Camera.Zoom = zoom / 100f;
 
             _zoomText.Text = zoom + "%";
         }

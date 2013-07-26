@@ -10,16 +10,20 @@ using FragEngine.IO;
 using FragEngine.Services;
 using Microsoft.Xna.Framework.Content;
 
-namespace FragEd.Forms {
-    public partial class AppContainer : Form {
+namespace FragEd.Forms
+{
+    public partial class AppContainer : Form
+    {
         private Project _project;
 
         private Properties.Settings _settings = Properties.Settings.Default;
 
-        public AppContainer() {
+        public AppContainer()
+        {
             InitializeComponent();
 
-            if( _settings.FirstRun ) {
+            if( _settings.FirstRun )
+            {
                 _settings.OpenProjectLastDirectoryPath = Environment.GetFolderPath( Environment.SpecialFolder.Personal );
                 _settings.FirstRun = false;
             }
@@ -29,22 +33,27 @@ namespace FragEd.Forms {
 
         protected string CurrentProjectFile { get; set; }
 
-        protected Project Project {
+        public Project Project
+        {
             get { return _project; }
-            set {
+            set
+            {
                 _project = value;
                 UpdateUserInterface();
             }
         }
 
-        private void OpenFile( object sender, EventArgs e ) {
+        private void OpenFile( object sender, EventArgs e )
+        {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.InitialDirectory = _settings.OpenProjectLastDirectoryPath;
             openFileDialog.Filter = "FragEd Project|*.fed";
-            if( openFileDialog.ShowDialog( this ) == DialogResult.OK ) {
+            if( openFileDialog.ShowDialog( this ) == DialogResult.OK )
+            {
                 var fileName = openFileDialog.FileName;
 
-                if( File.Exists( fileName ) ) {
+                if( File.Exists( fileName ) )
+                {
                     LoadProjectFile( fileName );
 
                     _settings.OpenProjectLastDirectoryPath = Path.GetDirectoryName( fileName );
@@ -52,56 +61,70 @@ namespace FragEd.Forms {
             }
         }
 
-        private void SaveAsToolStripMenuItem_Click( object sender, EventArgs e ) {
+        private void SaveAsToolStripMenuItem_Click( object sender, EventArgs e )
+        {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.InitialDirectory = Environment.GetFolderPath( Environment.SpecialFolder.Personal );
             saveFileDialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
-            if( saveFileDialog.ShowDialog( this ) == DialogResult.OK ) {
+            if( saveFileDialog.ShowDialog( this ) == DialogResult.OK )
+            {
                 string FileName = saveFileDialog.FileName;
             }
         }
 
-        private void ExitToolsStripMenuItem_Click( object sender, EventArgs e ) {
+        private void ExitToolsStripMenuItem_Click( object sender, EventArgs e )
+        {
             _settings.Save();
-            
+
             Close();
         }
 
-        private void CutToolStripMenuItem_Click( object sender, EventArgs e ) {
+        private void CutToolStripMenuItem_Click( object sender, EventArgs e )
+        {
         }
 
-        private void CopyToolStripMenuItem_Click( object sender, EventArgs e ) {
+        private void CopyToolStripMenuItem_Click( object sender, EventArgs e )
+        {
         }
 
-        private void PasteToolStripMenuItem_Click( object sender, EventArgs e ) {
+        private void PasteToolStripMenuItem_Click( object sender, EventArgs e )
+        {
         }
 
-        private void ToolBarToolStripMenuItem_Click( object sender, EventArgs e ) {
+        private void ToolBarToolStripMenuItem_Click( object sender, EventArgs e )
+        {
             toolStrip.Visible = toolBarToolStripMenuItem.Checked;
         }
 
-        private void StatusBarToolStripMenuItem_Click( object sender, EventArgs e ) {
+        private void StatusBarToolStripMenuItem_Click( object sender, EventArgs e )
+        {
             statusStrip.Visible = statusBarToolStripMenuItem.Checked;
         }
 
-        private void CascadeToolStripMenuItem_Click( object sender, EventArgs e ) {
+        private void CascadeToolStripMenuItem_Click( object sender, EventArgs e )
+        {
             LayoutMdi( MdiLayout.Cascade );
         }
 
-        private void TileVerticalToolStripMenuItem_Click( object sender, EventArgs e ) {
+        private void TileVerticalToolStripMenuItem_Click( object sender, EventArgs e )
+        {
             LayoutMdi( MdiLayout.TileVertical );
         }
 
-        private void TileHorizontalToolStripMenuItem_Click( object sender, EventArgs e ) {
+        private void TileHorizontalToolStripMenuItem_Click( object sender, EventArgs e )
+        {
             LayoutMdi( MdiLayout.TileHorizontal );
         }
 
-        private void ArrangeIconsToolStripMenuItem_Click( object sender, EventArgs e ) {
+        private void ArrangeIconsToolStripMenuItem_Click( object sender, EventArgs e )
+        {
             LayoutMdi( MdiLayout.ArrangeIcons );
         }
 
-        private void CloseAllToolStripMenuItem_Click( object sender, EventArgs e ) {
-            foreach( Form childForm in MdiChildren ) {
+        private void CloseAllToolStripMenuItem_Click( object sender, EventArgs e )
+        {
+            foreach( Form childForm in MdiChildren )
+            {
                 childForm.Close();
             }
         }
@@ -112,7 +135,8 @@ namespace FragEd.Forms {
             child.Show();
         }
 
-        private void LoadProjectFile( string fileName ) {
+        private void LoadProjectFile( string fileName )
+        {
             var config = new ProjectConfiguration();
             // user chose a file
             CurrentProjectFile = fileName;
@@ -123,8 +147,9 @@ namespace FragEd.Forms {
             Project = new Project( projectConfiguration );
         }
 
-        private void UpdateUserInterface() {
-            Text = string.Format("{0} - {1}", _settings.AppTitle, Path.GetFileName( CurrentProjectFile ));
+        private void UpdateUserInterface()
+        {
+            Text = string.Format( "{0} - {1}", _settings.AppTitle, Path.GetFileName( CurrentProjectFile ) );
             //ux_AddEntityMenu.DropDownItems.Clear();
             //ux_AddEntity.DropDownItems.Clear();
             //ux_GameLevels.DropDownItems.Clear();
@@ -148,13 +173,16 @@ namespace FragEd.Forms {
             projectToolStripMenu.Visible = Project != null;
         }
 
-        private void EditLevel( Level level ) {
+        private void EditLevel( Level level )
+        {
             OpenChild( new LevelEditorForm( level ) );
         }
 
-        private void ProjectOnOnChange( object sender, ProjectChangeEventArgs eventArgs ) {
+        private void ProjectOnOnChange( object sender, ProjectChangeEventArgs eventArgs )
+        {
             Project = (Project)sender;
-            if( eventArgs.PropertyName == "ContentDirectories" ) {
+            if( eventArgs.PropertyName == "ContentDirectories" )
+            {
                 // total hack, create a level editor control
                 // so that a valid GraphicsDevice object is created
                 new LevelEditorControl { Height = 100, Width = 100 }.CreateControl();

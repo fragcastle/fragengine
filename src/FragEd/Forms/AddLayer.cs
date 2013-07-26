@@ -1,23 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using FragEngine;
+using FragEngine.Layers;
 
 namespace FragEd.Forms {
     public partial class AddLayer : Form {
-        private Editor _editorForm;
+        private List<MapLayer> _layers;
 
-        public AddLayer( Editor editorForm ) {
+        public AddLayer( List<MapLayer> layers  ) {
             InitializeComponent();
 
-            _editorForm = editorForm;
+            _layers = layers;
 
             Load += ( sender, args ) => {
-                    ux_TileSet.Items.Clear();
-                    foreach( var pair in ContentCacheManager.TextureCache ) {
-                        ux_TileSet.Items.Add( pair.Key );
-                    }
-                };
+                ux_TileSet.Items.Clear();
+                foreach( var pair in ContentCacheManager.TextureCache ) {
+                    ux_TileSet.Items.Add( pair.Key );
+                }
+            };
         }
 
         public string LayerName
@@ -56,7 +58,7 @@ namespace FragEd.Forms {
                 return false;
             }
 
-            if( _editorForm.CurrentLevel.MapLayers.Any( ml => ml.Name == ux_LayerName.Text ) )
+            if( _layers.Any( ml => ml.Name == ux_LayerName.Text ) )
             {
                 MessageBox.Show( "That layer name is already in use." );
                 ux_LayerName.Focus();

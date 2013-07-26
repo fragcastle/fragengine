@@ -77,6 +77,8 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.ux_AddEntity = new System.Windows.Forms.ToolStripDropDownButton();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -428,7 +430,9 @@
             this.printToolStripButton,
             this.printPreviewToolStripButton,
             this.toolStripSeparator2,
-            this.helpToolStripButton});
+            this.helpToolStripButton,
+            this.toolStripSeparator5,
+            this.ux_AddEntity});
             this.toolStrip.Location = new System.Drawing.Point(0, 24);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(878, 25);
@@ -516,6 +520,21 @@
             this.toolStripStatusLabel.Size = new System.Drawing.Size(39, 17);
             this.toolStripStatusLabel.Text = "Status";
             // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
+            // 
+            // ux_AddEntity
+            // 
+            this.ux_AddEntity.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.ux_AddEntity.Image = global::FragEd.Properties.Resources.action_add_16xMD;
+            this.ux_AddEntity.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ux_AddEntity.Name = "ux_AddEntity";
+            this.ux_AddEntity.Size = new System.Drawing.Size(29, 22);
+            this.ux_AddEntity.Text = "toolStripDropDownButton1";
+            this.ux_AddEntity.Visible = false;
+            // 
             // AppContainer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -594,6 +613,8 @@
         private System.Windows.Forms.ToolStripMenuItem levelsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem contentDirectoriesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem assemblitesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        public System.Windows.Forms.ToolStripDropDownButton ux_AddEntity;
     }
 }
 

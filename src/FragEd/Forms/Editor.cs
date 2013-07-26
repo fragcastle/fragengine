@@ -434,7 +434,7 @@ namespace FragEd.Forms
 
         private void ux_AddLayer_Click( object sender, EventArgs e )
         {
-            var dialog = new AddLayer( this );
+            var dialog = new AddLayer( CurrentLevel.MapLayers );
             var result = dialog.ShowDialog();
             if( result == DialogResult.OK )
             {
