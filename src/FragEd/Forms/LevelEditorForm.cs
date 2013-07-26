@@ -96,6 +96,8 @@ namespace FragEd.Forms
 
             // setup status bar controls
             AddZoomControlsToStatusBar( ux_StatusBar );
+
+            Text = Path.GetFileName(level.FilePath);
         }
 
         private void UxLevelEditorOnMouseWheel( object sender, MouseEventArgs mouseEventArgs )

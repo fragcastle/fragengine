@@ -95,6 +95,7 @@
             // ux_SplitContainer.Panel1
             // 
             this.ux_SplitContainer.Panel1.Controls.Add(this.splitContainer1);
+            this.ux_SplitContainer.Panel1MinSize = 300;
             // 
             // ux_SplitContainer.Panel2
             // 

@@ -1,21 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using FragEd.Controls;
 using FragEd.Data;
-using FragEd.Services;
 using FragEngine;
 using FragEngine.Data;
 using FragEngine.IO;
 using FragEngine.Services;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace FragEd.Forms {
     public partial class AppContainer : Form {
@@ -31,17 +24,7 @@ namespace FragEd.Forms {
                 _settings.FirstRun = false;
             }
 
-            Project.OnCompleteLoadContentDirectory += ( sender, args ) => {
-                // total hack, create a level editor control
-                // so that a valid GraphicsDevice object is created
-                new LevelEditorControl { Height = 100, Width = 100 }.CreateControl();
-
-                var project = (Project)sender;
-                project.ContentDirectories.ForEach( ContentCacheManager.AddContentDirectory );
-
-                // TODO: disk op... show progress bar?
-                ContentCacheManager.LoadContent( new ContentManager( ServiceInjector.Apply() ) );
-            };
+            Project.OnChange += ProjectOnOnChange;
         }
 
         protected string CurrentProjectFile { get; set; }
@@ -141,7 +124,7 @@ namespace FragEd.Forms {
         }
 
         private void UpdateUserInterface() {
-            Text = _settings.AppTitle + Path.GetFileNameWithoutExtension( CurrentProjectFile );
+            Text = string.Format("{0} - {1}", _settings.AppTitle, Path.GetFileName( CurrentProjectFile ));
             //ux_AddEntityMenu.DropDownItems.Clear();
             //ux_AddEntity.DropDownItems.Clear();
             //ux_GameLevels.DropDownItems.Clear();
@@ -167,6 +150,22 @@ namespace FragEd.Forms {
 
         private void EditLevel( Level level ) {
             OpenChild( new LevelEditorForm( level ) );
+        }
+
+        private void ProjectOnOnChange( object sender, ProjectChangeEventArgs eventArgs ) {
+            Project = (Project)sender;
+            if( eventArgs.PropertyName == "ContentDirectories" ) {
+                // total hack, create a level editor control
+                // so that a valid GraphicsDevice object is created
+                new LevelEditorControl { Height = 100, Width = 100 }.CreateControl();
+
+                Project.ContentDirectories.ForEach( ContentCacheManager.AddContentDirectory );
+
+                // TODO: disk op... show progress bar?
+                ContentCacheManager.LoadContent( new ContentManager( ServiceInjector.Apply() ) );
+            }
+
+            UpdateUserInterface();
         }
     }
 }
