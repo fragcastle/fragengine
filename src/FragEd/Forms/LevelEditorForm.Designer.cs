@@ -235,7 +235,7 @@
             this.ux_AddEntity.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ux_AddEntity.Name = "ux_AddEntity";
             this.ux_AddEntity.Size = new System.Drawing.Size(29, 22);
-            this.ux_AddEntity.Text = "Add an Entity";
+            this.ux_AddEntity.Text = "Add an GameObject";
             // 
             // ux_RemoveEntity
             // 
@@ -244,7 +244,7 @@
             this.ux_RemoveEntity.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ux_RemoveEntity.Name = "ux_RemoveEntity";
             this.ux_RemoveEntity.Size = new System.Drawing.Size(23, 22);
-            this.ux_RemoveEntity.Text = "Remove Selected Entity";
+            this.ux_RemoveEntity.Text = "Remove Selected GameObject";
             this.ux_RemoveEntity.Click += new System.EventHandler(this.ux_RemoveEntity_Click);
             // 
             // ux_SaveLevelDialog

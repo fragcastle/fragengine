@@ -29,7 +29,7 @@ namespace FragEngine.View.Screens
         public PlayScreen( Hud hud )
         {
             _hud = hud;
-            _camera = ServiceInjector.Get<Camera>();
+            _camera = ServiceLocator.Get<Camera>();
         }
 
         public virtual void Initialize()
@@ -69,7 +69,7 @@ namespace FragEngine.View.Screens
             var collisionMap = new CollisionMap( CurrentLevel );
             var collisionService = new CollisionService( collisionMap );
 
-            ServiceInjector.Add<ICollisionService>( collisionService );
+            ServiceLocator.Add<ICollisionService>( collisionService );
         }
 
         protected Level CurrentLevel { get; private set; }

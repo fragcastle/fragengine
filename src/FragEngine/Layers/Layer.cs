@@ -59,7 +59,7 @@ namespace FragEngine.Layers
                 _initialized = true;
             }
 
-            var _camera = ServiceInjector.Get<Camera>();
+            var _camera = ServiceLocator.Get<Camera>();
 
             if( _camera != null )
                 spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState, null, null, null, _camera.GetViewMatrix( Parallax ) );

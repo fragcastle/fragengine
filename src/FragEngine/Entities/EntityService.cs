@@ -8,7 +8,7 @@ namespace FragEngine.Entities
 {
     public class EntityService : IEntityService
     {
-        public TEntitytype SpawnEntity<TEntitytype>( Action<TEntitytype> configuration = null ) where TEntitytype : Entity, new()
+        public TEntitytype SpawnEntity<TEntitytype>( Action<TEntitytype> configuration = null ) where TEntitytype : GameObject, new()
         {
             var entity = new TEntitytype();
 

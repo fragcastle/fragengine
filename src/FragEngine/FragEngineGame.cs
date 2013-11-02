@@ -76,19 +76,19 @@ namespace FragEngine {
 
             ClearColor = Color.White;
 
-            ServiceInjector.Apply( Services );
+            ServiceLocator.Apply( Services );
 
-            if( !ServiceInjector.Has<GraphicsDevice>() )
-                ServiceInjector.Add(Graphics.GraphicsDevice);
+            if( !ServiceLocator.Has<GraphicsDevice>() )
+                ServiceLocator.Add(Graphics.GraphicsDevice);
 
-            if( !ServiceInjector.Has<Camera>() )
-                ServiceInjector.Add( new Camera( Graphics.GraphicsDevice.Viewport ) );
+            if( !ServiceLocator.Has<Camera>() )
+                ServiceLocator.Add( new Camera( Graphics.GraphicsDevice.Viewport ) );
 
-            if( !ServiceInjector.Has<IEntityService>() )
-                ServiceInjector.Add<IEntityService>( new EntityService() );
+            if( !ServiceLocator.Has<IEntityService>() )
+                ServiceLocator.Add<IEntityService>( new EntityService() );
 
-            if( !ServiceInjector.Has<ICollisionService>() )
-                ServiceInjector.Add<ICollisionService>( new CollisionService() );
+            if( !ServiceLocator.Has<ICollisionService>() )
+                ServiceLocator.Add<ICollisionService>( new CollisionService() );
 
 #if !DEBUG
             Graphics.IsFullScreen = true;

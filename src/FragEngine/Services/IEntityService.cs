@@ -8,6 +8,6 @@ namespace FragEngine.Services
 {
     public interface IEntityService
     {
-        TEntitytype SpawnEntity<TEntitytype>( Action<TEntitytype> configuration = null ) where TEntitytype : Entity, new();
+        TEntitytype SpawnEntity<TEntitytype>( Action<TEntitytype> configuration = null ) where TEntitytype : GameObject, new();
     }
 }

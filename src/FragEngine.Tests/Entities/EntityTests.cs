@@ -13,8 +13,8 @@ namespace FragEngine.Tests.Entities
     public class EntityTests
     {
 
-        private class GameObject1 : Entity { }
-        private class GameObject2 : Entity { }
+        private class GameObject1 : GameObject { }
+        private class GameObject2 : GameObject { }
 
         [Fact]
         public void Should_Be_Able_To_Determine_Distance_To_Another_Entity()

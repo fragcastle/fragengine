@@ -21,7 +21,7 @@ namespace JumpJoy.Entities
 
         private bool _againstWall = false;
 
-        protected override void Initialize()
+        public Jumper()
         {
             Collision = CollisionType.A;
 
@@ -41,8 +41,6 @@ namespace JumpJoy.Entities
 
             // our player only has horizontal friction
             Friction = new Vector2( 2000, 0 );
-
-            base.Initialize();
         }
 
         public override void Update( GameTime gameTime )

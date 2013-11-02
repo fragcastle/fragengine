@@ -76,7 +76,7 @@ namespace FragEd.Controls
                 // batch has to be started before animations/entities can be drawn
                 // if you get the "big red x" error, ctrl+alt+e and check "thrown" for
                 // Common Language Runtime: http://thewayofcoding.com/2011/08/xna-4-0-red-x-exceptions/
-                var _camera = ServiceInjector.Get<Camera>();
+                var _camera = ServiceLocator.Get<Camera>();
                 spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, _camera.GetViewMatrix( new Vector2( 1, 1 ) ) );
                 DrawEntities( spriteBatch );
                 spriteBatch.End();

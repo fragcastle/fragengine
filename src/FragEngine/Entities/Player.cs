@@ -16,13 +16,6 @@ namespace FragEngine.Entities
 
         public Player() : base( Vector2.Zero, Vector2.Zero )
         {
-
-        }
-
-        protected override void Initialize()
-        {
-            base.Initialize();
-
             inputState = new InputState( Index );
         }
 

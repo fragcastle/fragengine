@@ -21,7 +21,7 @@ namespace FragEngine.Layers
 
         public override void Draw( SpriteBatch spriteBatch )
         {
-            var _camera = ServiceInjector.Get<Camera>();
+            var _camera = ServiceLocator.Get<Camera>();
 
             Matrix matrix = Centered ?
                                 _camera.GetStaticViewMatrix( Parallax ) :

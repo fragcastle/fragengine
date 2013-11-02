@@ -18,7 +18,7 @@ namespace FragEngine.Layers
             DrawMethod = DrawEntities;
         }
 
-        public List<Entity> Entities = new List<Entity>();
+        public List<GameObject> Entities = new List<GameObject>();
 
         public void DrawEntities( SpriteBatch spriteBatch )
         {
@@ -26,7 +26,12 @@ namespace FragEngine.Layers
             {
                 if( entity.IsAlive )
                 {
-                    entity.Alpha = Alpha;
+                    var actor = entity as Actor;
+                    if( actor != null )
+                    {
+                        actor.Alpha = Alpha;    
+                    }
+                    
                     entity.Draw( spriteBatch );
                 }
             }

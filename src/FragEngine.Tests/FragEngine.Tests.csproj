@@ -52,7 +52,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Collisions\BoundingBoxTests.cs" />
     <Compile Include="Entities\EntityTests.cs" />
     <Compile Include="Mapping\CollisionDetectorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -59,15 +59,15 @@ namespace FragEd.Controls
             {
                 _deviceService = GraphicsDeviceService.AddRef( Handle, ClientSize.Width, ClientSize.Height );
 
-                ServiceInjector.Add<IGraphicsDeviceService>( _deviceService );
-                ServiceInjector.Add( _deviceService.GraphicsDevice );
-                ServiceInjector.Add<IEntityService>( new EntityService() );
-                ServiceInjector.Add<ICollisionService>( new CollisionService() );
+                ServiceLocator.Add<IGraphicsDeviceService>( _deviceService );
+                ServiceLocator.Add( _deviceService.GraphicsDevice );
+                ServiceLocator.Add<IEntityService>( new EntityService() );
+                ServiceLocator.Add<ICollisionService>( new CollisionService() );
 
                 _camera = new Camera( _deviceService.GraphicsDevice.Viewport );
 
-                if( !ServiceInjector.Has<Camera>() )
-                    ServiceInjector.Add( _camera );
+                if( !ServiceLocator.Has<Camera>() )
+                    ServiceLocator.Add( _camera );
 
                 if( ControlInitializing != null )
                 {
@@ -186,7 +186,7 @@ namespace FragEd.Controls
 
                 _camera.Zoom = zoom;
 
-                ServiceInjector.Add(_camera);
+                ServiceLocator.Add(_camera);
             }
 
 

@@ -17,7 +17,7 @@ namespace FragEngine.View
         /// <summary>
         /// The camera will center the ViewPort on this Sprite
         /// </summary>
-        public Entity Target { get; set; }
+        public GameObject Target { get; set; }
 
         public Vector2 Offset { get; set; }
 

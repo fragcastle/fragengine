@@ -74,11 +74,11 @@
             this.printPreviewToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.helpToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.ux_AddEntity = new System.Windows.Forms.ToolStripDropDownButton();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.ux_AddEntity = new System.Windows.Forms.ToolStripDropDownButton();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -305,6 +305,7 @@
             this.assemblitesToolStripMenuItem.Name = "assemblitesToolStripMenuItem";
             this.assemblitesToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
             this.assemblitesToolStripMenuItem.Text = "Assemblies";
+            this.assemblitesToolStripMenuItem.Click += new System.EventHandler(this.assemblitesToolStripMenuItem_Click);
             // 
             // toolsMenu
             // 
@@ -317,7 +318,7 @@
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.optionsToolStripMenuItem.Text = "&Options";
             // 
             // windowsMenu
@@ -504,6 +505,21 @@
             this.helpToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.helpToolStripButton.Text = "Help";
             // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
+            // 
+            // ux_AddEntity
+            // 
+            this.ux_AddEntity.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.ux_AddEntity.Image = global::FragEd.Properties.Resources.action_add_16xMD;
+            this.ux_AddEntity.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ux_AddEntity.Name = "ux_AddEntity";
+            this.ux_AddEntity.Size = new System.Drawing.Size(29, 22);
+            this.ux_AddEntity.Text = "toolStripDropDownButton1";
+            this.ux_AddEntity.Visible = false;
+            // 
             // statusStrip
             // 
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -519,21 +535,6 @@
             this.toolStripStatusLabel.Name = "toolStripStatusLabel";
             this.toolStripStatusLabel.Size = new System.Drawing.Size(39, 17);
             this.toolStripStatusLabel.Text = "Status";
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
-            // 
-            // ux_AddEntity
-            // 
-            this.ux_AddEntity.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.ux_AddEntity.Image = global::FragEd.Properties.Resources.action_add_16xMD;
-            this.ux_AddEntity.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ux_AddEntity.Name = "ux_AddEntity";
-            this.ux_AddEntity.Size = new System.Drawing.Size(29, 22);
-            this.ux_AddEntity.Text = "toolStripDropDownButton1";
-            this.ux_AddEntity.Visible = false;
             // 
             // AppContainer
             // 

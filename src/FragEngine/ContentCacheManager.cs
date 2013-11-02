@@ -74,7 +74,7 @@ namespace FragEngine
 
             Stream stream = caller.GetManifestResourceStream( path );
 
-            var graphicsDevice = ServiceInjector.Get<GraphicsDevice>();
+            var graphicsDevice = ServiceLocator.Get<GraphicsDevice>();
 
             return Texture2D.FromStream( graphicsDevice, stream );
         }

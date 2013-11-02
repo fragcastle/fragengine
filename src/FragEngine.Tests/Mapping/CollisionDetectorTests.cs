@@ -80,7 +80,7 @@ namespace FragEngine.Tests.Mapping
             var result = detector.Check( new Vector2( 16, 16 ), new Vector2( -0.3200000023f, 4.8f ), new Vector2( 64, 64 ) );
 
             // X position should be pushed back (entity was in a bad spot before)
-            Assert.Equal( 32f, result.Position.X );
+            Assert.Equal( 16f, result.Position.X );
 
             // Y should increase as expected
             Assert.Equal( 20.8f, result.Position.Y );

@@ -11,18 +11,18 @@ using Wexman.Design;
 namespace FragEd.Data {
     public class EditableEntity
     {
-        private Entity _entity;
+        private GameObject _gameObject;
 
         [Editor(typeof(GenericDictionaryEditor<string,string>), typeof(UITypeEditor))]
         public Dictionary<string, string> Settings
         {
-            get { return _entity.Settings; }
-            set { _entity.Settings = value; }
+            get { return _gameObject.Settings; }
+            set { _gameObject.Settings = value; }
         }
 
-        public EditableEntity( Entity entity )
+        public EditableEntity( GameObject gameObject )
         {
-            _entity = entity;
+            _gameObject = gameObject;
         }
     }
 }

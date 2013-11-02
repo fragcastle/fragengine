@@ -32,7 +32,7 @@ namespace JumpJoy.Screens
 
             var jump = CurrentLevel.Entities.First( e => e as Jumper != null );
 
-            var camera = ServiceInjector.Get<Camera>();
+            var camera = ServiceLocator.Get<Camera>();
 
             camera.Target = jump;
 
@@ -49,7 +49,7 @@ namespace JumpJoy.Screens
         {
             base.HandleInput( input );
 
-            var camera = ServiceInjector.Get<Camera>();
+            var camera = ServiceLocator.Get<Camera>();
 
 
             // Zooming
@@ -73,6 +73,13 @@ namespace JumpJoy.Screens
             if( input.CurrentKeyboardState.IsKeyDown( Keys.NumPad8 ) ) camera.Zoom = 8f;
             if( input.CurrentKeyboardState.IsKeyDown( Keys.NumPad9 ) ) camera.Zoom = 9f;
             if( input.CurrentKeyboardState.IsKeyDown( Keys.NumPad0 ) ) camera.Zoom = 10f;
+
+            if( input.CurrentKeyboardState.IsKeyDown( Keys.OemPlus ) ) camera.Zoom += 1f;
+            if( input.CurrentKeyboardState.IsKeyDown( Keys.OemMinus ) ) camera.Zoom -= 1f;
+            
+            var box = camera.Target.BoundingBox;
+            if( input.CurrentKeyboardState.IsKeyDown( Keys.V ) ) camera.Target.BoundingBoxOffset += new Vector2( 10, 10 );
+            if( input.CurrentKeyboardState.IsKeyDown( Keys.B ) ) camera.Target.BoundingBoxOffset -= new Vector2( 10, 10 );
         }
     }
 }

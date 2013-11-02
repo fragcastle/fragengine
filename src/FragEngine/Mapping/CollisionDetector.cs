@@ -10,7 +10,7 @@ namespace FragEngine.Mapping
     public class CollisionDetector
     {
 
-        private Entity _entity;
+        private GameObject _gameObject;
         private CollisionMap _map;
 
         private Vector2 _positionDelta;

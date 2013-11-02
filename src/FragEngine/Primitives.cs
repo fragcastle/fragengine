@@ -12,7 +12,7 @@ namespace FragEngine
     {
         static Primitives()
         {
-            var device = ServiceInjector.Get<GraphicsDevice>();
+            var device = ServiceLocator.Get<GraphicsDevice>();
 
             WhiteTexture = new Texture2D( device, 1, 1 );
             WhiteTexture.SetData( new Color[] { Color.White } );

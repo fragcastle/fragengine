@@ -190,10 +190,15 @@ namespace FragEd.Forms
                 Project.ContentDirectories.ForEach( ContentCacheManager.AddContentDirectory );
 
                 // TODO: disk op... show progress bar?
-                ContentCacheManager.LoadContent( new ContentManager( ServiceInjector.Apply() ) );
+                ContentCacheManager.LoadContent( new ContentManager( ServiceLocator.Apply() ) );
             }
 
             UpdateUserInterface();
+        }
+
+        private void assemblitesToolStripMenuItem_Click( object sender, EventArgs e )
+        {
+
         }
     }
 }

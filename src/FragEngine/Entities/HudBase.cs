@@ -9,9 +9,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace FragEngine.Entities
 {
-    public abstract class Hud : Entity
+    public abstract class Hud : GameObject
     {
-        public Entity Target { get; set; }
+        public GameObject Target { get; set; }
         public bool ShowPauseMessage { get; set; }
         public SpriteFont Font { get; set; }
 
@@ -19,7 +19,7 @@ namespace FragEngine.Entities
 
         protected Rectangle _windowSize;
 
-        public Hud( Rectangle windowSize ) : base( Vector2.Zero, Vector2.Zero )
+        public Hud( Rectangle windowSize ) : base( Vector2.Zero )
         {
             _windowSize = windowSize;
             _text = new Dictionary<Vector2, string>();
@@ -62,7 +62,7 @@ namespace FragEngine.Entities
 
         public Matrix GetTransformation()
         {
-            var camera = ServiceInjector.Get<Camera>();
+            var camera = ServiceLocator.Get<Camera>();
             var pos = Target == null ? camera.DefaultPosition : Target.Position;
 
             return Matrix.CreateTranslation( new Vector3( -pos.X, -pos.Y, 0 ) ) *

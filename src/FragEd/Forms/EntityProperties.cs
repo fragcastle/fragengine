@@ -14,18 +14,18 @@ namespace FragEd.Forms
 {
     public partial class EntityProperties : Form
     {
-        private Entity _entity;
+        private Actor _actor;
 
-        public EntityProperties( Entity entity )
+        public EntityProperties( Actor actor )
         {
             InitializeComponent();
 
-            _entity = entity;
+            _actor = actor;
 
             Load += (sender, args) => PopulateForm();
 
             ux_AnimationList.SelectedIndexChanged +=
-                (sender, args) => _entity.CurrentAnimation = (string)ux_AnimationList.SelectedItem;
+                (sender, args) => _actor.CurrentAnimation = (string)ux_AnimationList.SelectedItem;
         }
 
         private void PopulateForm()
@@ -33,23 +33,23 @@ namespace FragEd.Forms
             ux_AnimationList.Items.Clear();
             ux_EntitySettings.SelectedObject = null;
 
-            foreach (var animation in _entity.Animations.GetAnimations())
+            foreach (var animation in _actor.Animations.GetAnimations())
             {
                 ux_AnimationList.Items.Add(animation.Name);
-                if (animation.Name == _entity.CurrentAnimation)
+                if (animation.Name == _actor.CurrentAnimation)
                 {
                     ux_AnimationList.SelectedIndex = ux_AnimationList.Items.Count - 1;
                 }
             }
 
-            ux_EntitySettings.SelectedObject = new EditableEntity( _entity );
+            ux_EntitySettings.SelectedObject = new EditableEntity( _actor );
         }
 
         private void ux_Done_Click( object sender, EventArgs e )
         {
             Hide();
 
-            _entity.Settings = ( (EditableEntity)ux_EntitySettings.SelectedObject ).Settings;
+            _actor.Settings = ( (EditableEntity)ux_EntitySettings.SelectedObject ).Settings;
 
             Close();
         }

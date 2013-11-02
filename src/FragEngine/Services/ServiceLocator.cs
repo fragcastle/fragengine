@@ -7,7 +7,7 @@ using System.Text;
 namespace FragEngine.Services
 {
     // a really lazy implementation of the service locator pattern
-    public static class ServiceInjector
+    public static class ServiceLocator
     {
         private static readonly IDictionary<Type, object> _services = new Dictionary<Type, object>();
 

@@ -62,11 +62,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Animation\AnimationSheet.cs" />
+    <Compile Include="Collisions\HitBox.cs" />
     <Compile Include="CollisionTypes.cs" />
     <Compile Include="ContentCacheManager.cs" />
     <Compile Include="Data\Level.cs" />
     <Compile Include="Entities\Actor.cs" />
-    <Compile Include="Entities\Entity.cs" />
+    <Compile Include="Entities\GameObject.cs" />
     <Compile Include="Entities\EntityService.cs" />
     <Compile Include="Entities\HudBase.cs" />
     <Compile Include="Entities\Player.cs" />
@@ -92,7 +93,7 @@
     <Compile Include="Services\ICollisionService.cs" />
     <Compile Include="Services\IEntityService.cs" />
     <Compile Include="Services\ServiceContainerExtensions.cs" />
-    <Compile Include="Services\ServiceInjector.cs" />
+    <Compile Include="Services\ServiceLocator.cs" />
     <Compile Include="Utility.cs" />
     <Compile Include="View\Camera.cs" />
     <Compile Include="Layers\CollisionLayer.cs" />

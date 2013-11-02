@@ -89,7 +89,11 @@ namespace FragEd.Services
                     if( DeviceDisposing != null )
                         DeviceDisposing( this, EventArgs.Empty );
 
-                    _graphicsDevice.Dispose();
+                    try
+                    {
+                        _graphicsDevice.Dispose();    
+                    } catch {} // yeah, i'm an awful person.
+                    
                 }
 
                 _graphicsDevice = null;
