@@ -69,15 +69,6 @@ namespace FragEngine.Entities
 
         public override void Update( GameTime gameTime )
         {            
-            CalculateVelocity( gameTime );
-
-            var partialVelocity = Velocity * gameTime.GetGameTick();
-
-            // ask the collision system if we're going to have a collision at that co-ord
-            var result = CollisionService.Check( Position, partialVelocity, BoundingBox );
-
-            UpdateEntityState( result );
-
             Animations.CurrentAnimation.Update( gameTime );
 
             base.Update( gameTime );
@@ -87,7 +78,7 @@ namespace FragEngine.Entities
         {
             Animations.CurrentAnimation.FlipX = FlipAnimation;
 
-            var correctedPosition = Position + Offset;
+            var correctedPosition = Position - Offset;
 
             Animations.CurrentAnimation.Draw( batch, correctedPosition, Alpha );
 
@@ -105,59 +96,6 @@ namespace FragEngine.Entities
             {
                 Health -= amount;
             }
-        }
-
-        protected virtual void UpdateEntityState( CollisionCheckResult result )
-        {
-            IsStanding = false;
-            if( result.YAxis )
-            {
-                IsStanding = Velocity.Y > 0;
-                Velocity = new Vector2( Velocity.X, 0 );
-            }
-
-            if( result.XAxis )
-                Velocity = new Vector2( 0, Velocity.Y );
-
-            Position = result.Position;
-        }
-
-        private void CalculateVelocity( GameTime gameTime )
-        {
-            var tick = gameTime.GetGameTick();
-
-            // apply gravity
-            var gravityVector = new Vector2( 0, FragEngineGame.Gravity * tick * GravityFactor );
-
-            Velocity += gravityVector;
-
-            // are we speeding up, or slowing down?
-            if( Acceleration != Vector2.Zero )
-                Velocity = ApplyAcceleration( gameTime );
-            else if( Friction != Vector2.Zero )
-                Velocity = ApplyFriction( gameTime );
-        }
-
-        private Vector2 ApplyFriction( GameTime gameTime )
-        {
-            var frictionDelta = Friction * gameTime.GetGameTick();
-
-            var newVelocity = Velocity;
-
-            if( Velocity.X - frictionDelta.X > 0 ) newVelocity.X -= frictionDelta.X;
-            else if( Velocity.X + frictionDelta.X < 0 ) newVelocity.X += frictionDelta.X;
-            else newVelocity.X = 0;
-
-            if( Velocity.Y - frictionDelta.Y > 0 ) newVelocity.Y -= frictionDelta.Y;
-            else if( Velocity.Y + frictionDelta.Y < 0 ) newVelocity.Y += frictionDelta.Y;
-            else newVelocity.Y = 0;
-
-            return Utility.Limit( newVelocity, MaxVelocity );
-        }
-
-        private Vector2 ApplyAcceleration( GameTime gameTime )
-        {
-            return Velocity = Utility.Limit( Velocity + Acceleration * gameTime.GetGameTick(), MaxVelocity );
-        }
+        }   
     }
 }

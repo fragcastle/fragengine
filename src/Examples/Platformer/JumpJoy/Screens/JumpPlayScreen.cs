@@ -17,7 +17,8 @@ namespace JumpJoy.Screens
 {
     public class JumpPlayScreen : PlayScreen
     {
-        public JumpPlayScreen(Hud hud) : base(hud)
+        public JumpPlayScreen( Hud hud )
+            : base( hud )
         {
 
         }
@@ -76,11 +77,22 @@ namespace JumpJoy.Screens
 
             if( input.CurrentKeyboardState.IsKeyDown( Keys.OemPlus ) ) camera.Zoom += 1f;
             if( input.CurrentKeyboardState.IsKeyDown( Keys.OemMinus ) ) camera.Zoom -= 1f;
-            
-            if( input.CurrentKeyboardState.IsKeyDown( Keys.H ) ) camera.Target.Offset += new Vector2( 1, 0 );
-            if( input.CurrentKeyboardState.IsKeyDown( Keys.J ) ) camera.Target.Offset -= new Vector2( 1, 0 );
-            if( input.CurrentKeyboardState.IsKeyDown( Keys.K ) ) camera.Target.Offset += new Vector2( 0, 1 );
-            if( input.CurrentKeyboardState.IsKeyDown( Keys.L ) ) camera.Target.Offset -= new Vector2( 0, 1 );
+
+            if( input.CurrentKeyboardState.IsKeyDown( Keys.LeftShift ) || input.CurrentKeyboardState.IsKeyDown( Keys.RightShift ) )
+            {
+                if( input.CurrentKeyboardState.IsKeyDown( Keys.H ) ) camera.Target.BoundingBox += new Vector2( 1, 0 );
+                if( input.CurrentKeyboardState.IsKeyDown( Keys.L ) ) camera.Target.BoundingBox -= new Vector2( 1, 0 );
+                if( input.CurrentKeyboardState.IsKeyDown( Keys.K ) ) camera.Target.BoundingBox += new Vector2( 0, 1 );
+                if( input.CurrentKeyboardState.IsKeyDown( Keys.J ) ) camera.Target.BoundingBox -= new Vector2( 0, 1 );
+            }
+            else
+            {
+                if( input.CurrentKeyboardState.IsKeyDown( Keys.H ) ) camera.Target.Offset += new Vector2( 1, 0 );
+                if( input.CurrentKeyboardState.IsKeyDown( Keys.L ) ) camera.Target.Offset -= new Vector2( 1, 0 );
+                if( input.CurrentKeyboardState.IsKeyDown( Keys.K ) ) camera.Target.Offset += new Vector2( 0, 1 );
+                if( input.CurrentKeyboardState.IsKeyDown( Keys.J ) ) camera.Target.Offset -= new Vector2( 0, 1 );
+            }
+
         }
     }
 }

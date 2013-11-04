@@ -90,19 +90,7 @@ namespace FragEngine.Entities
         [IgnoreDataMember]
         public Vector2 Offset { get; set; }
 
-        [IgnoreDataMember]
-        public Rectangle CollisionBox
-        {
-            get
-            {
-                Rectangle rect = BoundingBox - Offset;
-
-                rect.X = (int)Position.X;
-                rect.Y = (int)Position.Y;
-
-                return rect;
-            }
-        }
+        
         
         public virtual void Kill()
         {
@@ -111,8 +99,8 @@ namespace FragEngine.Entities
 
         public float DistanceTo( GameObject gameObject )
         {
-            var xd = ( CollisionBox.X / 2 ) - ( gameObject.CollisionBox.X / 2 );
-            var yd = ( CollisionBox.Y / 2 ) - ( gameObject.CollisionBox.Y / 2 );
+            var xd = ( BoundingBox.Width / 2 ) - ( gameObject.BoundingBox.Width / 2 );
+            var yd = ( BoundingBox.Height / 2 ) - ( gameObject.BoundingBox.Height / 2 );
             return (float)Math.Sqrt( xd * xd + yd * yd );
         }
 
@@ -123,7 +111,14 @@ namespace FragEngine.Entities
 
         public virtual void Update( GameTime gameTime )
         {
-            
+            CalculateVelocity( gameTime );
+
+            var partialVelocity = Velocity * gameTime.GetGameTick();
+
+            // ask the collision system if we're going to have a collision at that co-ord
+            var result = CollisionService.Check( Position, partialVelocity, BoundingBox );
+
+            UpdateEntityState( result );
         }
 
         public virtual void Draw( SpriteBatch batch )
@@ -134,11 +129,69 @@ namespace FragEngine.Entities
                 var whiteTexture = new Texture2D( batch.GraphicsDevice, 1, 1 );
                 whiteTexture.SetData( new Color[] { Color.White } );
 
-                batch.Draw( whiteTexture, new Rectangle( CollisionBox.Left,  CollisionBox.Top,    CollisionBox.Width, 1 ), Color.White );
-                batch.Draw( whiteTexture, new Rectangle( CollisionBox.Left,  CollisionBox.Bottom, CollisionBox.Width, 1 ), Color.White );
-                batch.Draw( whiteTexture, new Rectangle( CollisionBox.Left,  CollisionBox.Top, 1, CollisionBox.Height ), Color.White );
-                batch.Draw( whiteTexture, new Rectangle( CollisionBox.Right, CollisionBox.Top, 1, CollisionBox.Height + 1 ), Color.White );
+                Rectangle rect = BoundingBox;
+
+                rect.X = (int)Position.X;
+                rect.Y = (int)Position.Y;
+
+                batch.Draw( whiteTexture, new Rectangle( rect.Left, rect.Top, rect.Width, 1 ), Color.White );
+                batch.Draw( whiteTexture, new Rectangle( rect.Left, rect.Bottom, rect.Width, 1 ), Color.White );
+                batch.Draw( whiteTexture, new Rectangle( rect.Left, rect.Top, 1, rect.Height ), Color.White );
+                batch.Draw( whiteTexture, new Rectangle( rect.Right, rect.Top, 1, rect.Height + 1 ), Color.White );
             }
+        }
+
+        protected virtual void UpdateEntityState( CollisionCheckResult result )
+        {
+            IsStanding = false;
+            if( result.YAxis )
+            {
+                IsStanding = Velocity.Y > 0;
+                Velocity = new Vector2( Velocity.X, 0 );
+            }
+
+            if( result.XAxis )
+                Velocity = new Vector2( 0, Velocity.Y );
+
+            Position = result.Position;
+        }
+
+        private void CalculateVelocity( GameTime gameTime )
+        {
+            var tick = gameTime.GetGameTick();
+
+            // apply gravity
+            var gravityVector = new Vector2( 0, FragEngineGame.Gravity * tick * GravityFactor );
+
+            Velocity += gravityVector;
+
+            // are we speeding up, or slowing down?
+            if( Acceleration != Vector2.Zero )
+                Velocity = ApplyAcceleration( gameTime );
+            else if( Friction != Vector2.Zero )
+                Velocity = ApplyFriction( gameTime );
+        }
+
+        private Vector2 ApplyFriction( GameTime gameTime )
+        {
+            var frictionDelta = Friction * gameTime.GetGameTick();
+
+            var newVelocity = Velocity;
+
+            if( Velocity.X - frictionDelta.X > 0 ) newVelocity.X -= frictionDelta.X;
+            else if( Velocity.X + frictionDelta.X < 0 ) newVelocity.X += frictionDelta.X;
+            else newVelocity.X = 0;
+
+            if( Velocity.Y - frictionDelta.Y > 0 ) newVelocity.Y -= frictionDelta.Y;
+            else if( Velocity.Y + frictionDelta.Y < 0 ) newVelocity.Y += frictionDelta.Y;
+            else newVelocity.Y = 0;
+
+            return Utility.Limit( newVelocity, MaxVelocity );
+        }
+
+        private Vector2 ApplyAcceleration( GameTime gameTime )
+        {
+            return Velocity = Utility.Limit( Velocity + Acceleration * gameTime.GetGameTick(), MaxVelocity );
         }
     }
 }
