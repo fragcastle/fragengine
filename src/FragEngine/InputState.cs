@@ -160,8 +160,7 @@ namespace FragEngine
         /// </summary>
         public bool IsNewKeyPress( Keys key )
         {
-            return ( CurrentKeyboardState.IsKeyDown( key ) &&
-                    LastKeyboardState.IsKeyUp( key ) );
+            return ( CurrentKeyboardState.IsKeyDown( key ) && LastKeyboardState.IsKeyUp( key ) );
         }
 
         public string PressedKeyValue()

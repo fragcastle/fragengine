@@ -42,6 +42,10 @@ namespace JumpJoy.Entities
 
             // our player only has horizontal friction
             Friction = new Vector2( 2000, 0 );
+
+            Settings[ "_feDrawBox" ] = "true";
+
+            BoundingBox = new HitBox { Height = 64, Width = 64 };
         }
 
         public override void Update( GameTime gameTime )

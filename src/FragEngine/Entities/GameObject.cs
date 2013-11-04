@@ -20,6 +20,8 @@ namespace FragEngine.Entities
         
         protected ICollisionService CollisionService;
 
+        private IDictionary<string, string> _settings = new Dictionary<string, string>();
+
         protected GameObject()
             : this( Vector2.Zero )
         {
@@ -28,12 +30,10 @@ namespace FragEngine.Entities
         protected GameObject( Vector2 initialLocation, Vector2? initialVelocity = null, ICollisionService collisionService = null )
         {
             Position = initialLocation;
-
-            Settings = new Dictionary<string, string>();
             
             IsAlive = true;
 
-            BoundingBoxOffset = Vector2.Zero;
+            Offset = Vector2.Zero;
 
             Velocity = initialVelocity ?? Vector2.Zero;
 
@@ -50,22 +50,17 @@ namespace FragEngine.Entities
         public Vector2 Position { get; set; }
 
         [DataMember]
-        public virtual IDictionary<string, string> Settings { get; set; }
+        public IDictionary<string, string> Settings
+        {
+            get { return _settings; }
+            set { _settings = value; }
+        }
 
         [IgnoreDataMember]
         public bool IsAlive { get; set; }
 
         [IgnoreDataMember]
-        protected bool IsStanding { get; set; }
-
-        [IgnoreDataMember]
-        public Rectangle BoundingBox { get; set; }
-
-        [IgnoreDataMember]
-        public Vector2 BoundingBoxOffset { get; set; }
-
-        [IgnoreDataMember]
-        public CollisionType Collision { get; set; }
+        public bool IsStanding { get; set; } 
 
         // Physics Properties       
 
@@ -84,6 +79,31 @@ namespace FragEngine.Entities
         [IgnoreDataMember]
         public Vector2 Friction { get; set; }
 
+        // Collision Properties
+
+        [IgnoreDataMember]
+        public CollisionType Collision { get; set; }
+
+        [IgnoreDataMember]
+        public HitBox BoundingBox { get; set; }
+
+        [IgnoreDataMember]
+        public Vector2 Offset { get; set; }
+
+        [IgnoreDataMember]
+        public Rectangle CollisionBox
+        {
+            get
+            {
+                Rectangle rect = BoundingBox - Offset;
+
+                rect.X = (int)Position.X;
+                rect.Y = (int)Position.Y;
+
+                return rect;
+            }
+        }
+        
         public virtual void Kill()
         {
             IsAlive = false;
@@ -91,8 +111,8 @@ namespace FragEngine.Entities
 
         public float DistanceTo( GameObject gameObject )
         {
-            var xd = ( Position.X + BoundingBox.X / 2 ) - ( gameObject.Position.X + gameObject.BoundingBox.X / 2 );
-            var yd = ( Position.Y + BoundingBox.Y / 2 ) - ( gameObject.Position.Y + gameObject.BoundingBox.Y / 2 );
+            var xd = ( CollisionBox.X / 2 ) - ( gameObject.CollisionBox.X / 2 );
+            var yd = ( CollisionBox.Y / 2 ) - ( gameObject.CollisionBox.Y / 2 );
             return (float)Math.Sqrt( xd * xd + yd * yd );
         }
 
@@ -106,9 +126,19 @@ namespace FragEngine.Entities
             
         }
 
-        public virtual void Draw( SpriteBatch spriteBatch )
+        public virtual void Draw( SpriteBatch batch )
         {
-            
+            string drawBox = null;
+            if( Settings.TryGetValue("_feDrawBox", out drawBox) && drawBox == "true" )
+            {
+                var whiteTexture = new Texture2D( batch.GraphicsDevice, 1, 1 );
+                whiteTexture.SetData( new Color[] { Color.White } );
+
+                batch.Draw( whiteTexture, new Rectangle( CollisionBox.Left,  CollisionBox.Top,    CollisionBox.Width, 1 ), Color.White );
+                batch.Draw( whiteTexture, new Rectangle( CollisionBox.Left,  CollisionBox.Bottom, CollisionBox.Width, 1 ), Color.White );
+                batch.Draw( whiteTexture, new Rectangle( CollisionBox.Left,  CollisionBox.Top, 1, CollisionBox.Height ), Color.White );
+                batch.Draw( whiteTexture, new Rectangle( CollisionBox.Right, CollisionBox.Top, 1, CollisionBox.Height + 1 ), Color.White );
+            }
         }
     }
 }

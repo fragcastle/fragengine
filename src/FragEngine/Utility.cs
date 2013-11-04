@@ -20,27 +20,6 @@ namespace FragEngine {
             return (float)random.NextDouble() * 2f - 1f;
         }
 
-        public static Action Throttle( Action toThrottle, int wait ) {
-            var lastCall = DateTime.Now;
-            return () => {
-                    if( DateTime.Now.Subtract( lastCall ).TotalMilliseconds >= wait ) {
-                        toThrottle();
-                        lastCall = DateTime.Now;
-                    }
-                };
-        }
-
-        public static Action<T1, T2> Throttle<T1, T2>( Action<T1, T2> toThrottle, int wait )
-        {
-            var lastCall = DateTime.Now;
-            return (first, second) => {
-                if( DateTime.Now.Subtract( lastCall ).TotalMilliseconds >= wait ) {
-                    toThrottle(first, second);
-                    lastCall = DateTime.Now;
-                }
-            };
-        }
-
         public static float Limit( float target, float min, float max )
         {
             return Math.Min( max, Math.Max( min, target ) );

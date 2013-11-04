@@ -14,14 +14,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace FragEngine {
-    public enum GameMode
+namespace FragEngine
+{
+    public abstract class FragEngineGame : Game
     {
-        Debug,
-        Release
-    }
-
-    public abstract class FragEngineGame : Game {
 
         /// <summary>
         /// Use in your games to get a close approximation of the Gravitational Constant
@@ -63,7 +59,8 @@ namespace FragEngine {
             TimeScale = 1f;
         }
 
-        public FragEngineGame() {
+        public FragEngineGame()
+        {
             // TODO: figure out a way to change this to use the IGraphicsDeviceManager interface
             // FIXME: this is fucked. In DIRECTX versions of this code, we _must_ instantiate GraphicsDeviceManager
             // in the initialize, but in OPENGL versions we have to do it here (check the code in Game.cs)
@@ -72,14 +69,14 @@ namespace FragEngine {
 
             Content.RootDirectory = "Content";
 
-            DataDirectory = new DirectoryInfo(Path.Combine(Directory.GetCurrentDirectory(), "Data"));
+            DataDirectory = new DirectoryInfo( Path.Combine( Directory.GetCurrentDirectory(), "Data" ) );
 
             ClearColor = Color.White;
 
             ServiceLocator.Apply( Services );
 
             if( !ServiceLocator.Has<GraphicsDevice>() )
-                ServiceLocator.Add(Graphics.GraphicsDevice);
+                ServiceLocator.Add( Graphics.GraphicsDevice );
 
             if( !ServiceLocator.Has<Camera>() )
                 ServiceLocator.Add( new Camera( Graphics.GraphicsDevice.Viewport ) );
@@ -128,7 +125,8 @@ namespace FragEngine {
             base.Initialize();
         }
 
-        protected override void Update( GameTime gameTime ) {
+        protected override void Update( GameTime gameTime )
+        {
             // Allows the game to exit
             if( GamePad.GetState( PlayerIndex.One ).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().GetPressedKeys().Contains( Keys.X ) )
                 Exit();
@@ -136,13 +134,15 @@ namespace FragEngine {
             // Check to see if the user has paused or unpaused
             checkPauseKey( Keyboard.GetState(), GamePad.GetState( PlayerIndex.One ) );
 
-            base.Update( AdjustGameTime(gameTime) );
+            base.Update( AdjustGameTime( gameTime ) );
         }
 
-        protected override void Draw( GameTime gameTime ) {
+        protected override void Draw( GameTime gameTime )
+        {
             GraphicsDevice.Clear( ClearColor );
 
-            if( IsPaused || IsPausedForGuide ) {
+            if( IsPaused || IsPausedForGuide )
+            {
                 // shutdown all vibrations for the controllers
                 // TODO: move this into GameInputManager
                 GamePad.SetVibration( PlayerIndex.One, 0f, 0f );
@@ -172,25 +172,29 @@ namespace FragEngine {
             SpriteScale = Matrix.CreateScale( Scale, Scale, 1 );
         }
 
-        private void BeginPause( bool UserInitiated ) {
+        private void BeginPause( bool UserInitiated )
+        {
             IsPaused = true;
             IsPausedForGuide = !UserInitiated;
             //TODO: Pause audio playback
             //TODO: Pause controller vibration
         }
 
-        private void EndPause() {
+        private void EndPause()
+        {
             //TODO: Resume audio
             //TODO: Resume controller vibration
             IsPausedForGuide = false;
             IsPaused = false;
         }
 
-        private void checkPauseKey( KeyboardState keyboardState, GamePadState gamePadState ) {
+        private void checkPauseKey( KeyboardState keyboardState, GamePadState gamePadState )
+        {
             bool pauseKeyDownThisFrame = ( keyboardState.IsKeyDown( Keys.P ) || ( gamePadState.Buttons.Start == ButtonState.Pressed ) );
             // If key was not down before, but is down now, we toggle the
             // pause setting
-            if( !_isPauseKeyDown && pauseKeyDownThisFrame ) {
+            if( !_isPauseKeyDown && pauseKeyDownThisFrame )
+            {
                 if( !IsPaused )
                     BeginPause( true );
                 else

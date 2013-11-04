@@ -85,7 +85,6 @@
     <Compile Include="Collisions\CollisionMap.cs" />
     <Compile Include="Collisions\CollisionService.cs" />
     <Compile Include="Data\Map.cs" />
-    <Compile Include="Primitives.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

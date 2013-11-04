@@ -125,10 +125,14 @@ namespace FragEngine.Layers
                     if( DrawGrid )
                     {
                         var frame = new Rectangle( (int)cell.X, (int)cell.Y, TileSize, TileSize );
-                        spriteBatch.Draw( Primitives.WhiteTexture, new Rectangle( frame.Left, frame.Top, frame.Width, 1 ), Color.White );
-                        spriteBatch.Draw( Primitives.WhiteTexture, new Rectangle( frame.Left, frame.Bottom, frame.Width, 1 ), Color.White );
-                        spriteBatch.Draw( Primitives.WhiteTexture, new Rectangle( frame.Left, frame.Top, 1, frame.Height ), Color.White );
-                        spriteBatch.Draw( Primitives.WhiteTexture, new Rectangle( frame.Right, frame.Top, 1, frame.Height + 1 ), Color.White );
+                        
+                        var whiteTexture = new Texture2D( spriteBatch.GraphicsDevice, 1, 1 );
+                        whiteTexture.SetData( new Color[] { Color.White } );
+
+                        spriteBatch.Draw( whiteTexture, new Rectangle( frame.Left, frame.Top, frame.Width, 1 ), Color.White );
+                        spriteBatch.Draw( whiteTexture, new Rectangle( frame.Left, frame.Bottom, frame.Width, 1 ), Color.White );
+                        spriteBatch.Draw( whiteTexture, new Rectangle( frame.Left, frame.Top, 1, frame.Height ), Color.White );
+                        spriteBatch.Draw( whiteTexture, new Rectangle( frame.Right, frame.Top, 1, frame.Height + 1 ), Color.White );
                     }
                 } );
             }

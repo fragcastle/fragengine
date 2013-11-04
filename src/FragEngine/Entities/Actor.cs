@@ -74,13 +74,11 @@ namespace FragEngine.Entities
             var partialVelocity = Velocity * gameTime.GetGameTick();
 
             // ask the collision system if we're going to have a collision at that co-ord
-            var result = CollisionService.Check( Position, partialVelocity, Animations.CurrentAnimation.FrameSize );
+            var result = CollisionService.Check( Position, partialVelocity, BoundingBox );
 
             UpdateEntityState( result );
 
             Animations.CurrentAnimation.Update( gameTime );
-
-            BoundingBox = new Rectangle( (int)( Position.X + BoundingBoxOffset.X ), (int)( Position.Y + BoundingBoxOffset.Y ), BoundingBox.Width, BoundingBox.Height );
 
             base.Update( gameTime );
         }
@@ -89,16 +87,9 @@ namespace FragEngine.Entities
         {
             Animations.CurrentAnimation.FlipX = FlipAnimation;
 
-            var correctedPosition = Position + BoundingBoxOffset;
+            var correctedPosition = Position + Offset;
 
             Animations.CurrentAnimation.Draw( batch, correctedPosition, Alpha );
-
-#if DEBUG
-            batch.Draw( Primitives.WhiteTexture, new Rectangle( BoundingBox.Left, BoundingBox.Top, BoundingBox.Width, 1 ), Color.White );
-            batch.Draw( Primitives.WhiteTexture, new Rectangle( BoundingBox.Left, BoundingBox.Bottom, BoundingBox.Width, 1 ), Color.White );
-            batch.Draw( Primitives.WhiteTexture, new Rectangle( BoundingBox.Left, BoundingBox.Top, 1, BoundingBox.Height ), Color.White );
-            batch.Draw( Primitives.WhiteTexture, new Rectangle( BoundingBox.Right, BoundingBox.Top, 1, BoundingBox.Height + 1 ), Color.White );
-#endif
 
             base.Draw( batch );
         }
