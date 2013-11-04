@@ -1,4 +1,4 @@
-﻿namespace FragEngine
+﻿namespace FragEngine.Collisions
 {
     public enum CollisionType
     {

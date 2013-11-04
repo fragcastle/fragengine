@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using FragEngine.Animation;
-using FragEngine.Mapping;
+using FragEngine.Collisions;
 using FragEngine.Services;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -27,24 +27,6 @@ namespace FragEngine.Entities
 
         [IgnoreDataMember]
         public int Health { get; set; }
-
-        [IgnoreDataMember]
-        protected bool Standing { get; set; }
-
-        [IgnoreDataMember]
-        public float GravityFactor { get; set; }
-
-        [IgnoreDataMember]
-        public Vector2 Velocity { get; set; }
-
-        [IgnoreDataMember]
-        public Vector2 MaxVelocity { get; set; }
-
-        [IgnoreDataMember]
-        public Vector2 Acceleration { get; set; }
-
-        [IgnoreDataMember]
-        public Vector2 Friction { get; set; }
 
         [IgnoreDataMember]
         public bool FlipAnimation { get; set; }
@@ -75,25 +57,14 @@ namespace FragEngine.Entities
             }
         }
 
-        public Actor() : this(Vector2.Zero, Vector2.Zero ) {}
-
-        public Actor( Vector2 initialPosition, Vector2 initialVelocity, ICollisionService collisionSvc = null )
-            : base( initialPosition )
+        public Actor() : this( Vector2.Zero ) {}
+        public Actor( Vector2 initialPosition, Vector2? initialVelocity = null, ICollisionService collisionService = null )
+            : base( initialPosition, initialVelocity, collisionService )
         {
             TintColor = Color.White;
 
             // FIXES: bug where entities were invisible in fragEd.
             Alpha = 255f; // entities are visible by default
-
-            Velocity = initialVelocity;
-
-            // by default, gravity will affect entities
-            GravityFactor = 1f;
-
-            // entities are moved by changing the acceleration vector...
-            Acceleration = Vector2.Zero;
-
-            CollisionService = collisionSvc ?? ServiceLocator.Get<ICollisionService>();
         }        
 
         public override void Update( GameTime gameTime )
@@ -147,10 +118,10 @@ namespace FragEngine.Entities
 
         protected virtual void UpdateEntityState( CollisionCheckResult result )
         {
-            Standing = false;
+            IsStanding = false;
             if( result.YAxis )
             {
-                Standing = Velocity.Y > 0;
+                IsStanding = Velocity.Y > 0;
                 Velocity = new Vector2( Velocity.X, 0 );
             }
 

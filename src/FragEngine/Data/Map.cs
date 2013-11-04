@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 
-namespace FragEngine.Mapping
+namespace FragEngine.Data
 {
-    public class CompressedMapData
+    public class Map
     {
 
         public int this[Vector2 pos]
@@ -109,7 +105,7 @@ namespace FragEngine.Mapping
 
     public static class CompressedMapDataExtensions
     {
-        public static string ToJson( this CompressedMapData mapData )
+        public static string ToJson( this Map map )
         {
             var writer = new StringWriter();
             var jsonWriter = new JsonTextWriter( writer );
@@ -119,11 +115,11 @@ namespace FragEngine.Mapping
             jsonWriter.WritePropertyName("Data");
 
             jsonWriter.WriteStartArray();
-            mapData.Data.ToList().ForEach( jsonWriter.WriteValue );
+            map.Data.ToList().ForEach( jsonWriter.WriteValue );
             jsonWriter.WriteEndArray();
 
             jsonWriter.WritePropertyName("Width");
-            jsonWriter.WriteValue(mapData.Width);
+            jsonWriter.WriteValue(map.Width);
 
             jsonWriter.WriteEndObject();
 

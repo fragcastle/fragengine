@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using FragEngine.Mapping;
+using FragEngine.Collisions;
 using FragEngine.Services;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -19,14 +19,13 @@ namespace FragEngine.Entities
     {
         
         protected ICollisionService CollisionService;
-        protected IEntityService EntityService;
 
         protected GameObject()
             : this( Vector2.Zero )
         {
         }
 
-        protected GameObject( Vector2 initialLocation )
+        protected GameObject( Vector2 initialLocation, Vector2? initialVelocity = null, ICollisionService collisionService = null )
         {
             Position = initialLocation;
 
@@ -35,16 +34,29 @@ namespace FragEngine.Entities
             IsAlive = true;
 
             BoundingBoxOffset = Vector2.Zero;
+
+            Velocity = initialVelocity ?? Vector2.Zero;
+
+            // by default, gravity will affect entities
+            GravityFactor = 1f;
+
+            // entities are moved by changing the acceleration vector...
+            Acceleration = Vector2.Zero;
+
+            CollisionService = collisionService ?? ServiceLocator.Get<ICollisionService>();
         }
 
         [DataMember]
         public Vector2 Position { get; set; }
 
         [DataMember]
-        public virtual Dictionary<string, string> Settings { get; set; }
+        public virtual IDictionary<string, string> Settings { get; set; }
 
         [IgnoreDataMember]
         public bool IsAlive { get; set; }
+
+        [IgnoreDataMember]
+        protected bool IsStanding { get; set; }
 
         [IgnoreDataMember]
         public Rectangle BoundingBox { get; set; }
@@ -55,7 +67,22 @@ namespace FragEngine.Entities
         [IgnoreDataMember]
         public CollisionType Collision { get; set; }
 
-        
+        // Physics Properties       
+
+        [IgnoreDataMember]
+        public float GravityFactor { get; set; }
+
+        [IgnoreDataMember]
+        public Vector2 Velocity { get; set; }
+
+        [IgnoreDataMember]
+        public Vector2 MaxVelocity { get; set; }
+
+        [IgnoreDataMember]
+        public Vector2 Acceleration { get; set; }
+
+        [IgnoreDataMember]
+        public Vector2 Friction { get; set; }
 
         public virtual void Kill()
         {
@@ -83,12 +110,5 @@ namespace FragEngine.Entities
         {
             
         }
-
-        private void InternalInitialize()
-        {
-            CollisionService = ServiceLocator.Get<ICollisionService>();
-            EntityService = ServiceLocator.Get<IEntityService>();
-        }
-       
     }
 }

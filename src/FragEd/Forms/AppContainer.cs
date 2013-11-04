@@ -142,7 +142,7 @@ namespace FragEd.Forms
             CurrentProjectFile = fileName;
 
             // open the ProjectConfiguration
-            var projectConfiguration = Persistant.Load<ProjectConfiguration>( fileName ) ?? new ProjectConfiguration();
+            var projectConfiguration = DiskStorage.LoadFromDisk<ProjectConfiguration>( fileName ) ?? new ProjectConfiguration();
 
             Project = new Project( projectConfiguration );
         }

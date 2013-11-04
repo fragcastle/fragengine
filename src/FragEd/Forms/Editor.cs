@@ -320,7 +320,7 @@ namespace FragEd.Forms
                 var result = MessageBox.Show( "Do you want to save changes to the current project?", "Save Changes?", MessageBoxButtons.YesNoCancel );
                 if( result == DialogResult.Yes )
                 {
-                    Persistant.Persist( CurrentProjectFile, Project );
+                    DiskStorage.SaveToDisk( CurrentProjectFile, Project );
                     Project.Levels.ForEach( l => l.Save() );
                 }
 
@@ -347,7 +347,7 @@ namespace FragEd.Forms
                 var result = MessageBox.Show( "Do you want to save changes to the current project?", "Save Changes?", MessageBoxButtons.YesNoCancel );
                 if( result == DialogResult.Yes )
                 {
-                    Persistant.Persist( CurrentProjectFile, Project );
+                    DiskStorage.SaveToDisk( CurrentProjectFile, Project );
                     Project.Levels.ForEach( l => l.Save() );
                 }
 
@@ -367,7 +367,7 @@ namespace FragEd.Forms
             CurrentProjectFile = fileName;
 
             // open the ProjectConfiguration
-            var projectConfiguration = Persistant.Load<ProjectConfiguration>( fileName );
+            var projectConfiguration = DiskStorage.LoadFromDisk<ProjectConfiguration>( fileName );
 
             if( projectConfiguration != null )
             {
@@ -379,7 +379,7 @@ namespace FragEd.Forms
 
         private void ux_SaveProjectMenu_Click( object sender, EventArgs e )
         {
-            Persistant.Persist( CurrentProjectFile, Project.GetConfiguration() );
+            DiskStorage.SaveToDisk( CurrentProjectFile, Project.GetConfiguration() );
             Project.Levels.ForEach( l => l.Save() );
         }
 

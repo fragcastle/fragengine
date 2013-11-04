@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using FragEngine.Entities;
 using Microsoft.Xna.Framework;
 
-namespace FragEngine.Mapping
+namespace FragEngine.Collisions
 {
     public class CollisionDetector
     {

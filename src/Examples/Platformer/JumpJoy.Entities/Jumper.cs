@@ -1,5 +1,6 @@
 ﻿using FragEngine;
 using FragEngine.Animation;
+using FragEngine.Collisions;
 using FragEngine.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -46,14 +47,14 @@ namespace JumpJoy.Entities
         public override void Update( GameTime gameTime )
         {
             // we made contact with the ground, reset the jump count
-            if( Standing )
+            if( IsStanding )
                 _jumpCount = 0;
 
             base.Update( gameTime );
         }
 
         // custom method to do some extra work after the collision check
-        protected override void UpdateEntityState( FragEngine.Mapping.CollisionCheckResult result )
+        protected override void UpdateEntityState( CollisionCheckResult result )
         {
 
             base.UpdateEntityState( result );
@@ -76,7 +77,7 @@ namespace JumpJoy.Entities
                 Jump();
 
             // time to pick the current animation
-            if( !Standing && !jumped && _againstWall && ( left || right ) )
+            if( !IsStanding && !jumped && _againstWall && ( left || right ) )
             {
                 _jumpCount = 0;
 
@@ -89,11 +90,11 @@ namespace JumpJoy.Entities
             else
             {
                 // pick animation based on what the actor is doing
-                if( !Standing && Velocity.Y != 0 && !_againstWallRight && !_againstWallLeft )
+                if( !IsStanding && Velocity.Y != 0 && !_againstWallRight && !_againstWallLeft )
                     CurrentAnimation = "jump";
                 else if( Acceleration.X != 0f )
                     CurrentAnimation = "run";
-                else if( Standing && CurrentAnimation != "talking" )
+                else if( IsStanding && CurrentAnimation != "talking" )
                     CurrentAnimation = "idle";
             }
         }
@@ -105,14 +106,14 @@ namespace JumpJoy.Entities
 
         private void GoLeft()
         {
-            var accel = Standing ? _groundAccel : _airAccel;
+            var accel = IsStanding ? _groundAccel : _airAccel;
             Acceleration = new Vector2( -accel, Acceleration.Y );
             FlipAnimation = true;
         }
 
         private void GoRight()
         {
-            var accel = Standing ? _groundAccel : _airAccel;
+            var accel = IsStanding ? _groundAccel : _airAccel;
             Acceleration = new Vector2( accel, Acceleration.Y );
             FlipAnimation = false;
         }

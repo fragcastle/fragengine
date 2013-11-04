@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using FragEngine.Animation;
-using FragEngine.Mapping;
+using FragEngine.Data;
 using FragEngine.Services;
 using FragEngine.View;
 using Microsoft.Xna.Framework;
@@ -45,7 +45,7 @@ namespace FragEngine.Layers
         }
 
         [DataMember]
-        public CompressedMapData MapData { get; set; }
+        public Map MapData { get; set; }
 
         [DataMember]
         public virtual int TileSize
@@ -77,7 +77,7 @@ namespace FragEngine.Layers
         public MapLayer( Vector2? parallax, int tileSize = 16, int[] mapData = null )
             : base( parallax )
         {
-            MapData = new CompressedMapData();
+            MapData = new Map();
 
             TileSize = tileSize;
 

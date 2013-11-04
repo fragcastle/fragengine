@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using FragEngine.Collisions;
 using FragEngine.Data;
 using FragEngine.Layers;
-using FragEngine.Mapping;
 using FragEngine.Services;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

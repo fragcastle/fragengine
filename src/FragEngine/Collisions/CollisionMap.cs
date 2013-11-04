@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using FragEngine.Data;
-using FragEngine.Entities;
-using Microsoft.Xna.Framework;
+﻿using FragEngine.Data;
 
-namespace FragEngine.Mapping
+namespace FragEngine.Collisions
 {
     public class CollisionMap
     {
@@ -18,7 +12,7 @@ namespace FragEngine.Mapping
             }
         }
 
-        public CompressedMapData MapData;
+        public Map MapData;
 
         public int TileSize;
 
@@ -31,7 +25,7 @@ namespace FragEngine.Mapping
         // private initializer for an "empty" collision map
         private CollisionMap()
         {
-            MapData = new CompressedMapData() { Data = new int[800], Width = 80 };
+            MapData = new Map() { Data = new int[800], Width = 80 };
             TileSize = 16;
 
             for( int i = 0; i < MapData.Data.Length; i++ )

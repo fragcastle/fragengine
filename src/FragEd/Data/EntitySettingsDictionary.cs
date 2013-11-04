@@ -14,7 +14,7 @@ namespace FragEd.Data {
         private GameObject _gameObject;
 
         [Editor(typeof(GenericDictionaryEditor<string,string>), typeof(UITypeEditor))]
-        public Dictionary<string, string> Settings
+        public IDictionary<string, string> Settings
         {
             get { return _gameObject.Settings; }
             set { _gameObject.Settings = value; }

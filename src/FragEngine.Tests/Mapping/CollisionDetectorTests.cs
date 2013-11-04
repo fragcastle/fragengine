@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using FragEngine.Mapping;
+using FragEngine.Collisions;
 using FragEngine.Services;
 using Microsoft.Xna.Framework;
 using Xunit;

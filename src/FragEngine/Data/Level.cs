@@ -22,14 +22,14 @@ namespace FragEngine.Data
         public static Level Load( string levelName )
         {
             var temp = new Level() { Name = levelName };
-            temp = Persistant.Load<Level>( temp.FilePath );
+            temp = DiskStorage.LoadFromDisk<Level>( temp.FilePath );
 
             return temp;
         }
 
         public static Level Load( FileInfo filePath )
         {
-            var level = Persistant.Load<Level>( filePath.FullName );
+            var level = DiskStorage.LoadFromDisk<Level>( filePath.FullName );
 
             level.FilePath = filePath.FullName;
 
@@ -60,7 +60,7 @@ namespace FragEngine.Data
 
         public void Save()
         {
-            Persistant.Persist( FilePath, this );
+            DiskStorage.SaveToDisk( FilePath, this );
             if( OnPersisted != null )
             {
                 OnPersisted( this, EventArgs.Empty );
