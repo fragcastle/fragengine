@@ -193,7 +193,9 @@ namespace FragEd.Forms
 
         private void UpdateUserInterface()
         {
-            Text = string.Format("{0} - {1}", _settings.AppTitle, Path.GetFileName(CurrentProjectFile));
+            var fileName = !string.IsNullOrWhiteSpace(CurrentProjectFile) ? Path.GetFileName(CurrentProjectFile) : "New file *";
+
+            Text = string.Format("{0} - {1}", _settings.AppTitle, fileName);
 
             //ux_AddEntityMenu.DropDownItems.Clear();
             //ux_AddEntity.DropDownItems.Clear();
