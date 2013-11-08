@@ -42,6 +42,10 @@ namespace FragEd.Forms
                 UpdateUserInterface();
             }
         }
+        private void NewFile(object sender, EventArgs e)
+        {
+            CreateProjectFile();
+        }
 
         private void OpenFile( object sender, EventArgs e )
         {
@@ -134,10 +138,15 @@ namespace FragEd.Forms
             child.MdiParent = this;
             child.Show();
         }
+        private void CreateProjectFile()
+        {
+            var projectConfiguration = new ProjectConfiguration();
+
+            Project = new Project(projectConfiguration);
+        }
 
         private void LoadProjectFile( string fileName )
         {
-            var config = new ProjectConfiguration();
             // user chose a file
             CurrentProjectFile = fileName;
 
