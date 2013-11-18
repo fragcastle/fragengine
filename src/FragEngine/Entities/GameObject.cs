@@ -99,9 +99,13 @@ namespace FragEngine.Entities
 
         public float DistanceTo( GameObject gameObject )
         {
-            var xd = ( BoundingBox.Width / 2 ) - ( gameObject.BoundingBox.Width / 2 );
-            var yd = ( BoundingBox.Height / 2 ) - ( gameObject.BoundingBox.Height / 2 );
-            return (float)Math.Sqrt( xd * xd + yd * yd );
+            Vector2 a = Position + BoundingBox;
+            Vector2 b = gameObject.Position + gameObject.BoundingBox;
+
+            var x = ( b.X - a.X );
+            var y = ( b.Y - a.Y );
+
+            return (float)Math.Sqrt( (x * x) + (y * y) );
         }
 
         public override string ToString()
