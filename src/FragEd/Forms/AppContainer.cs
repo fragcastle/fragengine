@@ -171,6 +171,7 @@ namespace FragEd.Forms
             else
             {
                 DiskStorage.SaveToDisk<ProjectConfiguration>(CurrentProjectFile, Project.GetConfiguration());
+                Project.Levels.ForEach( l => l.Save() );
             }
         }
 
