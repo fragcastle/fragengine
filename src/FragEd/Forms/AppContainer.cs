@@ -137,6 +137,11 @@ namespace FragEd.Forms
             }
         }
 
+        private void addToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AddLevel();
+        }
+
         private void OpenChild(Form child)
         {
             child.MdiParent = this;
@@ -171,7 +176,7 @@ namespace FragEd.Forms
             else
             {
                 DiskStorage.SaveToDisk<ProjectConfiguration>(CurrentProjectFile, Project.GetConfiguration());
-                Project.Levels.ForEach( l => l.Save() );
+                Project.Levels.ForEach(l => l.Save());
             }
         }
 
@@ -218,10 +223,29 @@ namespace FragEd.Forms
 
             //SelectCurrentLevel();
 
-            levelsToolStripMenuItem.DropDownItems.Clear();
+            // TODO: Refactor this to not refresh the whole list?
+            if (levelsToolStripMenuItem.DropDownItems.Count > 1)
+            {
+                foreach (ToolStripItem item in levelsToolStripMenuItem.DropDownItems)
+                {
+                    levelsToolStripMenuItem.DropDownItems.Remove(item);
+                }
+            }
+
             Project.Levels.ForEach(l => levelsToolStripMenuItem.DropDownItems.Add(Path.GetFileName(l.FilePath), null, (sender, args) => EditLevel(l)));
 
             projectToolStripMenu.Visible = Project != null;
+        }
+
+        private void AddLevel()
+        {
+            var level = new Level();
+
+            Project.Levels.Add(level);
+
+            UpdateUserInterface();
+
+            EditLevel(level);
         }
 
         private void EditLevel(Level level)
