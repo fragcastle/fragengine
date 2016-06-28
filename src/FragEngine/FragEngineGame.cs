@@ -13,6 +13,7 @@ using FragEngine.View.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
 
 namespace FragEngine
 {
@@ -57,6 +58,9 @@ namespace FragEngine
             Scale = 1.2f;
 
             TimeScale = 1f;
+
+            var json = JsonConvert.SerializeObject(Vector2.One);
+            var vec = JsonConvert.DeserializeObject<Vector2>(json);
         }
 
         public FragEngineGame()
@@ -72,38 +76,6 @@ namespace FragEngine
             DataDirectory = new DirectoryInfo( Path.Combine( Directory.GetCurrentDirectory(), "Data" ) );
 
             ClearColor = Color.White;
-
-            ServiceLocator.Apply( Services );
-
-            if( !ServiceLocator.Has<GraphicsDevice>() )
-                ServiceLocator.Add( Graphics.GraphicsDevice );
-
-            if( !ServiceLocator.Has<Camera>() )
-                ServiceLocator.Add( new Camera( Graphics.GraphicsDevice.Viewport ) );
-
-            if( !ServiceLocator.Has<IEntityService>() )
-                ServiceLocator.Add<IEntityService>( new EntityService() );
-
-            if( !ServiceLocator.Has<ICollisionService>() )
-                ServiceLocator.Add<ICollisionService>( new CollisionService() );
-
-#if !DEBUG
-            Graphics.IsFullScreen = true;
-            Graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            Graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-            Graphics.PreferMultiSampling = false;
-#endif
-
-            // TODO: GGGGGGGGAAAAAAAAAAAAAAAAAHHHHHHHHH WE'RE IO BOUND IN A CTOR!!!!!!!!!!!!!!!!!! FFFFFFFFFFFFFUUUUUUUUUUUUUUUUUUUUUUU
-            // ContentCacheManager must be loaded first, this will scan
-            // every directory in the content project and load all of the
-            // content into a cache
-            ContentCacheManager.LoadContent( Content );
-
-            // TODO: in DIRECTX versions we'll have to do this in initialize...
-            // maybe move this code there now?
-            ScreenManager = new ScreenManager( this );
-            Components.Add( ScreenManager );
         }
 
         public bool IsPaused { get; set; }
@@ -116,6 +88,38 @@ namespace FragEngine
         {
             Graphics.PreferredBackBufferWidth = 1280;
             Graphics.PreferredBackBufferHeight = 720;
+
+            ServiceLocator.Apply(Services);
+
+            if (!ServiceLocator.Has<GraphicsDevice>())
+                ServiceLocator.Add(Graphics.GraphicsDevice);
+
+            if (!ServiceLocator.Has<Camera>())
+                ServiceLocator.Add(new Camera(Graphics.GraphicsDevice.Viewport));
+
+            if (!ServiceLocator.Has<IEntityService>())
+                ServiceLocator.Add<IEntityService>(new EntityService());
+
+            if (!ServiceLocator.Has<ICollisionService>())
+                ServiceLocator.Add<ICollisionService>(new CollisionService());
+
+#if !DEBUG
+            Graphics.IsFullScreen = true;
+            Graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            Graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            Graphics.PreferMultiSampling = false;
+#endif
+
+            // TODO: GGGGGGGGAAAAAAAAAAAAAAAAAHHHHHHHHH WE'RE IO BOUND IN A CTOR!!!!!!!!!!!!!!!!!! FFFFFFFFFFFFFUUUUUUUUUUUUUUUUUUUUUUU
+            // ContentCacheManager must be loaded first, this will scan
+            // every directory in the content project and load all of the
+            // content into a cache
+            ContentCacheManager.LoadContent(Content);
+
+            // TODO: in DIRECTX versions we'll have to do this in initialize...
+            // maybe move this code there now?
+            ScreenManager = new ScreenManager(this);
+            Components.Add(ScreenManager);
 
             // set our resolution into the viewport, otherwise camera calculations will be fucked.
             GraphicsDevice.Viewport = new Viewport( 0, 0, Graphics.PreferredBackBufferWidth, Graphics.PreferredBackBufferHeight );

@@ -4,11 +4,7 @@
         "$type": "System.Collections.Generic.List`1[[FragEngine.Entities.GameObject, FragEngine]], mscorlib",
         "$values": [{
             "$type": "JumpJoy.Entities.Jumper, JumpJoy.Entities",
-            "Position": {
-                "$type": "Microsoft.Xna.Framework.Vector2, MonoGame.Framework",
-                "X": 73.0,
-                "Y": 253.0
-            },
+            "Position": "73, 253",
             "Settings": {
                 "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib"
             }
@@ -29,11 +25,7 @@
             },
             "TileSize": 64,
             "Name": "Background",
-            "Parallax": {
-                "$type": "Microsoft.Xna.Framework.Vector2, MonoGame.Framework",
-                "X": 1.0,
-                "Y": 1.0
-            }
+            "Parallax": "1, 1"
         }, {
             "$type": "FragEngine.Layers.MapLayer, FragEngine",
             "TileSetTexturePath": "Textures/Tilesets/Lab/lab-platform-tiles",
@@ -47,11 +39,7 @@
             },
             "TileSize": 16,
             "Name": "Platforms",
-            "Parallax": {
-                "$type": "Microsoft.Xna.Framework.Vector2, MonoGame.Framework",
-                "X": 1.0,
-                "Y": 1.0
-            }
+          "Parallax": "1, 1"
         }]
     },
     "CollisionLayer": {
@@ -67,11 +55,7 @@
             },
             "Width": 80
         },
-        "Parallax": {
-            "$type": "Microsoft.Xna.Framework.Vector2, MonoGame.Framework",
-            "X": 1.0,
-            "Y": 1.0
-        }
+        "Parallax": "1, 1"
     },
     "Name": "jumpjoy_1"
 }

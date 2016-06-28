@@ -9,11 +9,11 @@ namespace FragEngine.Layers
     public class StaticLayer : Layer
     {
 
-        public StaticLayer(Vector2? parallax = null)
+        public StaticLayer(Vector2D? parallax = null)
             : base(parallax)
         {
             if (parallax == null)
-                Parallax = Vector2.Zero;
+                Parallax = new Vector2D();
         }
 
         public Vector2 StaticPosition { get; set; }

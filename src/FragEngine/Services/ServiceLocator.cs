@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace FragEngine.Services
 {
@@ -22,6 +23,12 @@ namespace FragEngine.Services
         public static void Add<T>(T instance)
         {
             Add( typeof(T), instance );
+        }
+
+        public static void Apply(GameServiceContainer container)
+        {
+            foreach (var service in _services)
+                container.AddService(service.Key, service.Value);
         }
 
         public static IServiceContainer Apply( IServiceContainer container = null )

@@ -36,11 +36,11 @@ namespace JumpJoy
         /// </summary>
         protected override void Initialize()
         {
+            base.Initialize();
+
             ScreenManager.AddScreen( new JumpPlayScreen( null ) );
 
             Gravity = GRAVITY_CONSTANT;
-
-            base.Initialize();
         }
 
         /// <summary>

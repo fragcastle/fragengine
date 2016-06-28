@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FragEd</RootNamespace>
     <AssemblyName>FragEd</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -26,6 +26,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -35,25 +36,26 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="GenericDictionaryEditor">
       <HintPath>..\..\packages\GenDictEdit.1.1.0\lib\net20\GenericDictionaryEditor.dll</HintPath>
     </Reference>
-    <Reference Include="Lidgren.Network, Version=2011.3.12.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Lidgren.Network, Version=3.5.1.1679, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Lidgren.Network.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\MonoGame\v3.0\Assemblies\DesktopGL\Lidgren.Network.dll</HintPath>
     </Reference>
-    <Reference Include="MonoGame.Framework, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="MonoGame.Framework, Version=3.5.1.1679, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\MonoGame.Framework.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\MonoGame\v3.0\Assemblies\DesktopGL\MonoGame.Framework.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\packages\Newtonsoft.Json.5.0.6\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\OpenTK.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\MonoGame\v3.0\Assemblies\DesktopGL\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
