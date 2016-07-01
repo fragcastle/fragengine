@@ -4,15 +4,16 @@ namespace FragEngine.Collisions
 {
     public class CollisionService : ICollisionService
     {
-        private CollisionMap _map;
-
         private CollisionDetector _detector;
 
         public CollisionService( CollisionMap map = null )
         {
-            _map = map ?? CollisionMap.Empty;
+            _detector = new CollisionDetector( map ?? CollisionMap.Empty );
+        }
 
-            _detector = new CollisionDetector( _map );
+        public SetCollisionMap( CollisionMap map ) 
+        {
+            _detector = new CollisionDetector( map );
         }
 
         public CollisionCheckResult Check( Vector2 currentPosition, Vector2 positionDelta, Vector2 objectSize )

@@ -7,6 +7,7 @@ using FragEngine.Entities;
 using FragEngine.IO;
 using FragEngine.Layers;
 using FragEngine.View;
+using FragEngine.Collisions;
 
 namespace FragEngine.Data
 {
@@ -32,6 +33,15 @@ namespace FragEngine.Data
             var level = DiskStorage.LoadFromDisk<Level>( filePath.FullName );
 
             level.FilePath = filePath.FullName;
+
+            // since we're loading a level we need to update the collision layer
+            // get the collision service
+            var collision = ServiceLocator.Get<ICollisionService>();
+            if (level.CollisionLayer == null) {
+                collision.SetCollisionMap(new CollisionMap(level));
+            } else {
+                collision.SetCollisionMap(null);
+            }
 
             return level;
         }
