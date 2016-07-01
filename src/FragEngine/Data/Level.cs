@@ -8,6 +8,7 @@ using FragEngine.IO;
 using FragEngine.Layers;
 using FragEngine.View;
 using FragEngine.Collisions;
+using FragEngine.Services;
 
 namespace FragEngine.Data
 {
@@ -37,7 +38,7 @@ namespace FragEngine.Data
             // since we're loading a level we need to update the collision layer
             // get the collision service
             var collision = ServiceLocator.Get<ICollisionService>();
-            if (level.CollisionLayer == null) {
+            if (level.CollisionLayer != null) {
                 collision.SetCollisionMap(new CollisionMap(level));
             } else {
                 collision.SetCollisionMap(null);

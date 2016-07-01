@@ -11,7 +11,7 @@ namespace FragEngine.Collisions
             _detector = new CollisionDetector( map ?? CollisionMap.Empty );
         }
 
-        public SetCollisionMap( CollisionMap map ) 
+        public void SetCollisionMap( CollisionMap map ) 
         {
             _detector = new CollisionDetector( map );
         }
