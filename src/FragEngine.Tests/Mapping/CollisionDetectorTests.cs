@@ -77,7 +77,7 @@ namespace FragEngine.Tests.Mapping
             var detector = new CollisionDetector( map );
 
             // now, simulate a collision where the entity wants to travel 0.32000000023f on X and 4.8f on Y
-            var result = detector.Check( new Vector2( 16, 16 ), new Vector2( -0.3200000023f, 4.8f ), new Vector2( 64, 64 ) );
+            var result = detector.Check( new Vector2( 16, 16 ), new Vector2( -0.0000000023f, 4.8f ), new Vector2( 64, 64 ) );
 
             // X position should be pushed back (entity was in a bad spot before)
             Assert.Equal( 16f, result.Position.X );

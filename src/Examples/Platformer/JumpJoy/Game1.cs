@@ -9,7 +9,6 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Storage;
-using Microsoft.Xna.Framework.GamerServices;
 #endregion
 
 namespace JumpJoy
@@ -73,7 +72,7 @@ namespace JumpJoy
         {
             if( GamePad.GetState( PlayerIndex.One ).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown( Keys.Escape ) )
                 Exit();
-
+            TimeScale = 0.1f;
             // example of time scaling
             var keys = Keyboard.GetState();
             if( keys.IsKeyDown( Keys.I ) )
