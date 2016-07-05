@@ -24,7 +24,7 @@ namespace JumpJoy.Entities
 
         public Jumper()
         {
-            Collision = CollisionType.A;
+            Group = GameObjectGroup.A;
 
             MaxVelocity = new Vector2 { X = 300, Y = 450 };
 
@@ -57,13 +57,10 @@ namespace JumpJoy.Entities
             base.Update( gameTime );
         }
 
-        // custom method to do some extra work after the collision check
-        protected override void UpdateEntityState( CollisionCheckResult result )
+        public override void HandleMovementTrace(CollisionCheckResult result)
         {
-
-            base.UpdateEntityState( result );
-
             _againstWall = result.XAxis;
+            base.HandleMovementTrace(result);
         }
 
         public override void HandleKeyboardInput(KeyboardState keyboard)

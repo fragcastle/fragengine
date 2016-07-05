@@ -27,11 +27,11 @@ namespace FragEngine
 
         private static List<DirectoryInfo> _contentDirectories;
 
-        public static void AddContentDirectory( DirectoryInfo dir )
+        public static void AddContentDirectory(DirectoryInfo dir)
         {
-            lock( _syncRoot )
+            lock (_syncRoot)
             {
-                if( _contentDirectories == null )
+                if (_contentDirectories == null)
                 {
                     _contentDirectories = new List<DirectoryInfo>();
                 }
@@ -40,23 +40,24 @@ namespace FragEngine
             _contentDirectories.Add(dir);
         }
 
-        public static void RemoveContentDirectory( DirectoryInfo dir )
+        public static void RemoveContentDirectory(DirectoryInfo dir)
         {
-            _contentDirectories.Remove( dir );
+            _contentDirectories.Remove(dir);
         }
 
-        public static void LoadContent( ContentManager contentManager )
+        public static void LoadContent(ContentManager contentManager)
         {
-            if( _contentDirectories != null && _contentDirectories.Any() )
+            if (_contentDirectories != null && _contentDirectories.Any())
             {
-                _contentDirectories.ForEach( dir => LoadContent( contentManager, dir ));
-            } else
+                _contentDirectories.ForEach(dir => LoadContent(contentManager, dir));
+            }
+            else
             {
                 LoadContent(contentManager, null);
             }
         }
 
-        public static void LoadContent( ContentManager contentManager, DirectoryInfo dir )
+        public static void LoadContent(ContentManager contentManager, DirectoryInfo dir)
         {
             // everything in the "Textures" folder is loaded as a Texture2D
             TextureCache = contentManager.LoadContent<Texture2D>(dir);
@@ -68,48 +69,48 @@ namespace FragEngine
             SongCache = contentManager.LoadContent<Song>(dir);
         }
 
-        public static Texture2D GetTextureFromResource( string path, Assembly caller = null )
+        public static Texture2D GetTextureFromResource(string path, Assembly caller = null)
         {
             caller = caller ?? Assembly.GetCallingAssembly();
 
-            Stream stream = caller.GetManifestResourceStream( path );
+            Stream stream = caller.GetManifestResourceStream(path);
 
             var graphicsDevice = ServiceLocator.Get<GraphicsDevice>();
 
-            return Texture2D.FromStream( graphicsDevice, stream );
+            return Texture2D.FromStream(graphicsDevice, stream);
         }
 
-        public static Texture2D GetTexture( string path, bool fallbackToResource = true )
+        public static Texture2D GetTexture(string path, bool fallbackToResource = true)
         {
             // normalize the path syntax
-            path = NormalizePath( path );
+            path = NormalizePath(path);
 
             Texture2D texture = null;
-            TextureCache.TryGetValue( path, out texture );
+            TextureCache.TryGetValue(path, out texture);
 
-            if( fallbackToResource && texture == null )
+            if (fallbackToResource && texture == null)
             {
-                texture = GetTextureFromResource( path, Assembly.GetCallingAssembly() );
+                texture = GetTextureFromResource(path, Assembly.GetCallingAssembly());
 
                 // cache the texture for future calls!
-                TextureCache[ path ] = texture;
+                TextureCache[path] = texture;
             }
             return texture;
         }
 
-        public static SpriteFont GetFont( string path )
+        public static SpriteFont GetFont(string path)
         {
-            path = NormalizePath( path );
+            path = NormalizePath(path);
             SpriteFont font = null;
-            FontCache.TryGetValue( path, out font );
+            FontCache.TryGetValue(path, out font);
             return font;
         }
 
-        public static SoundEffect GetSound( string path )
+        public static SoundEffect GetSound(string path)
         {
-            path = NormalizePath( path );
+            path = NormalizePath(path);
             SoundEffect sound = null;
-            SoundCache.TryGetValue( path, out sound );
+            SoundCache.TryGetValue(path, out sound);
             return sound;
         }
 
@@ -121,9 +122,9 @@ namespace FragEngine
             return sound;
         }
 
-        public static Dictionary<String, T> LoadContent<T>( this ContentManager contentManager, DirectoryInfo directory )
+        public static Dictionary<String, T> LoadContent<T>(this ContentManager contentManager, DirectoryInfo directory)
         {
-            if( String.IsNullOrWhiteSpace( contentManager.RootDirectory ) )
+            if (String.IsNullOrWhiteSpace(contentManager.RootDirectory))
             {
                 contentManager.RootDirectory = "Content";
             }
@@ -136,16 +137,16 @@ namespace FragEngine
             }
 
             // contentCacheManager, because it's evil, requires a relative path
-            var contentDirectory = new Uri( dirPath );
-            var currentDirectory = new Uri( AppDomain.CurrentDomain.BaseDirectory );
+            var contentDirectory = new Uri(dirPath);
+            var currentDirectory = new Uri(AppDomain.CurrentDomain.BaseDirectory);
 
-            var relativeContentDirectory = currentDirectory.MakeRelativeUri( contentDirectory );
+            var relativeContentDirectory = currentDirectory.MakeRelativeUri(contentDirectory);
 
             contentManager.RootDirectory = relativeContentDirectory.ToString();
 
             dirPath = Path.Combine(dirPath, GetContentDirectoryName<T>());
 
-            var result = LoadDirectory<T>(contentManager, new DirectoryInfo(dirPath) );
+            var result = LoadDirectory<T>(contentManager, new DirectoryInfo(dirPath));
 
             return result;
         }
@@ -160,7 +161,7 @@ namespace FragEngine
                     {typeof (Song), "Songs"}
                 };
 
-            return types[typeof (T)];
+            return types[typeof(T)];
         }
 
         private static Dictionary<String, T> LoadDirectory<T>(this ContentManager contentManager, DirectoryInfo dir)
@@ -169,19 +170,19 @@ namespace FragEngine
 
             var contentFolder = GetContentDirectoryName<T>();
 
-            if( dir.Exists )
+            if (dir.Exists)
             {
                 //Load all files that matches the file filter
-                FileInfo[] files = dir.GetFiles( "*.*", SearchOption.AllDirectories );
-                foreach( FileInfo file in files )
+                FileInfo[] files = dir.GetFiles("*.*", SearchOption.AllDirectories);
+                foreach (FileInfo file in files)
                 {
-                    var pathToFile = file.Directory.ToString() + "\\" + Path.GetFileNameWithoutExtension( file.Name );
-                    if( File.Exists( pathToFile + ".xnb" ) )
+                    var pathToFile = file.Directory.ToString() + "\\" + Path.GetFileNameWithoutExtension(file.Name);
+                    if (File.Exists(pathToFile + ".xnb"))
                     {
-                        var loadPath = pathToFile.Substring( pathToFile.IndexOf( contentFolder ) ).Replace( "\\", "/" );
-                        var key = NormalizePath( pathToFile.Substring( pathToFile.IndexOf( contentFolder ) ) );
+                        var loadPath = pathToFile.Substring(pathToFile.IndexOf(contentFolder)).Replace("\\", "/");
+                        var key = NormalizePath(pathToFile.Substring(pathToFile.IndexOf(contentFolder)));
 
-                        result[ key ] = contentManager.Load<T>( loadPath );
+                        result[key] = contentManager.Load<T>(loadPath);
                     }
                 }
             }
@@ -189,9 +190,9 @@ namespace FragEngine
             return result;
         }
 
-        private static string NormalizePath( string path )
+        private static string NormalizePath(string path)
         {
-            return path.Replace( "/", "_" ).Replace( "\\", "_" );
+            return path.Replace("/", "_").Replace("\\", "_");
         }
     }
 }

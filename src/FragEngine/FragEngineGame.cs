@@ -42,6 +42,8 @@ namespace FragEngine
         /// </summary>
         public static float Gravity { get; set; }
 
+        public static float Tick { get; private set; }
+
         /// <summary>
         /// Affects the passage of time in your game.
         /// </summary>
@@ -131,12 +133,16 @@ namespace FragEngine
 
         protected override void Update( GameTime gameTime )
         {
+            Timer.Update(gameTime);
+
             // Allows the game to exit
             if( GamePad.GetState( PlayerIndex.One ).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().GetPressedKeys().Contains( Keys.X ) )
                 Exit();
 
             // Check to see if the user has paused or unpaused
             checkPauseKey( Keyboard.GetState(), GamePad.GetState( PlayerIndex.One ) );
+
+            Tick = gameTime.GetGameTick();
 
             base.Update( AdjustGameTime( gameTime ) );
         }

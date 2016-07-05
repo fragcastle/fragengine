@@ -26,12 +26,8 @@ namespace FragEngine.Layers
             {
                 if( entity.IsAlive )
                 {
-                    var actor = entity as Actor;
-                    if( actor != null )
-                    {
-                        actor.Alpha = Alpha;    
-                    }
-                    
+                    entity.Alpha = Alpha;
+
                     entity.Draw( spriteBatch );
                 }
             }

@@ -79,7 +79,7 @@
   <ItemGroup>
     <Compile Include="Collisions\HitBoxTests.cs" />
     <Compile Include="Entities\EntityTests.cs" />
-    <Compile Include="Mapping\CollisionDetectorTests.cs" />
+    <Compile Include="Collisions\CollisionDetectorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -90,6 +90,9 @@
       <Project>{BC47C0E4-61F4-46D2-907E-009F4D1CFCDA}</Project>
       <Name>FragEngine</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Mapping\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

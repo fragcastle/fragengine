@@ -9,7 +9,7 @@ using Xunit;
 
 using Should;
 
-namespace FragEngine.Tests.Mapping
+namespace FragEngine.Tests.Collisions
 {
     public class CollisionDetectorTests
     {
