@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FragEngine.Collisions;
+using FragEngine.Debug;
 using FragEngine.Entities;
 using FragEngine.Services;
 using FragEngine.View;
@@ -33,6 +34,14 @@ namespace FragEngine
         public static DirectoryInfo DataDirectory { get; private set; }
 
         /// <summary>
+        /// Set this to true to enable debug in the engine
+        /// </summary>
+        /// <remarks>
+        /// This will cause the CollisionLayer for a level to be drawn
+        /// </remarks>
+        public static bool IsDebug { get; set; }
+
+        /// <summary>
         /// Affects the size of sprites when they are rendered to the <see cref="GraphicsDevice"/>
         /// </summary>
         public static float Scale { get; set; }
@@ -53,6 +62,8 @@ namespace FragEngine
 
         private IServiceContainer _services;
 
+        private readonly FpsCounter _frameCounter = new FpsCounter();
+
         static FragEngineGame()
         {
             Gravity = 0f; // default to no gravity
@@ -60,9 +71,6 @@ namespace FragEngine
             Scale = 1.2f;
 
             TimeScale = 1f;
-
-            var json = JsonConvert.SerializeObject(Vector2.One);
-            var vec = JsonConvert.DeserializeObject<Vector2>(json);
         }
 
         public FragEngineGame()
@@ -72,6 +80,8 @@ namespace FragEngine
             // in the initialize, but in OPENGL versions we have to do it here (check the code in Game.cs)
             // it throws an exception if GraphicsDevice is null???? WHAT THE FUCK!?!?!?
             Graphics = new GraphicsDeviceManager( this );
+
+            Graphics.CreateDevice();
 
             Content.RootDirectory = "Content";
 
@@ -110,6 +120,8 @@ namespace FragEngine
             Graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             Graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             Graphics.PreferMultiSampling = false;
+#else
+            IsDebug = true;
 #endif
 
             // TODO: GGGGGGGGAAAAAAAAAAAAAAAAAHHHHHHHHH WE'RE IO BOUND IN A CTOR!!!!!!!!!!!!!!!!!! FFFFFFFFFFFFFUUUUUUUUUUUUUUUUUUUUUUU
@@ -136,7 +148,7 @@ namespace FragEngine
             Timer.Update(gameTime);
 
             // Allows the game to exit
-            if( GamePad.GetState( PlayerIndex.One ).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().GetPressedKeys().Contains( Keys.X ) )
+            if ( GamePad.GetState( PlayerIndex.One ).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().GetPressedKeys().Contains( Keys.X ) )
                 Exit();
 
             // Check to see if the user has paused or unpaused

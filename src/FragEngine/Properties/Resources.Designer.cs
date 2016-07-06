@@ -83,6 +83,26 @@ namespace FragEngine.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap font_04b03_white_16 {
+            get {
+                object obj = ResourceManager.GetObject("font_04b03_white_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap font_helloplusplus_white_16 {
+            get {
+                object obj = ResourceManager.GetObject("font_helloplusplus_white_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap frag_castle_logo {
             get {
                 object obj = ResourceManager.GetObject("frag_castle_logo", resourceCulture);

@@ -69,11 +69,22 @@ namespace FragEngine
             SongCache = contentManager.LoadContent<Song>(dir);
         }
 
+        public static Font GetFont(string path)
+        {
+            var texture = GetTexture(path);
+            return new Font(texture);
+        }
+
         public static Texture2D GetTextureFromResource(string path, Assembly caller = null)
         {
             caller = caller ?? Assembly.GetCallingAssembly();
 
-            Stream stream = caller.GetManifestResourceStream(path);
+            var stream = caller.GetManifestResourceStream(path);
+
+            if (stream == null)
+            {
+                throw new Exception("Texture could not be read from resource: " + path);
+            }
 
             var graphicsDevice = ServiceLocator.Get<GraphicsDevice>();
 
@@ -98,7 +109,7 @@ namespace FragEngine
             return texture;
         }
 
-        public static SpriteFont GetFont(string path)
+        public static SpriteFont GetSpriteFont(string path)
         {
             path = NormalizePath(path);
             SpriteFont font = null;

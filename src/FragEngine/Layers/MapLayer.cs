@@ -96,7 +96,7 @@ namespace FragEngine.Layers
             }
         }
 
-        public void DrawMap( SpriteBatch spriteBatch )
+        public virtual void DrawMap( SpriteBatch spriteBatch )
         {
             if( _tileSetTextureIsDirty )
             {

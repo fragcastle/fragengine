@@ -431,12 +431,13 @@ namespace FragEngine.Entities
                     Velocity *= new Vector2(0, 1);
                 }
             }
+            Position = result.Position;
         }
 
         public virtual void Draw( SpriteBatch batch )
         {
             string drawBox = null;
-            if( Settings.TryGetValue("_feDrawBox", out drawBox) && drawBox == "true" )
+            if( Settings.TryGetValue("_feDrawBox", out drawBox) && drawBox == "true" && FragEngineGame.IsDebug)
             {
                 var whiteTexture = new Texture2D( batch.GraphicsDevice, 1, 1 );
                 whiteTexture.SetData( new Color[] { Color.White } );

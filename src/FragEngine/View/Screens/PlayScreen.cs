@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using FragEngine.Collisions;
 using FragEngine.Data;
+using FragEngine.Debug;
 using FragEngine.Layers;
 using FragEngine.Services;
 using Microsoft.Xna.Framework;
@@ -30,6 +31,7 @@ namespace FragEngine.View.Screens
         {
             _hud = hud;
             _camera = ServiceLocator.Get<Camera>();
+            Decorations = new List<Decoration>();
         }
 
         public virtual void Initialize()
@@ -47,6 +49,10 @@ namespace FragEngine.View.Screens
                 _hudLayer = new StaticLayer() { StaticPosition = Vector2.Zero, DrawMethod = _hud.Draw };
                 _layers.Add(_hudLayer);
             }
+
+#if DEBUG
+            Decorations.Add(new DebugDecoration());
+#endif
         }
 
         public void LoadLevel( string levelName )
@@ -72,6 +78,8 @@ namespace FragEngine.View.Screens
             ServiceLocator.Add<ICollisionService>( collisionService );
         }
 
+        public List<Decoration> Decorations { get; set; }
+
         protected Level CurrentLevel { get; private set; }
 
         public override void LoadContent()
@@ -84,7 +92,7 @@ namespace FragEngine.View.Screens
 
             if( _hud != null )
             {
-                _gameFont = ContentCacheManager.GetFont( @"Fonts\GameFont" );
+                _gameFont = ContentCacheManager.GetSpriteFont( @"Fonts\GameFont" );
                 _hud.Font = _gameFont;
             }
 
@@ -99,6 +107,12 @@ namespace FragEngine.View.Screens
                 layer.Alpha = TransitionAlpha;
                 layer.Draw( _spriteBatch );
             }
+
+            if (Decorations.Count > 0)
+            {
+                Decorations.Sort((a, b) => a.ZIndex < b.ZIndex ? -1 : 1);
+                Decorations.ForEach(d => d.Draw(gameTime));
+            }   
         }
 
         public override void Update( GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen )

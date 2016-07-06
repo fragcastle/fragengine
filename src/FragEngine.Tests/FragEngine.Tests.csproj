@@ -78,9 +78,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collisions\HitBoxTests.cs" />
-    <Compile Include="Entities\EntityTests.cs" />
+    <Compile Include="ContentCacheManagerTests.cs" />
+    <Compile Include="Entities\GameObjectTests.cs" />
     <Compile Include="Collisions\CollisionDetectorTests.cs" />
+    <Compile Include="FontTests.cs" />
+    <Compile Include="FragEngineGameTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestGame.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

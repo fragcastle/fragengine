@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using FragEngine.Collisions;
 using FragEngine.Services;
@@ -64,26 +65,37 @@ namespace FragEngine.Tests.Collisions
             map.TileSize = 16;
             map.MapData.Width = 4;
 
+            var theories = new List<Vector2[]>()
+            {
+                new Vector2[] {new Vector2(-0.00000023f, 4.8f), new Vector2(16f, 20.8f)},
+                new Vector2[] {new Vector2(4.8f, 0.00000023f), new Vector2(16f, 16.00000023f)}
+            };
+
             // create a fake map
             // 0,  0,  0,  0,
+            // 0, -1, -1,  0,
             // 0, -1, -1,  0,
             // 0, -1, -1,  0,
             // 0,  0,  0,  0
             map.MapData[  0 ] = 0; map.MapData[  1 ] =  0; map.MapData[  2 ] =  0; map.MapData[   3 ] = 0;
             map.MapData[  4 ] = 0; map.MapData[  5 ] = -1; map.MapData[  6 ] = -1; map.MapData[   7 ] = 0;
             map.MapData[  8 ] = 0; map.MapData[  9 ] = -1; map.MapData[ 10 ] = -1; map.MapData[  11 ] = 0;
-            map.MapData[ 12 ] = 0; map.MapData[ 13 ] =  0; map.MapData[ 14 ] =  0; map.MapData[  15 ] = 0;
+            map.MapData[ 12 ] = 0; map.MapData[ 13 ] = -1; map.MapData[ 14 ] = -1; map.MapData[  15 ] = 0;
+            map.MapData[ 16 ] = 0; map.MapData[ 17 ] =  0; map.MapData[ 18 ] =  0; map.MapData[  19 ] = 0;
 
             var detector = new CollisionDetector( map );
 
-            // now, simulate a collision where the entity wants to travel 0.32000000023f on X and 4.8f on Y
-            var result = detector.Check( new Vector2( 16, 16 ), new Vector2( -0.0000000023f, 4.8f ), new Vector2( 64, 64 ) );
+            foreach (var theory in theories)
+            {
+                // now, simulate a collision where the entity wants to travel 0.32000000023f on X and 4.8f on Y
+                var result = detector.Check(new Vector2(16, 16), theory[0], new Vector2(32, 32));
 
-            // X position should be pushed back (entity was in a bad spot before)
-            Assert.Equal( 16f, result.Position.X );
+                // X position should be pushed back (entity was in a bad spot before)
+                Assert.Equal(theory[1].X, result.Position.X);
 
-            // Y should increase as expected
-            Assert.Equal( 20.8f, result.Position.Y );
+                // Y should increase as expected
+                Assert.Equal(theory[1].Y, result.Position.Y);
+            }
         }
 
         [Fact]

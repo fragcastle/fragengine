@@ -113,7 +113,7 @@ namespace FragEngine.View.Screens
         {
             // Load content belonging to the screen manager.
             _spriteBatch = new SpriteBatch( GraphicsDevice );
-            _font = ContentCacheManager.GetFont( "Fonts/MenuFont" );
+            _font = ContentCacheManager.GetSpriteFont( "Fonts/MenuFont" );
             _blankTexture = ContentCacheManager.GetTexture( "FragEngine.Resources.blank.png" );
 
             // Tell each of the screens to load their content.

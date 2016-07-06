@@ -69,6 +69,8 @@
     <Compile Include="Collisions\CollisionTypes.cs" />
     <Compile Include="ContentCacheManager.cs" />
     <Compile Include="Data\Level.cs" />
+    <Compile Include="Debug\DebugDecoration.cs" />
+    <Compile Include="Debug\FpsCounter.cs" />
     <Compile Include="Entities\GameObject.cs" />
     <Compile Include="Entities\EntityService.cs" />
     <Compile Include="Entities\GameObjectCollisionType.cs" />
@@ -78,7 +80,9 @@
     <Compile Include="Entities\Player.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\GameTimeExtensions.cs" />
+    <Compile Include="Extensions\Texture2DExtensions.cs" />
     <Compile Include="Extensions\Vector2Extensions.cs" />
+    <Compile Include="Font.cs" />
     <Compile Include="FragEngineGame.cs" />
     <Compile Include="InputState.cs" />
     <Compile Include="IO\DiskStorage.cs" />
@@ -104,6 +108,7 @@
     <Compile Include="View\Camera.cs" />
     <Compile Include="Layers\CollisionLayer.cs" />
     <Compile Include="Layers\Layer.cs" />
+    <Compile Include="View\Screens\Decoration.cs" />
     <Compile Include="View\Screens\FragEngineLogoScreen.cs" />
     <Compile Include="View\Screens\GameScreenBase.cs" />
     <Compile Include="View\Screens\MenuScreenBase.cs" />
@@ -154,7 +159,12 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\font_helloplusplus_white_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\font_04b03_white_16.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

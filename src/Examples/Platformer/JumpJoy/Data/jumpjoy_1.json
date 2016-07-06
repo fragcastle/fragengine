@@ -3,7 +3,7 @@
     "Entities": {
         "$type": "System.Collections.Generic.List`1[[FragEngine.Entities.GameObject, FragEngine]], mscorlib",
         "$values": [{
-            "$type": "JumpJoy.Entities.Jumper, JumpJoy.Entities",
+            "$type": "JumpJoy.Entities.Jumper, JumpJoy",
             "Position": "73, 253",
             "Settings": {
                 "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib"

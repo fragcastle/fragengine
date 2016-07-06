@@ -79,5 +79,11 @@ namespace FragEngine.Layers
         {
             return "Collision";
         }
+
+        public override void DrawMap(SpriteBatch spriteBatch)
+        {
+            if (FragEngineGame.IsDebug)
+                base.DrawMap(spriteBatch);
+        }
     }
 }

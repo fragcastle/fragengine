@@ -41,6 +41,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Entities\Jumper.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -81,10 +82,6 @@
     <ProjectReference Include="..\..\..\FragEngine\FragEngine.csproj">
       <Project>{BC47C0E4-61F4-46D2-907E-009F4D1CFCDA}</Project>
       <Name>FragEngine</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\JumpJoy.Entities\JumpJoy.Entities.csproj">
-      <Project>{B529EB1F-09E0-40AC-8B23-27129CA02844}</Project>
-      <Name>JumpJoy.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
