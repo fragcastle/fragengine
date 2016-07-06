@@ -9,6 +9,12 @@ namespace FragEngine.Collisions
 {
     public struct HitBox
     {
+        public HitBox(float width, float height)
+        {
+            Width = width;
+            Height = height;
+        }
+
         public float Height { get; set; }
         public float Width { get; set; }
 

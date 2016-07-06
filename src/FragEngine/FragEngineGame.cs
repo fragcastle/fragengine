@@ -109,8 +109,8 @@ namespace FragEngine
             if (!ServiceLocator.Has<Camera>())
                 ServiceLocator.Add(new Camera(Graphics.GraphicsDevice.Viewport));
 
-            if (!ServiceLocator.Has<IEntityService>())
-                ServiceLocator.Add<IEntityService>(new EntityService());
+            if (!ServiceLocator.Has<IGameObjectService>())
+                ServiceLocator.Add<IGameObjectService>(new GameObjectService());
 
             if (!ServiceLocator.Has<ICollisionService>())
                 ServiceLocator.Add<ICollisionService>(new CollisionService());

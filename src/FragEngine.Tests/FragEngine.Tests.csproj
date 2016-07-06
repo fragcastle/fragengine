@@ -79,6 +79,7 @@
   <ItemGroup>
     <Compile Include="Collisions\HitBoxTests.cs" />
     <Compile Include="ContentCacheManagerTests.cs" />
+    <Compile Include="Entities\GameObjectServiceTests.cs" />
     <Compile Include="Entities\GameObjectTests.cs" />
     <Compile Include="Collisions\CollisionDetectorTests.cs" />
     <Compile Include="FontTests.cs" />

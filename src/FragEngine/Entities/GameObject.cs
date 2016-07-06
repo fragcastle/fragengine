@@ -13,7 +13,9 @@ namespace FragEngine.Entities
     [DataContract]
     public abstract class GameObject
     {
-        
+
+        private bool _hasBeenConfigured = false;
+
         protected ICollisionService CollisionService;
 
         private IDictionary<string, string> _settings = new Dictionary<string, string>();
@@ -232,7 +234,11 @@ namespace FragEngine.Entities
 
         public GameObject( Vector2 initialLocation, Vector2? initialVelocity = null, ICollisionService collisionService = null )
         {
+            ZIndex = 1;
+
             TintColor = Color.White;
+
+            // TODO: add lifetime/fadetime to gameobject
 
             // FIXES: bug where entities were invisible in fragEd.
             Alpha = 255f; // entities are visible by default
@@ -257,6 +263,9 @@ namespace FragEngine.Entities
         }
 
         [IgnoreDataMember]
+        public string Name { get; set; }
+
+        [IgnoreDataMember]
         public AnimationSheet Animations { get; set; }
 
         [IgnoreDataMember]
@@ -270,6 +279,9 @@ namespace FragEngine.Entities
 
         [IgnoreDataMember]
         public bool FlipAnimation { get; set; }
+
+        [IgnoreDataMember]
+        public int ZIndex { get; set; }
 
         [IgnoreDataMember]
         public string CurrentAnimation
@@ -365,6 +377,17 @@ namespace FragEngine.Entities
         [IgnoreDataMember]
         public Vector2 Offset { get; set; }
 
+        public float? Lifetime { get; set; }
+        public float? Fadetime { get; set; }
+
+        public Timer IdleTimer { get; set; }
+
+        protected virtual void ConfigureInstance()
+        {
+            // use this method in your objects to set default values before the
+            // object is used
+        }
+
         public virtual void Check( GameObject other) { }
 
         public virtual void CollideWith( GameObject other, string axis ) { }
@@ -380,6 +403,26 @@ namespace FragEngine.Entities
 
         public virtual void Update( GameTime gameTime )
         {
+            if (!_hasBeenConfigured)
+            {
+                ConfigureInstance();
+                _hasBeenConfigured = true;
+            }
+
+
+            if (Lifetime.HasValue)
+            {
+                if (IdleTimer == null)
+                {
+                    IdleTimer = new Timer(Lifetime.Value);
+                }
+                if (IdleTimer.Delta() > Lifetime.Value)
+                {
+                    Kill(); // TODO: make sure calling Kill() multiple times has no side effects
+                    return;
+                }
+            }
+
             LastPosition = Position;
 
             CalculateVelocity( gameTime );
@@ -466,6 +509,9 @@ namespace FragEngine.Entities
         public virtual void Kill()
         {
             IsAlive = false;
+            Group = GameObjectGroup.None;
+            CheckAgainstGroup = GameObjectGroup.None;
+            CollisionStyle = GameObjectCollisionStyle.Never;
         }
 
         public virtual void ReceiveDamage(GameObject from, int amount)

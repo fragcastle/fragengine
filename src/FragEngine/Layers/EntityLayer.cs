@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FragEngine.Entities;
+using FragEngine.Services;
 using FragEngine.View;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,24 +13,23 @@ namespace FragEngine.Layers
     // EntityLayer is never serialized. It's only used by the game engine
     public class EntityLayer : Layer
     {
-        public EntityLayer( Vector2? parallax = null )
+        private IGameObjectService _gameObjectService;
+
+        public EntityLayer( Vector2? parallax = null, IGameObjectService gameObjectService = null)
             : base( parallax )
         {
             DrawMethod = DrawEntities;
-        }
 
-        public List<GameObject> Entities = new List<GameObject>();
+            _gameObjectService = gameObjectService ?? ServiceLocator.Get<IGameObjectService>();
+        }
 
         public void DrawEntities( SpriteBatch spriteBatch )
         {
-            foreach( var entity in Entities )
+            var queues = _gameObjectService.DrawQueues.Keys.ToArray().OrderByDescending(i => i);
+            foreach (var queue in queues)
             {
-                if( entity.IsAlive )
-                {
-                    entity.Alpha = Alpha;
-
-                    entity.Draw( spriteBatch );
-                }
+                var gameObjects = _gameObjectService.DrawQueues[queue];
+                gameObjects.ForEach(go => go.Draw(spriteBatch));
             }
         }
     }

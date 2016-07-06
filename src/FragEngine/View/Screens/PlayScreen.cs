@@ -23,25 +23,25 @@ namespace FragEngine.View.Screens
         protected List<Layer> _layers;
         protected Hud _hud;
 
-        protected EntityLayer _playerLayer;
         protected Layer _hudLayer;
         private EntityLayer _entityLayer;
 
-        public PlayScreen( Hud hud )
+        private readonly IGameObjectService _gameObjectService = null;
+
+        public PlayScreen( Hud hud, IGameObjectService gameObjectService = null, Camera camera = null )
         {
             _hud = hud;
-            _camera = ServiceLocator.Get<Camera>();
+            _camera = camera ?? ServiceLocator.Get<Camera>();
+            _gameObjectService = gameObjectService ?? ServiceLocator.Get<IGameObjectService>();
             Decorations = new List<Decoration>();
         }
 
         public virtual void Initialize()
         {
-            _playerLayer = new EntityLayer();
             _entityLayer = new EntityLayer();
             _layers = new List<Layer>
             {
-                _entityLayer,
-                _playerLayer
+                _entityLayer
             };
 
             if( _hud != null )
@@ -60,10 +60,6 @@ namespace FragEngine.View.Screens
             var path = Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "Data\\" + levelName + ".json" );
 
             CurrentLevel = Level.Load( new FileInfo( path ) );
-
-            var players = CurrentLevel.Entities.Where( e => e is Player );
-
-            _playerLayer.Entities.AddRange( players );
 
             _layers.InsertRange( 0, CurrentLevel.MapLayers );
 
@@ -120,14 +116,9 @@ namespace FragEngine.View.Screens
             if( _hud != null )
                 _hud.Update( gameTime );
 
-            foreach (var entity in _entityLayer.Entities)
+            foreach (var gameObject in _gameObjectService.GameObjects)
             {
-                entity.Update( gameTime );
-            }
-
-            foreach( var entity in _playerLayer.Entities )
-            {
-                entity.Update( gameTime );
+                gameObject.Update(gameTime);
             }
 
             base.Update( gameTime, otherScreenHasFocus, coveredByOtherScreen );
