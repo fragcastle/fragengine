@@ -56,7 +56,7 @@ namespace FragEngine.Tests.Entities
             [Fact]
             public void Should_Return_GameObject_If_Found()
             {
-                var go = _gameObjectService.SpawnGameObject<TestGameObject>(Vector2.One, tgo => tgo.Name = "name");
+                var go = _gameObjectService.SpawnGameObject<TestGameObject>(Vector2.One, new { Name = "name" });
                 var fgo = _gameObjectService.GetGameObjectByName("name");
                 fgo.ShouldNotBeNull().ShouldEqual(go);
             }
@@ -107,9 +107,8 @@ namespace FragEngine.Tests.Entities
             [Fact]
             public void Should_Add_GameObject_To_DrawQueue()
             {
-                var go = _gameObjectService.SpawnGameObject<TestGameObject>(Vector2.One, tgo =>
-                {
-                    tgo.ZIndex = 100;
+                var go = _gameObjectService.SpawnGameObject<TestGameObject>(Vector2.One, new {
+                    ZIndex = 100
                 });
                 _gameObjectService.DrawQueues.Keys.ShouldContain(10);
                 _gameObjectService.DrawQueues[10].ShouldContain(go);

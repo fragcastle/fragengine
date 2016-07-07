@@ -9,9 +9,7 @@ namespace FragEngine.Services
 {
     public interface IGameObjectService
     {
-        TEntityType SpawnGameObject<TEntityType>( Vector2 position, Action<TEntityType> configuration = null ) where TEntityType : GameObject, new();
-        TEntityType SpawnGameObject<TEntityType>(Vector2 position, Dictionary<string, object> settings) where TEntityType : GameObject, new();
-        TEntityType SpawnGameObject<TEntityType>(Vector2 position, object settings) where TEntityType : GameObject, new();
+        TEntityType SpawnGameObject<TEntityType>(Vector2 position, object settings = null) where TEntityType : GameObject, new();
 
         List<GameObject> GameObjects { get; set; }
 

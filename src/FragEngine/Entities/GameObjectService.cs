@@ -61,7 +61,7 @@ namespace FragEngine.Entities
             }
         }
 
-        public TEntityType SpawnGameObject<TEntityType>(Vector2 position, object settings)
+        public TEntityType SpawnGameObject<TEntityType>(Vector2 position, object settings = null)
             where TEntityType : GameObject, new()
         {
             var gameObject = new TEntityType { Position = position };
