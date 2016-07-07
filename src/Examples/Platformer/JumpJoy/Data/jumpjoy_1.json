@@ -1,15 +1,28 @@
 {
-    "$type": "FragEngine.Data.Level, FragEngine",
-    "Entities": {
-        "$type": "System.Collections.Generic.List`1[[FragEngine.Entities.GameObject, FragEngine]], mscorlib",
-        "$values": [{
-            "$type": "JumpJoy.Entities.Jumper, JumpJoy",
-            "Position": "73, 253",
-            "Settings": {
-                "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib"
-            }
-        }]
-    },
+  "$type": "FragEngine.Data.Level, FragEngine",
+  "GameObjects": {
+    "$type": "System.Collections.Generic.List`1[[FragEngine.Entities.GameObject, FragEngine]], mscorlib",
+    "$values": [
+      {
+        "$type": "JumpJoy.Entities.Jumper, JumpJoy",
+        "Position": "73, 253",
+        "Settings": {
+          "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib"
+        }
+      },
+      {
+        "$type": "FragEngine.Particles.AreaSpawner, FragEngine",
+        "Position": "93, 253",
+        "Particles": 20,
+        "SpawnDelayTime": 1,
+        "Velocity": "40, 100",
+        "SetVelocity": "80, 200",
+        "Settings": {
+          "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib"
+        }
+      }
+    ]
+  },
     "MapLayers": {
         "$type": "System.Collections.Generic.List`1[[FragEngine.Layers.MapLayer, FragEngine]], mscorlib",
         "$values": [{

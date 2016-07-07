@@ -145,6 +145,7 @@ namespace FragEngine
 
         protected override void Update( GameTime gameTime )
         {
+            // update the game timers
             Timer.Update(gameTime);
 
             // Allows the game to exit

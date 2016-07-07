@@ -1,6 +1,7 @@
 ﻿using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using FragEngine.Collisions;
 using FragEngine.Services;
@@ -13,6 +14,8 @@ namespace FragEngine.Entities
     [DataContract]
     public abstract class GameObject
     {
+
+        private const string DefaultAnimationName = "idle";
 
         private bool _hasBeenConfigured = false;
 
@@ -262,7 +265,7 @@ namespace FragEngine.Entities
             CollisionService = collisionService ?? ServiceLocator.Get<ICollisionService>();
         }
 
-        [IgnoreDataMember]
+        [DataMember]
         public string Name { get; set; }
 
         [IgnoreDataMember]
@@ -280,7 +283,7 @@ namespace FragEngine.Entities
         [IgnoreDataMember]
         public bool FlipAnimation { get; set; }
 
-        [IgnoreDataMember]
+        [DataMember]
         public int ZIndex { get; set; }
 
         [IgnoreDataMember]
@@ -322,10 +325,10 @@ namespace FragEngine.Entities
             set { _settings = value; }
         }
 
-        [IgnoreDataMember]
+        [DataMember]
         public float Bounciness { get; set; }
 
-        [IgnoreDataMember]
+        [DataMember]
         public float MinBounceVelocity { get; set; }
 
         [IgnoreDataMember]
@@ -336,13 +339,13 @@ namespace FragEngine.Entities
 
         // Physics Properties       
 
-        [IgnoreDataMember]
+        [DataMember]
         public float GravityFactor { get; set; }
 
-        [IgnoreDataMember]
+        [DataMember]
         public Vector2 Velocity { get; set; }
 
-        [IgnoreDataMember]
+        [DataMember]
         public Vector2 MaxVelocity { get; set; }
 
         [IgnoreDataMember]
@@ -351,7 +354,7 @@ namespace FragEngine.Entities
         [IgnoreDataMember]
         public Vector2 ExternalAcceleration { get; set; }
 
-        [IgnoreDataMember]
+        [DataMember]
         public Vector2 Friction { get; set; }
 
         [IgnoreDataMember]
@@ -409,6 +412,18 @@ namespace FragEngine.Entities
                 _hasBeenConfigured = true;
             }
 
+            if (Animations != null && Animations.CurrentAnimation == null)
+            {
+                if (Animations.HasAnimation(DefaultAnimationName))
+                {
+                    Animations.SetCurrentAnimation(DefaultAnimationName);
+                }
+                else
+                {
+                    Animations.SetCurrentAnimation(Animations.GetAnimations().First().Name);
+                }
+                
+            }
 
             if (Lifetime.HasValue)
             {
@@ -441,7 +456,10 @@ namespace FragEngine.Entities
                 Position += partialVelocity;
             }
 
-            Animations.CurrentAnimation.Update(gameTime);
+            if (Animations?.CurrentAnimation != null)
+            {
+                Animations.CurrentAnimation.Update(gameTime);
+            }
         }
 
         public virtual void HandleMovementTrace(CollisionCheckResult result)
@@ -496,7 +514,7 @@ namespace FragEngine.Entities
                 batch.Draw( whiteTexture, new Rectangle( rect.Right, rect.Top, 1, rect.Height + 1 ), Color.White );
             }
 
-            if (Animations.CurrentAnimation != null)
+            if (Animations?.CurrentAnimation != null)
             {
                 Animations.CurrentAnimation.FlipX = FlipAnimation;
 

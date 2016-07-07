@@ -29,7 +29,7 @@ namespace FragEngine.Layers
             foreach (var queue in queues)
             {
                 var gameObjects = _gameObjectService.DrawQueues[queue];
-                gameObjects.ForEach(go => go.Draw(spriteBatch));
+                gameObjects.Where(go => go.IsAlive).ToList().ForEach(go => go.Draw(spriteBatch));
             }
         }
     }

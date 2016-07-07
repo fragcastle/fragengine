@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using FragEngine.Entities;
 using FragEngine.Services;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace FragEngine.Particles
 {
@@ -28,12 +30,16 @@ namespace FragEngine.Particles
             _gameObjectService = gameObjectService ?? ServiceLocator.Get<IGameObjectService>();
         }
 
-        public Action<Particle> ParticleOptions { get; set; }
+        [DataMember]
+        public Particle ParticleOptions { get; set; }
 
+        [DataMember]
         public float SpawnDelayTime { get; set; }
 
+        [IgnoreDataMember]
         public Timer SpawnDelay { get; set; }
 
+        [DataMember]
         public int Particles { get; set; }
 
         public override void ReceiveDamage(GameObject @from, int amount)
@@ -50,10 +56,15 @@ namespace FragEngine.Particles
                     var x = Utility.RndRange(Position.X, Position.X + BoundingBox.Width);
                     var y = Utility.RndRange(Position.Y, Position.Y + BoundingBox.Height);
 
-                    _gameObjectService.SpawnGameObject(new Vector2(x, y), ParticleOptions);
+                    _gameObjectService.SpawnGameObject(new Vector2(x, y), (object)ParticleOptions);
                 }
                 SpawnDelay.Reset();
             }
+        }
+
+        public override void Draw(SpriteBatch batch)
+        {
+            // no draw for AreaSpawner
         }
     }
 }

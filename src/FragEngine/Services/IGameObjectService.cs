@@ -9,7 +9,9 @@ namespace FragEngine.Services
 {
     public interface IGameObjectService
     {
-        TEntitytype SpawnGameObject<TEntitytype>( Vector2 position, Action<TEntitytype> configuration = null ) where TEntitytype : GameObject, new();
+        TEntityType SpawnGameObject<TEntityType>( Vector2 position, Action<TEntityType> configuration = null ) where TEntityType : GameObject, new();
+        TEntityType SpawnGameObject<TEntityType>(Vector2 position, Dictionary<string, object> settings) where TEntityType : GameObject, new();
+        TEntityType SpawnGameObject<TEntityType>(Vector2 position, object settings) where TEntityType : GameObject, new();
 
         List<GameObject> GameObjects { get; set; }
 
@@ -18,6 +20,8 @@ namespace FragEngine.Services
         GameObject GetGameObjectByName(string name);
 
         List<GameObject> GetGameObjectsByType(Type gameObjectType);
+
+        void AttachGameObjects(params GameObject[] gameObjects);
 
         void RemoveGameObject(GameObject go);
     }

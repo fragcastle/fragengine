@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using FragEngine.Services;
@@ -22,7 +23,7 @@ namespace FragEngine.Entities
 
         private List<GameObject> GetDrawQueue(int zIndex)
         {
-            var idx = (int)Math.Floor(zIndex/10f);
+            var idx = (int)Math.Floor(zIndex / 10f);
 
             if (!DrawQueues.ContainsKey(idx))
             {
@@ -30,25 +31,74 @@ namespace FragEngine.Entities
             }
 
             return DrawQueues[idx];
-        } 
+        }
 
-        public TEntitytype SpawnGameObject<TEntitytype>( Vector2 position, Action<TEntitytype> configuration = null ) where TEntitytype : GameObject, new()
+        private void InsertGameObjects(params GameObject[] gameObjects)
         {
-            var entity = new TEntitytype {Position = position};
-
-            configuration?.Invoke( entity );
-
-            GameObjects.Add(entity);
-
-            if (!String.IsNullOrWhiteSpace(entity.Name))
+            foreach (var gameObject in gameObjects)
             {
-                _gameObjectNameIndex[entity.Name] = entity;
+                GameObjects.Add(gameObject);
+
+                if (!String.IsNullOrWhiteSpace(gameObject.Name))
+                {
+                    _gameObjectNameIndex[gameObject.Name] = gameObject;
+                }
+
+                var queue = GetDrawQueue(gameObject.ZIndex);
+                queue.Add(gameObject);
+            }
+        }
+
+        private void ApplySettings(GameObject gameObject, Dictionary<string, object> settings)
+        {
+            foreach (var pair in settings)
+            {
+                var propInfo = typeof (GameObject).GetProperty(pair.Key);
+                if (propInfo.CanWrite)
+                {
+                    propInfo.SetValue(gameObject, pair.Value);
+                }
+            }
+        }
+
+        public TEntityType SpawnGameObject<TEntityType>(Vector2 position, object settings)
+            where TEntityType : GameObject, new()
+        {
+            var gameObject = new TEntityType { Position = position };
+
+            if (settings != null)
+            {
+                if (settings is Action<TEntityType>)
+                {
+                    (settings as Action<TEntityType>)?.Invoke(gameObject);
+                }
+                else
+                {
+                    var dictionary = new Dictionary<string, object>();
+                    if (settings is Dictionary<string, object>)
+                    {
+                        dictionary = (Dictionary<string, object>)settings;
+                    }
+                    else
+                    {
+                        foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(settings))
+                        {
+                            var obj2 = descriptor.GetValue(settings);
+                            dictionary.Add(descriptor.Name, obj2);
+                        }
+                    }
+                    ApplySettings(gameObject, dictionary);
+                }
             }
 
-            var queue = GetDrawQueue(entity.ZIndex);
-            queue.Add(entity);
+            InsertGameObjects(gameObject);
 
-            return entity;
+            return gameObject;
+        }
+
+        public void AttachGameObjects(params GameObject[] gameObjects)
+        {
+            InsertGameObjects(gameObjects);
         }
 
         public void RemoveGameObject(GameObject go)

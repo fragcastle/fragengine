@@ -32,7 +32,7 @@ namespace FragEngine.Particles
 
         public Vector2<bool> Drips { get; set; }
 
-        public Particle() : base() { }
+        public Particle() : this(Vector2.Zero) { }
         public Particle(Vector2 initialLocation, Vector2? initialVelocity = null) : base(initialLocation, initialVelocity)
         {
             Friction = new Vector2(10f, 0);
@@ -43,6 +43,9 @@ namespace FragEngine.Particles
             CollisionStyle = GameObjectCollisionStyle.Never;
             CheckAgainstGroup = GameObjectGroup.None;
             Group = GameObjectGroup.None;
+
+            Lifetime = 1f;
+            Fadetime = 1f;
 
             Colors = new[] { Color.White };
         }

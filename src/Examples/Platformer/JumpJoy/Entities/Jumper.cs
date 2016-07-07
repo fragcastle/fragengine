@@ -26,6 +26,8 @@ namespace JumpJoy.Entities
         {
             Group = GameObjectGroup.A;
 
+            Name = "Jump";
+
             MaxVelocity = new Vector2 { X = 300, Y = 450 };
 
             Animations = new AnimationSheet( @"Textures\player", 64, 64 );

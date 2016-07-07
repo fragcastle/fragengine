@@ -31,7 +31,7 @@ namespace JumpJoy.Screens
 
             LoadLevel( "jumpjoy_1" );
 
-            var jump = CurrentLevel.Entities.First( e => e as Jumper != null );
+            var jump = ServiceLocator.Get<IGameObjectService>().GetGameObjectByName("Jump");
 
             var camera = ServiceLocator.Get<Camera>();
 

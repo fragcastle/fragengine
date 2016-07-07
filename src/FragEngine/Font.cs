@@ -84,7 +84,7 @@ namespace FragEngine
             var viewPort = new Rectangle((int)Indices[c - FirstChar], 0, (int)WidthMap[c - FirstChar], (int)Height);
             var destination = new Rectangle(pos.ToPoint(), new Point(viewPort.Width, viewPort.Height));
             spriteBatch.Draw(FontTexture, destination, viewPort, new Color(Color.White, Alpha));
-            return WidthMap[c] + LetterSpacing;
+            return WidthMap[c - FirstChar] + LetterSpacing;
         }
 
         public void Draw(SpriteBatch spriteBatch, string text, Vector2 pos, FontAlignment align = FontAlignment.LEFT)

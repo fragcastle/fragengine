@@ -76,6 +76,7 @@
     <Compile Include="Entities\GameObjectCollisionType.cs" />
     <Compile Include="Entities\GameObjectFactory.cs" />
     <Compile Include="Entities\GameObjectGroup.cs" />
+    <Compile Include="Entities\GameObjectSettingsDictionary.cs" />
     <Compile Include="Entities\HudBase.cs" />
     <Compile Include="Entities\Player.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />

@@ -5,29 +5,21 @@ namespace FragEngine
 {
     public class Timer
     {
-        private static long last;
-        private static long current;
-        private static float time;
-        private static float maxStep = 0.05f;
-        private static float timeScale = 1f;
+        private static float _time;
+        private const float MaxStep = 0.05f;
 
-        public static float TimeScale
-        {
-            get
-            {
-                return timeScale;
-            }
-        }
+        [Obsolete("Use FragEngineGame.TimeScale instead. This property may be removed in future releases.")]
+        public static float TimeScale => FragEngineGame.TimeScale;
 
         public float Base { get; private set; }
         public float Last { get; private set; }
         public float Target { get; private set; }
         public float PausedAt { get; private set; }
 
-        public Timer( float seconds = 0f )
+        public Timer(float seconds = 0f)
         {
-            Base = Timer.time;
-            Last = Timer.time;
+            Base = _time;
+            Last = _time;
 
             Target = seconds;
         }
@@ -35,35 +27,33 @@ namespace FragEngine
         public void Set(float seconds = 0f)
         {
             Target = seconds;
-            Base = Timer.time;
+            Base = _time;
             PausedAt = 0;
         }
 
         public void Reset()
         {
-            Base = Timer.time;
+            Base = _time;
             PausedAt = 0;
         }
 
         public float Tick()
         {
-            var delta = Timer.time - Last;
-            Last = Timer.time;
+            var delta = _time - Last;
+            Last = _time;
             return (PausedAt == 0 ? 0 : delta);
         }
 
         public float Delta()
         {
-            var start = PausedAt == 0 ? Timer.time : PausedAt;
+            var start = PausedAt == 0 ? _time : PausedAt;
             return start - Base - Target;
         }
 
-        public static void Update( GameTime gameTime )
+        public static void Update(GameTime gameTime)
         {
-            var current = DateTime.Now.SinceEpoch();
-            var delta = (current - last) / 1000;
-            time += Math.Min(delta, maxStep) * timeScale;
-            last = current;
+            var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            _time += Math.Min(delta, MaxStep) * FragEngineGame.TimeScale;
         }
     }
 }

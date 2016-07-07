@@ -65,6 +65,31 @@ namespace FragEngine.Tests.Entities
         public class SpawnGameObject : GameObjectServiceTests
         {
             [Fact]
+            public void Should_Allow_Setting_Any_Writeable_Property_Via_Settings_Dictionary()
+            {
+                var settings = new Dictionary<string, object>()
+                {
+                    { "Name", "TestObject" },
+                    { "Velocity", new Vector2(100, 100) }
+                };
+                var gameObject = _gameObjectService.SpawnGameObject<TestGameObject>(Vector2.One, settings);
+                gameObject.Name.ShouldEqual("TestObject");
+                gameObject.Velocity.ShouldEqual(new Vector2(100, 100));
+            }
+
+            [Fact]
+            public void Should_Allow_Setting_Any_Writeable_Property_Via_Settings_Object()
+            {
+                var gameObject = _gameObjectService.SpawnGameObject<TestGameObject>(Vector2.One, new
+                {
+                    Name = "TestObject",
+                    Velocity = new Vector2(100, 100)
+                });
+                gameObject.Name.ShouldEqual("TestObject");
+                gameObject.Velocity.ShouldEqual(new Vector2(100, 100));
+            }
+
+            [Fact]
             public void Should_Add_GameObject_To_GameObjects_List()
             {
                 _gameObjectService.GameObjects.Count.ShouldEqual(0);

@@ -67,6 +67,8 @@ namespace FragEngine.View.Screens
             _layers.Add( CurrentLevel.CollisionLayer );
 #endif
 
+            _gameObjectService.AttachGameObjects(CurrentLevel.GameObjects.ToArray());
+
             // replace the collision service with one setup for this level
             var collisionMap = new CollisionMap( CurrentLevel );
             var collisionService = new CollisionService( collisionMap );
@@ -116,9 +118,15 @@ namespace FragEngine.View.Screens
             if( _hud != null )
                 _hud.Update( gameTime );
 
-            foreach (var gameObject in _gameObjectService.GameObjects)
+            // copy the GameObjects collection in case it is modified while we
+            // are updating the objects
+            // TODO: maybe don't update these objects inside the screen? This could be expensive if we have 10k objects
+            foreach (var gameObject in _gameObjectService.GameObjects.ToList())
             {
-                gameObject.Update(gameTime);
+                if (gameObject.IsAlive)
+                {
+                    gameObject.Update(gameTime);
+                }
             }
 
             base.Update( gameTime, otherScreenHasFocus, coveredByOtherScreen );

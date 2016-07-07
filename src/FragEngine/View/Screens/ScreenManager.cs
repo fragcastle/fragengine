@@ -22,7 +22,7 @@ namespace FragEngine.View.Screens
         private List<GameScreenBase> screensToUpdate = new List<GameScreenBase>();
         private List<GameScreenBase> screensToDraw = new List<GameScreenBase>();
 
-        private InputState input = new InputState( PlayerIndex.One) ; // by default, player one controls menus
+        private InputState input = new InputState(PlayerIndex.One); // by default, player one controls menus
 
         private IGraphicsDeviceService graphicsDeviceService;
 
@@ -95,14 +95,13 @@ namespace FragEngine.View.Screens
         /// <summary>
         /// Constructs a new screen manager component.
         /// </summary>
-        public ScreenManager( Game game )
-            : base( game )
+        public ScreenManager(Game game)
+            : base(game)
         {
-            graphicsDeviceService = (IGraphicsDeviceService)game.Services.GetService(
-                                                        typeof( IGraphicsDeviceService ) );
+            graphicsDeviceService = (IGraphicsDeviceService)game.Services.GetService(typeof(IGraphicsDeviceService));
 
-            if ( graphicsDeviceService == null )
-                throw new InvalidOperationException( "No graphics device service." );
+            if (graphicsDeviceService == null)
+                throw new InvalidOperationException("No graphics device service.");
         }
 
 
@@ -112,24 +111,24 @@ namespace FragEngine.View.Screens
         protected override void LoadContent()
         {
             // Load content belonging to the screen manager.
-            _spriteBatch = new SpriteBatch( GraphicsDevice );
-            _font = ContentCacheManager.GetSpriteFont( "Fonts/MenuFont" );
-            _blankTexture = ContentCacheManager.GetTexture( "FragEngine.Resources.blank.png" );
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _font = ContentCacheManager.GetSpriteFont("Fonts/MenuFont");
+            _blankTexture = ContentCacheManager.GetTexture("FragEngine.Resources.blank.png");
 
             // Tell each of the screens to load their content.
-            foreach ( GameScreenBase screen in screens )
+            foreach (GameScreenBase screen in screens)
             {
                 screen.LoadContent();
             }
 
             // update the title-safe area
             _titleSafeArea = new Rectangle(
-                (int)Math.Floor( GraphicsDevice.Viewport.X +
-                   GraphicsDevice.Viewport.Width * 0.05f ),
-                (int)Math.Floor( GraphicsDevice.Viewport.Y +
-                   GraphicsDevice.Viewport.Height * 0.05f ),
-                (int)Math.Floor( GraphicsDevice.Viewport.Width * 0.9f ),
-                (int)Math.Floor( GraphicsDevice.Viewport.Height * 0.9f ) );
+                (int)Math.Floor(GraphicsDevice.Viewport.X +
+                   GraphicsDevice.Viewport.Width * 0.05f),
+                (int)Math.Floor(GraphicsDevice.Viewport.Y +
+                   GraphicsDevice.Viewport.Height * 0.05f),
+                (int)Math.Floor(GraphicsDevice.Viewport.Width * 0.9f),
+                (int)Math.Floor(GraphicsDevice.Viewport.Height * 0.9f));
         }
 
 
@@ -144,7 +143,7 @@ namespace FragEngine.View.Screens
         /// <summary>
         /// Allows each screen to run logic.
         /// </summary>
-        public override void Update( GameTime gameTime )
+        public override void Update(GameTime gameTime)
         {
             // Read the keyboard and gamepad.
             input.Update();
@@ -154,30 +153,30 @@ namespace FragEngine.View.Screens
             // (or it happens on another thread)
             screensToUpdate.Clear();
 
-            foreach ( GameScreenBase screen in screens )
-                screensToUpdate.Add( screen );
+            foreach (GameScreenBase screen in screens)
+                screensToUpdate.Add(screen);
 
             bool otherScreenHasFocus = !Game.IsActive;
             bool coveredByOtherScreen = false;
 
             // Loop as long as there are screens waiting to be updated.
-            while ( screensToUpdate.Count > 0 )
+            while (screensToUpdate.Count > 0)
             {
                 // Pop the topmost screen off the waiting list.
                 GameScreenBase screen = screensToUpdate[screensToUpdate.Count - 1];
 
-                screensToUpdate.RemoveAt( screensToUpdate.Count - 1 );
+                screensToUpdate.RemoveAt(screensToUpdate.Count - 1);
 
                 // Update the screen.
-                screen.Update( gameTime, otherScreenHasFocus, coveredByOtherScreen );
+                screen.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
 
-                if ( screen.ScreenState == ScreenState.TransitionOn || screen.ScreenState == ScreenState.Active )
+                if (screen.ScreenState == ScreenState.TransitionOn || screen.ScreenState == ScreenState.Active)
                 {
                     // If this is the first active screen we came across,
                     // give it a chance to handle input and update presence.
-                    if ( !otherScreenHasFocus )
+                    if (!otherScreenHasFocus)
                     {
-                        screen.HandleInput( input );
+                        screen.HandleInput(input);
 
                         screen.UpdatePresence(); // presence support
 
@@ -186,13 +185,13 @@ namespace FragEngine.View.Screens
 
                     // If this is an active non-popup, inform any subsequent
                     // screens that they are covered by it.
-                    if ( !screen.IsPopup )
+                    if (!screen.IsPopup)
                         coveredByOtherScreen = true;
                 }
             }
 
             // Print debug trace?
-            if ( traceEnabled )
+            if (traceEnabled)
                 TraceScreens();
         }
 
@@ -204,30 +203,30 @@ namespace FragEngine.View.Screens
         {
             List<string> screenNames = new List<string>();
 
-            foreach ( GameScreenBase screen in screens )
-                screenNames.Add( screen.GetType().Name );
+            foreach (GameScreenBase screen in screens)
+                screenNames.Add(screen.GetType().Name);
         }
 
 
         /// <summary>
         /// Tells each screen to draw itself.
         /// </summary>
-        public override void Draw( GameTime gameTime )
+        public override void Draw(GameTime gameTime)
         {
             // Make a copy of the master screen list, to avoid confusion if
             // the process of drawing one screen adds or removes others
             // (or it happens on another thread
             screensToDraw.Clear();
 
-            foreach ( GameScreenBase screen in screens )
-                screensToDraw.Add( screen );
+            foreach (GameScreenBase screen in screens)
+                screensToDraw.Add(screen);
 
-            foreach ( GameScreenBase screen in screensToDraw )
+            foreach (GameScreenBase screen in screensToDraw)
             {
-                if ( screen.ScreenState == ScreenState.Hidden )
+                if (screen.ScreenState == ScreenState.Hidden)
                     continue;
 
-                screen.Draw( gameTime );
+                screen.Draw(gameTime);
             }
         }
 
@@ -236,28 +235,28 @@ namespace FragEngine.View.Screens
         /// </summary>
         /// <param name="rectangle">The destination rectangle.</param>
         /// <param name="color">The color of the rectangle.</param>
-        public void DrawRectangle( Rectangle rectangle, Color color )
+        public void DrawRectangle(Rectangle rectangle, Color color)
         {
             // We changed this to be Opaque
-            SpriteBatch.Begin( 0, BlendState.Opaque, null, null, null );
-            SpriteBatch.Draw( _blankTexture, rectangle, color );
+            SpriteBatch.Begin(0, BlendState.Opaque, null, null, null);
+            SpriteBatch.Draw(_blankTexture, rectangle, color);
             SpriteBatch.End();
         }
 
         /// <summary>
         /// Adds a new screen to the screen manager.
         /// </summary>
-        public void AddScreen( GameScreenBase screen )
+        public void AddScreen(GameScreenBase screen)
         {
             screen.ScreenManager = this;
 
             // If we have a graphics device, tell the screen to load content.
-            if ( ( graphicsDeviceService != null ) && ( graphicsDeviceService.GraphicsDevice != null ) )
+            if ((graphicsDeviceService != null) && (graphicsDeviceService.GraphicsDevice != null))
             {
                 screen.LoadContent();
             }
 
-            screens.Add( screen );
+            screens.Add(screen);
         }
 
 
@@ -267,17 +266,17 @@ namespace FragEngine.View.Screens
         /// the screen can gradually transition off rather than just being
         /// instantly removed.
         /// </summary>
-        public void RemoveScreen( GameScreenBase screen )
+        public void RemoveScreen(GameScreenBase screen)
         {
             // If we have a graphics device, tell the screen to unload content.
-            if ( ( graphicsDeviceService != null ) &&
-                ( graphicsDeviceService.GraphicsDevice != null ) )
+            if ((graphicsDeviceService != null) &&
+                (graphicsDeviceService.GraphicsDevice != null))
             {
                 screen.UnloadContent();
             }
 
-            screens.Remove( screen );
-            screensToUpdate.Remove( screen );
+            screens.Remove(screen);
+            screensToUpdate.Remove(screen);
         }
 
 
@@ -296,15 +295,15 @@ namespace FragEngine.View.Screens
         /// Helper draws a translucent black fullscreen sprite, used for fading
         /// screens in and out, and for darkening the background behind popups.
         /// </summary>
-        public void FadeBackBufferToBlack( int alpha )
+        public void FadeBackBufferToBlack(int alpha)
         {
             Viewport viewport = GraphicsDevice.Viewport;
 
             SpriteBatch.Begin();
 
-            SpriteBatch.Draw( _blankTexture,
-                             new Rectangle( 0, 0, viewport.Width, viewport.Height ),
-                             new Color( 0, 0, 0, (byte)alpha ) );
+            SpriteBatch.Draw(_blankTexture,
+                             new Rectangle(0, 0, viewport.Width, viewport.Height),
+                             new Color(0, 0, 0, (byte)alpha));
 
             SpriteBatch.End();
         }
