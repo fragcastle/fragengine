@@ -79,7 +79,7 @@ namespace FragEngine
             // FIXME: this is fucked. In DIRECTX versions of this code, we _must_ instantiate GraphicsDeviceManager
             // in the initialize, but in OPENGL versions we have to do it here (check the code in Game.cs)
             // it throws an exception if GraphicsDevice is null???? WHAT THE FUCK!?!?!?
-            Graphics = new GraphicsDeviceManager( this );
+            Graphics = new GraphicsDeviceManager(this);
 
             Graphics.CreateDevice();
 
@@ -100,6 +100,8 @@ namespace FragEngine
         {
             Graphics.PreferredBackBufferWidth = 1280;
             Graphics.PreferredBackBufferHeight = 720;
+
+            Graphics.ApplyChanges();
 
             ServiceLocator.Apply(Services);
 
