@@ -19,13 +19,11 @@ namespace JumpJoy.Entities
 
             Name = "Jump";
 
-            Animations = new AnimationSheet(@"Textures\player", 64, 64);
+            Animations = new AnimationSheet(ContentCacheManager.GetTextureFromResource(@"JumpJoy.Resources.rock.png"), 32, 32);
 
-            Animations.Add("idle", 1f, true, 0, 1);
-
-            Animations.Add("run", 0.07f, true, 12, 13, 14, 15, 16, 17, 18, 19, 20);
-
-            Animations.Add("jump", 0.09f, false, 21, 22);
+            Animations.Add("idle", 0.08f, true, 1, 2, 3, 4, 5, 6, 7);
+            Animations.Add("run", 0.07f, true, 45, 46, 47, 48, 49, 50);
+            Animations.Add("jump", 1f, false, 73);
 
             Index = PlayerIndex.One;
 
@@ -36,7 +34,8 @@ namespace JumpJoy.Entities
 
             Settings["_feDrawBox"] = "true";
 
-            BoundingBox = new HitBox { Height = 64, Width = 64 };
+            BoundingBox = new HitBox { Height = 22, Width = 8 };
+            Offset = new Vector2(12, 10);
 
             GravityFactor = 10f;
         }
