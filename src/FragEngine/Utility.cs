@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace FragEngine {
     public static class Utility {
-        private static readonly Random random = new Random();
+        private static readonly Random _random = new Random();
 
         public static float Clerp( float from, float to, float step ) {
             float t = ( ( MathHelper.WrapAngle( to - from ) * ( step ) ) );
@@ -17,7 +17,7 @@ namespace FragEngine {
         /// Helper to generate a random float in the range of [-1, 1].
         /// </summary>
         public static float NextFloat() {
-            return (float)random.NextDouble() * 2f - 1f;
+            return (float)_random.NextDouble() * 2f - 1f;
         }
 
         public static float Limit( float target, float min, float max )
@@ -27,14 +27,12 @@ namespace FragEngine {
 
         public static int RndRange(int min = 0, int max = 1)
         {
-            var r = new Random();
-            return r.Next(min, max);
+            return _random.Next(min, max);
         }
 
         public static float RndRange(float min = 0, float max = 1)
         {
-            var r = new Random();
-            return (float)(r.NextDouble() * (max - min) + min);
+            return (float)(_random.NextDouble() * (max - min) + min);
         }
 
         public static T Random<T>(T[] arr)
