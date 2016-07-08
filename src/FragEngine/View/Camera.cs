@@ -9,6 +9,18 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace FragEngine.View
 {
+    public enum CameraShakeLevel
+    {
+        None,
+        AlmostNone,
+        ALittle,
+        Some,
+        More,
+        ALot,
+        TooMuch,
+        Vlambeer
+    }
+
     public class Camera
     {
         private readonly Viewport _viewport;
@@ -56,9 +68,44 @@ namespace FragEngine.View
 
         public float Rotation { get; set; }
 
+        public CameraShakeLevel ShakeLevel { get; set; }
+
+        public float ShakeAmount { get; set; }
+
+        private float GetCameraShakeModifier()
+        {
+            switch(ShakeLevel)
+            {
+                case CameraShakeLevel.None:
+                    return 0;
+                case CameraShakeLevel.AlmostNone:
+                    return 0.01f;
+                case CameraShakeLevel.ALittle:
+                    return 0.09f;
+                case CameraShakeLevel.Some:
+                    return 0.2f;
+                case CameraShakeLevel.More:
+                    return 0.4f;
+                case CameraShakeLevel.ALot:
+                    return 0.6f;
+                case CameraShakeLevel.TooMuch:
+                    return 0.8f;
+                case CameraShakeLevel.Vlambeer:
+                    return 1.5f;
+            }
+            return 0.01f;
+        }
+
         public Matrix GetViewMatrix( Vector2 parallax )
         {
-            return Matrix.CreateTranslation( new Vector3( -Position * parallax, 0.0f) ) *
+            var shake = ShakeAmount/100*GetCameraShakeModifier();
+            var shakeVector = new Vector2(Utility.RndRange(-shake, shake), Utility.RndRange(-shake, shake));
+            var translationVector = new Vector3(-Position*parallax + shakeVector, 0.0f);
+            if (Utility.CoinFlip())
+            {
+                translationVector = new Vector3(-Position * parallax - shakeVector, 0.0f);
+            }
+            return Matrix.CreateTranslation( translationVector ) *
                    Matrix.CreateRotationZ( Rotation ) *
                    Matrix.CreateScale( new Vector3(Zoom, Zoom, 1f ) ) *
                    Matrix.CreateTranslation( new Vector3( Origin, 0.0f ) );

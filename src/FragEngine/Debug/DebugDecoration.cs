@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FragEngine.Services;
+using FragEngine.View;
 using FragEngine.View.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -30,13 +31,19 @@ namespace FragEngine.Debug
 
         public override void Draw(GameTime gameTime)
         {
+            var camera = ServiceLocator.Get<Camera>();
             var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             _frameCounter.Update(deltaTime);
 
             var numberOfObjects = _gameObjectService.GameObjects.Count;
 
-            var fps = string.Format("FPS: {0}\nObjects: {1}", _frameCounter.AverageFramesPerSecond, numberOfObjects);
+            var fps = string.Format("FPS: {0}\nObjects: {1}\nShake Level:{2}\nShake Amount:{3}", 
+                _frameCounter.AverageFramesPerSecond, 
+                numberOfObjects,
+                camera.ShakeLevel,
+                camera.ShakeAmount
+                );
 
             _font.Draw(_spriteBatch, fps, Vector2.One);
         }
