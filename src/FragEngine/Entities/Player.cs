@@ -30,6 +30,8 @@ namespace FragEngine.Entities
             }
 
             base.Update( gameTime );
+
+            Acceleration = Vector2.Zero;
         }
 
         public abstract void HandleKeyboardInput( KeyboardState keyboard );
