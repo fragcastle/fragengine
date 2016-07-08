@@ -30,6 +30,7 @@ namespace JumpJoy.Screens
             var camera = ServiceLocator.Get<Camera>();
 
             camera.Target = jump;
+            camera.Zoom = 5f;
 
             // this kind of works... but seems odd...
             camera.Offset = new Vector2(48, 256);

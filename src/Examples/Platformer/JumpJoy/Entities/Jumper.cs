@@ -50,6 +50,15 @@ namespace JumpJoy.Entities
 
             GravityFactor = 10f;
 
+            // time to pick the current animation
+            // pick animation based on what the actor is doing
+            if (!IsStanding && Velocity.Y != 0)
+                CurrentAnimation = "jump";
+            else if (Velocity.X != 0f)
+                CurrentAnimation = "run";
+            else if (IsStanding)
+                CurrentAnimation = "idle";
+
             base.Update(gameTime);
         }
 
@@ -66,20 +75,23 @@ namespace JumpJoy.Entities
 
             if (jumped)
                 Jump();
-
-            // time to pick the current animation
-            // pick animation based on what the actor is doing
-            if (!IsStanding && Velocity.Y != 0)
-                CurrentAnimation = "jump";
-            else if (Velocity.X != 0f)
-                CurrentAnimation = "run";
-            else if (IsStanding)
-                CurrentAnimation = "idle";
         }
 
         public override void HandleGamePadInput(GamePadState gamepad)
         {
-            // no gamepad bindings yet
+            if (gamepad.DPad.Left == ButtonState.Pressed)
+            {
+                GoLeft();
+            }
+            else if (gamepad.DPad.Right == ButtonState.Pressed)
+            {
+                GoRight();
+            }
+
+            if (gamepad.Buttons.A == ButtonState.Pressed)
+            {
+                Jump();
+            }
         }
 
         private void GoLeft()

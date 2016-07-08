@@ -25,6 +25,7 @@ namespace FragEngine.View
     {
         private readonly Viewport _viewport;
         private float _zoom;
+        private Vector2 _shakeVector;
 
         /// <summary>
         /// The camera will center the ViewPort on this Sprite
@@ -96,18 +97,16 @@ namespace FragEngine.View
             return 0.01f;
         }
 
-        public Vector2 ShakeVector;
-
         public void Update()
         {
             var shake = ShakeAmount / 100 * GetCameraShakeModifier();
 
-            ShakeVector = new Vector2(Utility.RndRange(-shake, shake), Utility.RndRange(-shake, shake));
+            _shakeVector = new Vector2(Utility.RndRange(-shake, shake), Utility.RndRange(-shake, shake));
         }
 
         public Matrix GetViewMatrix( Vector2 parallax )
         {
-            var translationVector = new Vector3(-Position * parallax + ShakeVector, 0.0f);
+            var translationVector = new Vector3(-Position * parallax + _shakeVector, 0.0f);
 
             return Matrix.CreateTranslation( translationVector ) *
                    Matrix.CreateRotationZ( Rotation ) *
