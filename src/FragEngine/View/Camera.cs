@@ -96,15 +96,19 @@ namespace FragEngine.View
             return 0.01f;
         }
 
+        public Vector2 ShakeVector;
+
+        public void Update()
+        {
+            var shake = ShakeAmount / 100 * GetCameraShakeModifier();
+
+            ShakeVector = new Vector2(Utility.RndRange(-shake, shake), Utility.RndRange(-shake, shake));
+        }
+
         public Matrix GetViewMatrix( Vector2 parallax )
         {
-            var shake = ShakeAmount/100*GetCameraShakeModifier();
-            var shakeVector = new Vector2(Utility.RndRange(-shake, shake), Utility.RndRange(-shake, shake));
-            var translationVector = new Vector3(-Position*parallax + shakeVector, 0.0f);
-            if (Utility.CoinFlip())
-            {
-                translationVector = new Vector3(-Position * parallax - shakeVector, 0.0f);
-            }
+            var translationVector = new Vector3(-Position * parallax + ShakeVector, 0.0f);
+
             return Matrix.CreateTranslation( translationVector ) *
                    Matrix.CreateRotationZ( Rotation ) *
                    Matrix.CreateScale( new Vector3(Zoom, Zoom, 1f ) ) *
