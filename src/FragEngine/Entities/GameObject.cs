@@ -2,6 +2,7 @@
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using FragEngine.Collisions;
 using FragEngine.Services;
@@ -441,7 +442,15 @@ namespace FragEngine.Entities
 
             LastPosition = Position;
 
-            CalculateVelocity( gameTime );
+            var tick = gameTime.GetGameTick();
+            var gravityVector = new Vector2(0, FragEngineGame.Gravity * tick * GravityFactor);
+            Velocity += gravityVector;
+            Velocity = Velocity.SetX(
+                GetNewVelocity(Velocity.X, Acceleration.X + ExternalAcceleration.X, Friction.X + ExternalFriction.X, MaxVelocity.X, tick)
+                );
+            Velocity = Velocity.SetY(
+                GetNewVelocity(Velocity.Y, Acceleration.Y + ExternalAcceleration.Y, Friction.Y + ExternalFriction.Y, MaxVelocity.Y, tick)
+                );
 
             var partialVelocity = Velocity * gameTime.GetGameTick();
 
@@ -457,10 +466,9 @@ namespace FragEngine.Entities
                 Position += partialVelocity;
             }
 
-            if (Animations?.CurrentAnimation != null)
-            {
-                Animations.CurrentAnimation.Update(gameTime);
-            }
+            Animations?.CurrentAnimation?.Update(gameTime);
+
+            ExternalAcceleration = Vector2.Zero;
         }
 
         public virtual void HandleMovementTrace(CollisionCheckResult result)
@@ -574,44 +582,29 @@ namespace FragEngine.Entities
             );
         }
 
-        private void CalculateVelocity( GameTime gameTime )
+        private float GetNewVelocity(float vel, float accel, float friction, float max, float tick)
         {
-            var tick = gameTime.GetGameTick();
-
-            // apply gravity
-            var gravityVector = new Vector2( 0, FragEngineGame.Gravity * tick * GravityFactor );
-
-            Velocity += gravityVector;
-
-            // are we speeding up, or slowing down?
-            if( Acceleration != Vector2.Zero )
-                Velocity = ApplyAcceleration( gameTime );
-            else if( Friction != Vector2.Zero )
-                Velocity = ApplyFriction( gameTime );
-
-            ExternalAcceleration = Vector2.Zero;
-        }
-
-        private Vector2 ApplyFriction( GameTime gameTime )
-        {
-            var frictionDelta = (Friction + ExternalFriction) * gameTime.GetGameTick();
-
-            var newVelocity = Velocity;
-
-            if( Velocity.X - frictionDelta.X > 0 ) newVelocity.X -= frictionDelta.X;
-            else if( Velocity.X + frictionDelta.X < 0 ) newVelocity.X += frictionDelta.X;
-            else newVelocity.X = 0;
-
-            if( Velocity.Y - frictionDelta.Y > 0 ) newVelocity.Y -= frictionDelta.Y;
-            else if( Velocity.Y + frictionDelta.Y < 0 ) newVelocity.Y += frictionDelta.Y;
-            else newVelocity.Y = 0;
-
-            return Utility.Limit( newVelocity, MaxVelocity );
-        }
-
-        private Vector2 ApplyAcceleration( GameTime gameTime )
-        {
-            return Velocity = Utility.Limit( Velocity + (Acceleration + ExternalAcceleration) * gameTime.GetGameTick(), MaxVelocity );
+            if (accel != 0)
+            {
+                return Utility.Limit(vel + accel*tick, -max, max);
+            }
+            else if (friction != 0)
+            {
+                var delta = friction*tick;
+                if (vel - delta > 0)
+                {
+                    return vel - delta;
+                }
+                else if (vel + delta < 0)
+                {
+                    return vel + delta;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            return Utility.Limit(vel, -max, max);
         }
     }
 }
