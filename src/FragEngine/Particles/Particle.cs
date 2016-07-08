@@ -23,6 +23,7 @@ namespace FragEngine.Particles
 
     public class Particle : GameObject
     {
+        private static Dictionary<Color, Texture2D[]> _cache = new Dictionary<Color, Texture2D[]>();
         public Color[] Colors { get; set; }
 
         public Vector2? AbsoluteVelocity { get; set; }
@@ -50,18 +51,46 @@ namespace FragEngine.Particles
             Colors = new[] { Color.White };
         }
 
-        protected override void ConfigureInstance()
+        private Texture2D CreateTexture(Color color, int size)
         {
-            var data = new Color[(int)BoundingBox.Width * (int)BoundingBox.Height];
             var graphicsDevice = ServiceLocator.Get<GraphicsDevice>();
-            var rectTexture = new Texture2D(graphicsDevice, (int)BoundingBox.Width, (int)BoundingBox.Height);
-
-            var color = Utility.Random(Colors);
-
+            var data = new Color[size * size];
+            var texture = new Texture2D(graphicsDevice, size, size);
             for (int i = 0; i < data.Length; ++i)
                 data[i] = color;
+            texture.SetData(data);
 
-            rectTexture.SetData(data);
+            return texture;
+        }
+
+        protected override void ConfigureInstance()
+        {
+            Texture2D rectTexture = null;
+            var color = Utility.Random(Colors);
+
+            // get our texture from the cache
+            // or create one if one does not exist.
+            // this isn't thread safe, but I don't
+            // think it needs to be since particles
+            // are spawned in loops within a single
+            // update()
+            if (!_cache.ContainsKey(color))
+            {
+                _cache[color] = new Texture2D[] { null, null, null, null, null };
+            }
+
+            if (_cache.ContainsKey(color))
+            {
+                var idx = (int) BoundingBox.Width - 1;
+                if (_cache[color][idx] != null)
+                {
+                    rectTexture = _cache[color][idx];
+                }
+                else
+                {
+                    rectTexture = _cache[color][idx] = CreateTexture(color, (int)BoundingBox.Width);
+                }
+            }
 
             Animations = new AnimationSheet(rectTexture, (int)BoundingBox.Width, (int)BoundingBox.Height);
             Animations.Add("idle", 1f, true, 0);

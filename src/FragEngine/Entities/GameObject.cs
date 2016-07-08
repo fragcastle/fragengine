@@ -18,6 +18,7 @@ namespace FragEngine.Entities
         private const string DefaultAnimationName = "idle";
 
         private bool _hasBeenConfigured = false;
+        private Texture2D _debugOutline;
 
         protected ICollisionService CollisionService;
 
@@ -233,6 +234,7 @@ namespace FragEngine.Entities
         public GameObject()
             : this( Vector2.Zero )
         {
+            
         }
 
         public GameObject( Vector2 initialLocation, Vector2? initialVelocity = null, ICollisionService collisionService = null )
@@ -497,20 +499,23 @@ namespace FragEngine.Entities
         public virtual void Draw( SpriteBatch batch )
         {
             string drawBox = null;
-            if( Settings.TryGetValue("_feDrawBox", out drawBox) && drawBox == "true" && FragEngineGame.IsDebug)
+            if (Settings.TryGetValue("_feDrawBox", out drawBox) && drawBox == "true" && FragEngineGame.IsDebug)
             {
-                var whiteTexture = new Texture2D( batch.GraphicsDevice, 1, 1 );
-                whiteTexture.SetData( new Color[] { Color.White } );
+                if (_debugOutline == null)
+                {
+                    _debugOutline = new Texture2D(batch.GraphicsDevice, 1, 1);
+                    _debugOutline.SetData(new Color[] { Color.White });
+                }
 
                 Rectangle rect = BoundingBox;
 
                 rect.X = (int)Position.X;
                 rect.Y = (int)Position.Y;
 
-                batch.Draw( whiteTexture, new Rectangle( rect.Left, rect.Top, rect.Width, 1 ), Color.White );
-                batch.Draw( whiteTexture, new Rectangle( rect.Left, rect.Bottom, rect.Width, 1 ), Color.White );
-                batch.Draw( whiteTexture, new Rectangle( rect.Left, rect.Top, 1, rect.Height ), Color.White );
-                batch.Draw( whiteTexture, new Rectangle( rect.Right, rect.Top, 1, rect.Height + 1 ), Color.White );
+                batch.Draw(_debugOutline, new Rectangle(rect.Left, rect.Top, rect.Width, 1), Color.White);
+                batch.Draw(_debugOutline, new Rectangle(rect.Left, rect.Bottom, rect.Width, 1), Color.White);
+                batch.Draw(_debugOutline, new Rectangle(rect.Left, rect.Top, 1, rect.Height), Color.White);
+                batch.Draw(_debugOutline, new Rectangle(rect.Right, rect.Top, 1, rect.Height + 1), Color.White);
             }
 
             if (Animations?.CurrentAnimation != null)
