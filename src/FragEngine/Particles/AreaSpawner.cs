@@ -31,7 +31,7 @@ namespace FragEngine.Particles
         }
 
         [DataMember]
-        public Particle ParticleOptions { get; set; }
+        public ParticleOptions ParticleOptions { get; set; }
 
         [DataMember]
         public float SpawnDelayTime { get; set; }

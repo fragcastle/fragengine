@@ -39,7 +39,7 @@ namespace FragEngine.Particles
             Bounciness = 0.6f;
             MaxVelocity = new Vector2(320, 320);
             BoundingBox = new HitBox(4, 4);
-            GravityFactor = 4f;
+            GravityFactor = 8f;
             CollisionStyle = GameObjectCollisionStyle.Never;
             CheckAgainstGroup = GameObjectGroup.None;
             Group = GameObjectGroup.None;

@@ -9,18 +9,9 @@ namespace JumpJoy.Entities
 {
     public class Jumper : Player
     {
-
-        private bool _againstWallLeft;
-        private bool _againstWallRight;
-
         private int _jumpCount;
 
-        private int _airAccel = 1250;
-        private int _groundAccel = 2000;
-
-        private int _jumpSpeed = 350;
-
-        private bool _againstWall = false;
+        private Vector2 _speed = new Vector2(1000, 300);
 
         public Jumper()
         {
@@ -28,78 +19,61 @@ namespace JumpJoy.Entities
 
             Name = "Jump";
 
-            MaxVelocity = new Vector2 { X = 300, Y = 450 };
+            Animations = new AnimationSheet(@"Textures\player", 64, 64);
 
-            Animations = new AnimationSheet( @"Textures\player", 64, 64 );
+            Animations.Add("idle", 1f, true, 0, 1);
 
-            Animations.Add( "idle", 1f, true, 0, 1 );
+            Animations.Add("run", 0.07f, true, 12, 13, 14, 15, 16, 17, 18, 19, 20);
 
-            Animations.Add( "run", 0.07f, true, 12, 13, 14, 15, 16, 17, 18, 19, 20 );
-
-            Animations.Add( "jump", 0.09f, false, 21, 22 );
-
-            Animations.Add( "wallSlide", 1f, true, 2 );
+            Animations.Add("jump", 0.09f, false, 21, 22);
 
             Index = PlayerIndex.One;
 
             // our player only has horizontal friction
-            Friction = new Vector2( 2000, 0 );
+            Friction = new Vector2(1000, 100);
+            Acceleration = Vector2.Zero;
+            MaxVelocity = new Vector2(150, 180);
 
-            Settings[ "_feDrawBox" ] = "true";
+            Settings["_feDrawBox"] = "true";
 
             BoundingBox = new HitBox { Height = 64, Width = 64 };
+
+            GravityFactor = 10f;
         }
 
-        public override void Update( GameTime gameTime )
+        public override void Update(GameTime gameTime)
         {
             // we made contact with the ground, reset the jump count
-            if( IsStanding )
+            if (IsStanding)
                 _jumpCount = 0;
 
-            base.Update( gameTime );
-        }
+            GravityFactor = 10f;
 
-        public override void HandleMovementTrace(CollisionCheckResult result)
-        {
-            _againstWall = result.XAxis;
-            base.HandleMovementTrace(result);
+            base.Update(gameTime);
         }
 
         public override void HandleKeyboardInput(KeyboardState keyboard)
         {
-            var left = keyboard.IsKeyDown( Keys.Left );
-            var right = keyboard.IsKeyDown( Keys.Right );
-            var jumped = keyboard.IsKeyDown( Keys.Up );
+            var left = keyboard.IsKeyDown(Keys.Left);
+            var right = keyboard.IsKeyDown(Keys.Right);
+            var jumped = keyboard.IsKeyDown(Keys.Up);
 
-            if( left )
+            if (left)
                 GoLeft();
-            else if( right )
+            else if (right)
                 GoRight();
 
-            if( jumped )
+            if (jumped)
                 Jump();
 
             // time to pick the current animation
-            if( !IsStanding && !jumped && _againstWall && ( left || right ) )
-            {
-                _jumpCount = 0;
-
-                CurrentAnimation = "wallSlide";
-
-                GravityFactor = 1.0f;
-
-                Velocity *= new Vector2( 1, 0.8f );
-            }
-            else
-            {
-                // pick animation based on what the actor is doing
-                if( !IsStanding && Velocity.Y != 0 && !_againstWallRight && !_againstWallLeft )
-                    CurrentAnimation = "jump";
-                else if( Acceleration.X != 0f )
-                    CurrentAnimation = "run";
-                else if( IsStanding && CurrentAnimation != "talking" )
-                    CurrentAnimation = "idle";
-            }
+            // pick animation based on what the actor is doing
+            if (!IsStanding && Velocity.Y != 0)
+                CurrentAnimation = "jump";
+            else if (Velocity.X != 0f)
+                CurrentAnimation = "run";
+            else if (IsStanding)
+                CurrentAnimation = "idle";
         }
 
         public override void HandleGamePadInput(GamePadState gamepad)
@@ -109,34 +83,25 @@ namespace JumpJoy.Entities
 
         private void GoLeft()
         {
-            var accel = IsStanding ? _groundAccel : _airAccel;
-            Acceleration = new Vector2( -accel, Acceleration.Y );
+            Acceleration = Acceleration.SetX(-_speed.X);
             FlipAnimation = true;
         }
 
         private void GoRight()
         {
-            var accel = IsStanding ? _groundAccel : _airAccel;
-            Acceleration = new Vector2( accel, Acceleration.Y );
+            Acceleration = Acceleration.SetX(_speed.X);
             FlipAnimation = false;
         }
 
         private void Jump()
         {
-            if( _jumpCount >= 2 )
+            if (_jumpCount >= 2)
                 return;
 
-            Velocity = new Vector2( Velocity.X, -_jumpSpeed );
+            Velocity = Velocity.SetY(-_speed.Y);
 
-            if( _againstWall )
-            {
-                Velocity = new Vector2( Acceleration.X > 0 ? -500 : 500, Velocity.Y );
-
-                _againstWall = false;
-            }
-
-            if( CurrentAnimation != "jump" )
-                Animations.SetCurrentAnimation( "jump" );
+            if (CurrentAnimation != "jump")
+                Animations.SetCurrentAnimation("jump");
 
             _jumpCount++;
         }

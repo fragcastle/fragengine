@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using Microsoft.Xna.Framework;
 
 namespace FragEngine.Collisions
 {
+    [DataContract]
     public struct HitBox
     {
         public HitBox(float width, float height)
@@ -15,7 +17,10 @@ namespace FragEngine.Collisions
             Height = height;
         }
 
+        [DataMember]
         public float Height { get; set; }
+
+        [DataMember]
         public float Width { get; set; }
 
         public static HitBox operator +( HitBox box, Vector2 vector )

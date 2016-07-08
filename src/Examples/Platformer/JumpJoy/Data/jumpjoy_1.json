@@ -17,6 +17,10 @@
         "SpawnDelayTime": 1,
         "Velocity": "40, 100",
         "SetVelocity": "80, 200",
+        "ParticleOptions": {
+          "Velocity": "20, 50",
+          "SetVelocity": "60, 100",
+        },
         "Settings": {
           "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib"
         }

@@ -53,8 +53,8 @@ namespace FragEngine.Entities
         {
             foreach (var pair in settings)
             {
-                var propInfo = typeof (GameObject).GetProperty(pair.Key);
-                if (propInfo.CanWrite)
+                var propInfo = gameObject.GetType().GetProperty(pair.Key);
+                if (propInfo.CanWrite && pair.Value != null)
                 {
                     propInfo.SetValue(gameObject, pair.Value);
                 }
@@ -114,6 +114,12 @@ namespace FragEngine.Entities
             GameObjects.Remove(go);
 
             go = null;
+        }
+
+        public void CleanUp()
+        {
+            var deadObjects = GameObjects.Where(go => !go.IsAlive);
+            deadObjects.ToList().ForEach(RemoveGameObject);
         }
 
         public GameObject GetGameObjectByName(string name)

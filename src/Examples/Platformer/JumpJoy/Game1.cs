@@ -39,7 +39,7 @@ namespace JumpJoy
 
             ScreenManager.AddScreen( new JumpPlayScreen( null ) );
 
-            Gravity = GRAVITY_CONSTANT;
+            Gravity = 90;
         }
 
         /// <summary>

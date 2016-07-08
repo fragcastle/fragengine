@@ -259,8 +259,7 @@ namespace FragEngine.Entities
             // by default, gravity will affect entities
             GravityFactor = 1f;
 
-            // entities are moved by changing the acceleration vector...
-            Acceleration = Vector2.Zero;
+            ExternalAcceleration = ExternalFriction = Acceleration = Friction = Vector2.Zero;
 
             CollisionService = collisionService ?? ServiceLocator.Get<ICollisionService>();
         }
@@ -292,7 +291,7 @@ namespace FragEngine.Entities
             get
             {
                 var val = String.Empty;
-                if (Animations.CurrentAnimation != null)
+                if (Animations?.CurrentAnimation != null)
                     val = Animations.CurrentAnimation.Name;
                 return val;
             }
@@ -374,7 +373,7 @@ namespace FragEngine.Entities
         [IgnoreDataMember]
         public bool IgnoreCollisions { get; set; }
 
-        [IgnoreDataMember]
+        [DataMember]
         public HitBox BoundingBox { get; set; }
 
         [IgnoreDataMember]

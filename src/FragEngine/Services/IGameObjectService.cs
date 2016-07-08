@@ -22,5 +22,7 @@ namespace FragEngine.Services
         void AttachGameObjects(params GameObject[] gameObjects);
 
         void RemoveGameObject(GameObject go);
+
+        void CleanUp();
     }
 }

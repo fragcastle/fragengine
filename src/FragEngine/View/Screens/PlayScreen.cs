@@ -129,6 +129,8 @@ namespace FragEngine.View.Screens
                 }
             }
 
+            _gameObjectService.CleanUp();
+
             base.Update( gameTime, otherScreenHasFocus, coveredByOtherScreen );
         }
     }
