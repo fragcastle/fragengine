@@ -21,9 +21,6 @@ namespace FragEngine.Entities
 
         public override void Update( GameTime gameTime )
         {
-            // zero out the acceleration
-            Acceleration = Vector2.Zero;
-
             if( inputState != null )
             {
                 inputState.Update();
