@@ -98,8 +98,16 @@ namespace FragEngine
 
         protected override void Initialize()
         {
+#if !DEBUG
+            Graphics.IsFullScreen = true;
+            Graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            Graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            Graphics.PreferMultiSampling = false;
+#else
             Graphics.PreferredBackBufferWidth = 1280;
             Graphics.PreferredBackBufferHeight = 720;
+            IsDebug = true;
+#endif
 
             Graphics.ApplyChanges();
 
@@ -116,15 +124,6 @@ namespace FragEngine
 
             if (!ServiceLocator.Has<ICollisionService>())
                 ServiceLocator.Add<ICollisionService>(new CollisionService());
-
-#if !DEBUG
-            Graphics.IsFullScreen = true;
-            Graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            Graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-            Graphics.PreferMultiSampling = false;
-#else
-            IsDebug = true;
-#endif
 
             // TODO: GGGGGGGGAAAAAAAAAAAAAAAAAHHHHHHHHH WE'RE IO BOUND IN A CTOR!!!!!!!!!!!!!!!!!! FFFFFFFFFFFFFUUUUUUUUUUUUUUUUUUUUUUU
             // ContentCacheManager must be loaded first, this will scan
