@@ -25,6 +25,8 @@ namespace FragEngine.Entities
 
         private IDictionary<string, string> _settings = new Dictionary<string, string>();
 
+        private readonly Guid _id = Guid.NewGuid();
+
         public static void SeperateOnYAxis(GameObject top, GameObject bottom, GameObject weak)
         {
             float nudge = (top.Position.Y + top.BoundingBox.Height - bottom.Position.Y);
@@ -110,7 +112,7 @@ namespace FragEngine.Entities
             if (weak != null)
             {
                 var strong = left == weak ? right : left;
-                weak.Velocity = weak.Velocity.SetX(weak.Velocity.X * weak.Bounciness + strong.Velocity.X);
+                weak.Velocity = weak.Velocity.SetX(-weak.Velocity.X * weak.Bounciness + strong.Velocity.X);
 
                 var resWeak = collisionService.Check(
                     weak.Position,
@@ -223,8 +225,6 @@ namespace FragEngine.Entities
             // If this pair allows collision, solve it! At least one entity must
             // collide ACTIVE or FIXED, while the other one must not collide NEVER.
             if (
-                a.CollisionStyle != GameObjectCollisionStyle.Never &&
-                b.CollisionStyle != GameObjectCollisionStyle.Never &&
                 (int)a.CollisionStyle + (int)b.CollisionStyle > (int)GameObjectCollisionStyle.Active
             )
             {
@@ -266,6 +266,9 @@ namespace FragEngine.Entities
 
             CollisionService = collisionService ?? ServiceLocator.Get<ICollisionService>();
         }
+
+        [IgnoreDataMember]
+        public Guid Id => _id;
 
         [DataMember]
         public string Name { get; set; }
@@ -559,12 +562,13 @@ namespace FragEngine.Entities
 
         public bool Touches(GameObject other)
         {
-            return !(
+            var result = !(
                 Position.X >= other.Position.X + other.BoundingBox.Width ||
-                Position.X + BoundingBox.Width <= Position.X ||
+                Position.X + BoundingBox.Width <= other.Position.X ||
                 Position.Y >= other.Position.Y + other.BoundingBox.Height ||
                 Position.Y + BoundingBox.Height <= other.Position.Y
             );
+            return result;
         }
 
         public float DistanceTo(GameObject gameObject)

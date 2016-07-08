@@ -56,7 +56,7 @@ namespace FragEngine.Particles
                     var x = Utility.RndRange(Position.X, Position.X + BoundingBox.Width);
                     var y = Utility.RndRange(Position.Y, Position.Y + BoundingBox.Height);
 
-                    _gameObjectService.SpawnGameObject<Particle>(new Vector2(x, y), ParticleOptions);
+                    // _gameObjectService.SpawnGameObject<Particle>(new Vector2(x, y), ParticleOptions);
                 }
                 SpawnDelay.Reset();
             }

@@ -16,6 +16,8 @@ namespace JumpJoy.Entities
         public Jumper()
         {
             Group = GameObjectGroup.A;
+            CheckAgainstGroup = GameObjectGroup.B;
+            CollisionStyle = GameObjectCollisionStyle.Passive;
 
             Name = "Jump";
 

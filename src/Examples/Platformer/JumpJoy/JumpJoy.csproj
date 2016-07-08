@@ -41,6 +41,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Entities\Crate.cs" />
     <Compile Include="Entities\Jumper.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Program.cs" />
@@ -72,6 +73,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icon.ico" />
+    <EmbeddedResource Include="Resources\crate.png" />
     <EmbeddedResource Include="Resources\rock.png" />
   </ItemGroup>
   <ItemGroup>

@@ -24,7 +24,7 @@ namespace JumpJoy
         public Game1()
             : base()
         {
-            ClearColor = Color.CornflowerBlue;
+            ClearColor = Color.Black;
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace JumpJoy
         {
             base.Initialize();
 
-            ScreenManager.AddScreen( new JumpPlayScreen( null ) );
+            ScreenManager.AddScreen( new JumpPlayScreen() );
 
             Gravity = 90;
         }

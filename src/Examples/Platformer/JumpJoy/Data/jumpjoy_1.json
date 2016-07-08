@@ -11,6 +11,13 @@
         }
       },
       {
+        "$type": "JumpJoy.Entities.Crate, JumpJoy",
+        "Position": "173, 253",
+        "Settings": {
+          "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib"
+        }
+      },
+      {
         "$type": "FragEngine.Particles.AreaSpawner, FragEngine",
         "Position": "93, 253",
         "Particles": 20,

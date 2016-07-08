@@ -17,12 +17,6 @@ namespace JumpJoy.Screens
 {
     public class JumpPlayScreen : PlayScreen
     {
-        public JumpPlayScreen( Hud hud )
-            : base( hud )
-        {
-
-        }
-
         public override void Initialize()
         {
             base.Initialize();
