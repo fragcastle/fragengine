@@ -148,6 +148,8 @@ namespace FragEngine.View.Screens
 
         public override void Draw( GameTime gameTime )
         {
+            _camera.Update();
+
             foreach (Layer layer in _layers)
             {
                 layer.Alpha = TransitionAlpha;
