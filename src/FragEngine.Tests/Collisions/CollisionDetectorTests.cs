@@ -1,23 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
+﻿using System.Collections.Generic;
 using FragEngine.Collisions;
-using FragEngine.Services;
 using Microsoft.Xna.Framework;
-using Xunit;
-
 using Should;
+using Xunit;
 
 namespace FragEngine.Tests.Collisions
 {
     public class CollisionDetectorTests
     {
 
-        private Vector2 _startPosition = new Vector2( 100, 100 );
-        private Vector2 _smallVelocity = new Vector2( 5, 5 ); // diagonal velocity
-        private Vector2 _size = new Vector2( 64, 64 );
+        private readonly Vector2 _startPosition = new Vector2( 100, 100 );
+        private readonly Vector2 _smallVelocity = new Vector2( 5, 5 ); // diagonal velocity
+        private readonly Vector2 _size = new Vector2( 64, 64 );
 
 
         [Fact]

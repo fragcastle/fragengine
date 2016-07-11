@@ -9,6 +9,8 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Storage;
+using MonoGame.Extended.Maps.Tiled;
+
 #endregion
 
 namespace JumpJoy
@@ -20,6 +22,8 @@ namespace JumpJoy
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+
+        public static TiledMap Map;
 
         public Game1()
             : base()
@@ -36,7 +40,7 @@ namespace JumpJoy
         protected override void Initialize()
         {
             base.Initialize();
-
+            Map = Content.Load<TiledMap>("Levels/example1");
             ScreenManager.AddScreen( new JumpPlayScreen() );
 
             Gravity = 90;

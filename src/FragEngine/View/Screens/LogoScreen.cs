@@ -1,6 +1,6 @@
 ﻿using System;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace FragEngine.View.Screens
@@ -16,7 +16,7 @@ namespace FragEngine.View.Screens
         float timer = 0f;
 
         private Texture2D _logoTexture;
-        private string _texturePath;
+        private readonly string _texturePath;
 
         public LogoScreen(  string logoFilePath )
         {

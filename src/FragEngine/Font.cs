@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -28,7 +25,7 @@ namespace FragEngine
         public float Height { get; set; }
         public List<float> Indices { get; set; }
 
-        public Texture2D FontTexture { get; private set; }
+        public Texture2D FontTexture { get; }
 
         public Font(string texturePath) : this(ContentCacheManager.GetTextureFromResource(texturePath))
         {

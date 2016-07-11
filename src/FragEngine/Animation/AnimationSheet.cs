@@ -1,14 +1,14 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
 
 namespace FragEngine.Animation
 {
     public class AnimationSheet
     {
         private string _currentAnimationKey;
-        private Dictionary<string, Animation> _animations;
+        private readonly Dictionary<string, Animation> _animations;
 
         private string _texturePath;
 
@@ -47,9 +47,9 @@ namespace FragEngine.Animation
             SpriteSheet = spriteSheet;
         }
 
-        public Texture2D SpriteSheet { get; private set; }
+        public Texture2D SpriteSheet { get; }
 
-        public Vector2 FrameSize { get; private set; }
+        public Vector2 FrameSize { get; }
 
         public int TotalFrames
         {

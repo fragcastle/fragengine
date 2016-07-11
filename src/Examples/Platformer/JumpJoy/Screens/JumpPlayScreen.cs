@@ -4,10 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using FragEngine.Data;
-using FragEngine.Entities;
+using FragEngine.GameObjects;
 using FragEngine.Services;
 using FragEngine.View;
 using FragEngine.View.Screens;
+using FragEngine.View.Screens.Play;
 using JumpJoy.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -21,9 +22,7 @@ namespace JumpJoy.Screens
         {
             base.Initialize();
 
-            // load the level
-
-            LoadLevel("jumpjoy_1");
+            // TODO: load the level
 
             var jump = ServiceLocator.Get<IGameObjectService>().GetGameObjectByName("Jump");
 
@@ -36,7 +35,7 @@ namespace JumpJoy.Screens
             camera.Offset = new Vector2(48, 256);
 
             // tell XNA not to apply any texture filtering to our sprites
-            _layers.ForEach(l => l.SamplerState = SamplerState.PointWrap);
+            Layers.ForEach(l => l.SamplerState = SamplerState.PointWrap);
         }
 
         // just a quick and dirty example to show off the camera zoom :D

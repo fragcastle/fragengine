@@ -35,6 +35,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MonoGame.Extended, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MonoGame.Extended.0.5.149\lib\MonoGame.Extended.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MonoGame.Framework, Version=3.5.1.1679, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\MonoGame.Framework.WindowsDX.3.5.1.1679\lib\net40\MonoGame.Framework.dll</HintPath>
       <Private>True</Private>
@@ -60,31 +64,62 @@
     <Compile Include="Collisions\HitBox.cs" />
     <Compile Include="Collisions\CollisionTypes.cs" />
     <Compile Include="ContentCacheManager.cs" />
+    <Compile Include="Content\ContentCache.cs" />
+    <Compile Include="Content\ContentImporter.cs" />
+    <Compile Include="Content\ContentCacheLoader.cs" />
+    <Compile Include="Content\FileImporter.cs" />
+    <Compile Include="Content\FontImporter.cs" />
+    <Compile Include="Content\TextureImporter.cs" />
     <Compile Include="Data\Level.cs" />
     <Compile Include="Debug\DebugDecoration.cs" />
     <Compile Include="Debug\FpsCounter.cs" />
-    <Compile Include="Entities\GameObject.cs" />
-    <Compile Include="Entities\GameObjectService.cs" />
-    <Compile Include="Entities\GameObjectCollisionType.cs" />
-    <Compile Include="Entities\GameObjectGroup.cs" />
-    <Compile Include="Entities\HudBase.cs" />
-    <Compile Include="Entities\Player.cs" />
-    <Compile Include="Entities\Void.cs" />
+    <Compile Include="GameObjects\GameObject.cs" />
+    <Compile Include="GameObjects\GameObjectService.cs" />
+    <Compile Include="GameObjects\GameObjectCollisionType.cs" />
+    <Compile Include="GameObjects\GameObjectGroup.cs" />
+    <Compile Include="GameObjects\HudBase.cs" />
+    <Compile Include="GameObjects\Player.cs" />
+    <Compile Include="GameObjects\Void.cs" />
+    <Compile Include="Extensions\ContentManagerExtensions.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\GameTimeExtensions.cs" />
+    <Compile Include="Extensions\SpriteBatchExtensions.cs" />
     <Compile Include="Extensions\Texture2DExtensions.cs" />
     <Compile Include="Extensions\Vector2Extensions.cs" />
     <Compile Include="Font.cs" />
     <Compile Include="FragEngineGame.cs" />
     <Compile Include="InputState.cs" />
-    <Compile Include="IO\DiskStorage.cs" />
-    <Compile Include="Layers\EntityLayer.cs" />
+    <Compile Include="GameObjects\GameObjectLayer.cs" />
     <Compile Include="Layers\StaticLayer.cs" />
     <Compile Include="Collisions\CollisionCheckResult.cs" />
     <Compile Include="Collisions\CollisionDetector.cs" />
     <Compile Include="Collisions\CollisionMap.cs" />
     <Compile Include="Collisions\CollisionService.cs" />
-    <Compile Include="Data\Map.cs" />
+    <Compile Include="Logger.cs" />
+    <Compile Include="Maps\MapDataDictionary.cs" />
+    <Compile Include="Maps\MapConfiguration.cs" />
+    <Compile Include="Maps\MapLayer.cs" />
+    <Compile Include="Maps\Tiled\Data\TmxData.cs" />
+    <Compile Include="Maps\Tiled\Data\TmxDataTile.cs" />
+    <Compile Include="Maps\Tiled\Data\TmxEllipse.cs" />
+    <Compile Include="Maps\Tiled\Data\TmxFrame.cs" />
+    <Compile Include="Maps\Tiled\Data\TmxImage.cs" />
+    <Compile Include="Maps\Tiled\Data\TmxImageLayer.cs" />
+    <Compile Include="Maps\Tiled\Data\TmxLayer.cs" />
+    <Compile Include="Maps\Tiled\Data\TmxMap.cs" />
+    <Compile Include="Maps\Tiled\Data\TmxObject.cs" />
+    <Compile Include="Maps\Tiled\Data\TmxObjectGroup.cs" />
+    <Compile Include="Maps\Tiled\Data\TmxOrientation.cs" />
+    <Compile Include="Maps\Tiled\Data\TmxPolygon.cs" />
+    <Compile Include="Maps\Tiled\Data\TmxPolyline.cs" />
+    <Compile Include="Maps\Tiled\Data\TmxProperty.cs" />
+    <Compile Include="Maps\Tiled\Data\TmxRenderOrder.cs" />
+    <Compile Include="Maps\Tiled\Data\TmxTerrain.cs" />
+    <Compile Include="Maps\Tiled\Data\TmxTile.cs" />
+    <Compile Include="Maps\Tiled\Data\TmxTileLayer.cs" />
+    <Compile Include="Maps\Tiled\Data\TmxTileOffset.cs" />
+    <Compile Include="Maps\Tiled\Data\TmxTileSet.cs" />
+    <Compile Include="Maps\Tiled\TiledMapImporter.cs" />
     <Compile Include="Particles\AreaSpawner.cs" />
     <Compile Include="Particles\Particle.cs" />
     <Compile Include="Particles\ParticleOptions.cs" />
@@ -102,16 +137,14 @@
     <Compile Include="TypedVector2.cs" />
     <Compile Include="Utility.cs" />
     <Compile Include="View\Camera.cs" />
-    <Compile Include="Layers\CollisionLayer.cs" />
     <Compile Include="Layers\Layer.cs" />
     <Compile Include="View\Screens\Decoration.cs" />
     <Compile Include="View\Screens\FragEngineLogoScreen.cs" />
     <Compile Include="View\Screens\GameScreenBase.cs" />
     <Compile Include="View\Screens\MenuScreenBase.cs" />
     <Compile Include="View\Screens\LogoScreen.cs" />
-    <Compile Include="View\Screens\PlayScreen.cs" />
+    <Compile Include="View\Screens\Play\PlayScreen.cs" />
     <Compile Include="View\Screens\ScreenManager.cs" />
-    <Compile Include="Layers\MapLayer.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
-using FragEngine.Properties;
 using FragEngine.Services;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Content;
-using System.IO;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
+using MonoGame.Extended.Maps.Tiled;
 
 namespace FragEngine
 {
@@ -24,6 +23,8 @@ namespace FragEngine
         private static Dictionary<string, SoundEffect> SoundCache { get; set; }
 
         private static Dictionary<string, Song> SongCache { get; set; }
+
+        private static Dictionary<string, TiledMap> LevelCache { get; set; } 
 
         private static List<DirectoryInfo> _contentDirectories;
 
@@ -67,6 +68,8 @@ namespace FragEngine
             SoundCache = contentManager.LoadContent<SoundEffect>(dir);
 
             SongCache = contentManager.LoadContent<Song>(dir);
+
+            LevelCache = contentManager.LoadContent<TiledMap>(dir);
         }
 
         public static Font GetFont(string path)
@@ -133,6 +136,14 @@ namespace FragEngine
             return sound;
         }
 
+        public static TiledMap GetLevel(string path)
+        {
+            path = NormalizePath(path);
+            TiledMap level = null;
+            LevelCache.TryGetValue(path, out level);
+            return level;
+        }
+
         public static Dictionary<String, T> LoadContent<T>(this ContentManager contentManager, DirectoryInfo directory)
         {
             if (String.IsNullOrWhiteSpace(contentManager.RootDirectory))
@@ -149,7 +160,7 @@ namespace FragEngine
 
             // contentCacheManager, because it's evil, requires a relative path
             var contentDirectory = new Uri(dirPath);
-            var currentDirectory = new Uri(AppDomain.CurrentDomain.BaseDirectory);
+            var currentDirectory = new Uri(AppDomain.CurrentDomain.BaseDirectory + "\\");
 
             var relativeContentDirectory = currentDirectory.MakeRelativeUri(contentDirectory);
 
@@ -169,7 +180,8 @@ namespace FragEngine
                     {typeof (Texture2D), "Textures"},
                     {typeof (SoundEffect), "Sounds"},
                     {typeof (SpriteFont), "Fonts"},
-                    {typeof (Song), "Songs"}
+                    {typeof (Song), "Songs"},
+                    {typeof (TiledMap), "Levels"}
                 };
 
             return types[typeof(T)];
@@ -187,18 +199,28 @@ namespace FragEngine
                 FileInfo[] files = dir.GetFiles("*.*", SearchOption.AllDirectories);
                 foreach (FileInfo file in files)
                 {
-                    var pathToFile = file.Directory.ToString() + "\\" + Path.GetFileNameWithoutExtension(file.Name);
-                    if (File.Exists(pathToFile + ".xnb"))
+                    var pathToFile = file.Directory + "\\" + Path.GetFileName(file.Name);
+                    if (File.Exists(pathToFile))
                     {
-                        var loadPath = pathToFile.Substring(pathToFile.IndexOf(contentFolder)).Replace("\\", "/");
-                        var key = NormalizePath(pathToFile.Substring(pathToFile.IndexOf(contentFolder)));
-
-                        result[key] = contentManager.Load<T>(loadPath);
+                        var sub = RemoveExtension(pathToFile.Substring(pathToFile.IndexOf(contentFolder)));
+                        var key = NormalizePath(sub);
+                        if (!sub.Contains("Levels"))
+                            result[key] = contentManager.Load<T>(Slash(sub));
                     }
                 }
             }
 
             return result;
+        }
+
+        private static string RemoveExtension(string path)
+        {
+            return path.Substring(0, path.LastIndexOf("."));
+        }
+
+        private static string Slash(string path)
+        {
+            return path.Replace("\\", "/");
         }
 
         private static string NormalizePath(string path)

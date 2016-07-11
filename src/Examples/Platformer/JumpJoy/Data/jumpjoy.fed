@@ -1,1 +1,6 @@
-{"$type":"FragEd.Data.ProjectConfiguration, FragEd","GameAssemblies":{"$type":"System.Linq.Enumerable+<DistinctIterator>d__81`1[[System.String, mscorlib]], System.Core","$values":["C:\\Users\\jared\\Src\\fragcastle\\fragengine\\src\\Examples\\Platformer\\JumpJoy.Entities\\bin\\Debug\\JumpJoy.Entities.dll"]},"GameLevels":{"$type":"System.Linq.Enumerable+WhereSelectListIterator`2[[FragEngine.Data.Level, FragEngine],[System.String, mscorlib]], System.Core","$values":["C:\\Users\\jared\\Src\\fragcastle\\fragengine\\src\\Examples\\Platformer\\JumpJoy\\Data\\jumpjoy_1.json"]},"GameContent":{"$type":"System.Linq.Enumerable+WhereSelectListIterator`2[[System.IO.DirectoryInfo, mscorlib],[System.String, mscorlib]], System.Core","$values":["C:\\Users\\jared\\Src\\fragcastle\\fragengine\\src\\Examples\\Platformer\\JumpJoy\\Content"]}}
+{
+    "$type": "FragEd.Data.ProjectConfiguration, FragEd",
+    "GameAssemblies": ["C:\\Users\\jared\\src\\fragengine\\src\\Examples\\Platformer\\JumpJoy\\bin\\WindowsGL\\Debug\\JumpJoy.exe"],
+    "GameLevels": ["C:\\Users\\jared\\src\\fragengine\\src\\Examples\\Platformer\\JumpJoy\\Data\\jumpjoy_1.json"],
+    "GameContent": ["C:\\Users\\jared\\src\\fragengine\\src\\Examples\\Platformer\\JumpJoy\\Content"]
+}

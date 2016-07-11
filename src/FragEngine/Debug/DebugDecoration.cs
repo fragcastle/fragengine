@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FragEngine.Services;
+﻿using FragEngine.Services;
 using FragEngine.View;
 using FragEngine.View.Screens;
 using Microsoft.Xna.Framework;
@@ -15,8 +10,8 @@ namespace FragEngine.Debug
     {
         private readonly FpsCounter _frameCounter = new FpsCounter();
         private readonly IGameObjectService _gameObjectService;
-        private SpriteBatch _spriteBatch;
-        private Font _font;
+        private readonly SpriteBatch _spriteBatch;
+        private readonly Font _font;
 
         public DebugDecoration(IGameObjectService gameObjectService = null)
         {

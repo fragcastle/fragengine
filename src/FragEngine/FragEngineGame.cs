@@ -1,20 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Design;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FragEngine.Collisions;
+using FragEngine.Content;
 using FragEngine.Debug;
-using FragEngine.Entities;
+using FragEngine.GameObjects;
+using FragEngine.Maps.Tiled;
 using FragEngine.Services;
 using FragEngine.View;
 using FragEngine.View.Screens;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
-using Newtonsoft.Json;
+using Microsoft.Xna.Framework.Input;
 
 namespace FragEngine
 {
@@ -27,11 +24,8 @@ namespace FragEngine
         public const float GRAVITY_CONSTANT = 613f;
 
         public static GraphicsDeviceManager Graphics;
-        public static Matrix SpriteScale { get; protected set; }
 
         public static ScreenManager ScreenManager { get; private set; }
-
-        public static DirectoryInfo DataDirectory { get; private set; }
 
         /// <summary>
         /// Set this to true to enable debug in the engine
@@ -40,11 +34,6 @@ namespace FragEngine
         /// This will cause the CollisionLayer for a level to be drawn
         /// </remarks>
         public static bool IsDebug { get; set; }
-
-        /// <summary>
-        /// Affects the size of sprites when they are rendered to the <see cref="GraphicsDevice"/>
-        /// </summary>
-        public static float Scale { get; set; }
 
         /// <summary>
         /// The gravitational constant of your game.
@@ -67,26 +56,14 @@ namespace FragEngine
         static FragEngineGame()
         {
             Gravity = 0f; // default to no gravity
-
-            Scale = 1.2f;
-
             TimeScale = 1f;
         }
 
         public FragEngineGame()
         {
-            // TODO: figure out a way to change this to use the IGraphicsDeviceManager interface
-            // FIXME: this is fucked. In DIRECTX versions of this code, we _must_ instantiate GraphicsDeviceManager
-            // in the initialize, but in OPENGL versions we have to do it here (check the code in Game.cs)
-            // it throws an exception if GraphicsDevice is null???? WHAT THE FUCK!?!?!?
             Graphics = new GraphicsDeviceManager(this);
-
             Graphics.CreateDevice();
-
             Content.RootDirectory = "Content";
-
-            DataDirectory = new DirectoryInfo( Path.Combine( Directory.GetCurrentDirectory(), "Data" ) );
-
             ClearColor = Color.White;
         }
 
@@ -111,7 +88,32 @@ namespace FragEngine
 
             Graphics.ApplyChanges();
 
+            SetupServices();
+
+            // set our resolution into the viewport, otherwise camera calculations will be fucked.
+            GraphicsDevice.Viewport = new Viewport( 0, 0, Graphics.PreferredBackBufferWidth, Graphics.PreferredBackBufferHeight );
+
+            base.Initialize();
+            
+            // TODO: in DIRECTX versions we'll have to do this in initialize...
+            // maybe move this code there now?
+            ScreenManager = new ScreenManager(this);
+            Components.Add(ScreenManager);
+        }
+
+        protected virtual void SetupServices()
+        {
             ServiceLocator.Apply(Services);
+
+            var contentCache = new ContentCache();
+            var contentCacheLoader = new ContentCacheLoader(contentCache, Content);
+
+            if (!ServiceLocator.Has<IReadableContentCache>())
+                ServiceLocator.Add<IReadableContentCache>(contentCache);
+            if (!ServiceLocator.Has<IWriteableContentCache>())
+                ServiceLocator.Add<IWriteableContentCache>(contentCache);
+            if (!ServiceLocator.Has<ContentCacheLoader>())
+                ServiceLocator.Add(contentCacheLoader);
 
             if (!ServiceLocator.Has<GraphicsDevice>())
                 ServiceLocator.Add(Graphics.GraphicsDevice);
@@ -124,24 +126,16 @@ namespace FragEngine
 
             if (!ServiceLocator.Has<ICollisionService>())
                 ServiceLocator.Add<ICollisionService>(new CollisionService());
+        }
 
-            // TODO: GGGGGGGGAAAAAAAAAAAAAAAAAHHHHHHHHH WE'RE IO BOUND IN A CTOR!!!!!!!!!!!!!!!!!! FFFFFFFFFFFFFUUUUUUUUUUUUUUUUUUUUUUU
-            // ContentCacheManager must be loaded first, this will scan
-            // every directory in the content project and load all of the
-            // content into a cache
-            ContentCacheManager.LoadContent(Content);
-
-            // TODO: in DIRECTX versions we'll have to do this in initialize...
-            // maybe move this code there now?
-            ScreenManager = new ScreenManager(this);
-            Components.Add(ScreenManager);
-
-            // set our resolution into the viewport, otherwise camera calculations will be fucked.
-            GraphicsDevice.Viewport = new Viewport( 0, 0, Graphics.PreferredBackBufferWidth, Graphics.PreferredBackBufferHeight );
-
-            SetSpriteScale();
-
-            base.Initialize();
+        protected override void LoadContent()
+        {
+            var loader = ServiceLocator.Get<ContentCacheLoader>();
+            loader.RegisterImporter(new FontImporter());
+            loader.RegisterImporter(new TextureImporter());
+            loader.RegisterImporter(new TiledMapImporter());
+            loader.LoadContent();
+            base.LoadContent();
         }
 
         protected override void Update( GameTime gameTime )
@@ -154,7 +148,7 @@ namespace FragEngine
                 Exit();
 
             // Check to see if the user has paused or unpaused
-            checkPauseKey( Keyboard.GetState(), GamePad.GetState( PlayerIndex.One ) );
+            CheckPauseKey( Keyboard.GetState(), GamePad.GetState( PlayerIndex.One ) );
 
             Tick = gameTime.GetGameTick();
 
@@ -189,13 +183,6 @@ namespace FragEngine
             return new GameTime( new TimeSpan( 0, 0, 0, 0, (int)totalTime ), new TimeSpan( 0, 0, 0, 0, (int)adjustedMsDelta ), gameTime.IsRunningSlowly );
         }
 
-        private void SetSpriteScale()
-        {
-            // Create the scale transform for Draw.
-            // Do not scale the sprite depth (Z=1).
-            SpriteScale = Matrix.CreateScale( Scale, Scale, 1 );
-        }
-
         private void BeginPause( bool UserInitiated )
         {
             IsPaused = true;
@@ -212,7 +199,7 @@ namespace FragEngine
             IsPaused = false;
         }
 
-        private void checkPauseKey( KeyboardState keyboardState, GamePadState gamePadState )
+        private void CheckPauseKey( KeyboardState keyboardState, GamePadState gamePadState )
         {
             bool pauseKeyDownThisFrame = ( keyboardState.IsKeyDown( Keys.P ) || ( gamePadState.Buttons.Start == ButtonState.Pressed ) );
             // If key was not down before, but is down now, we toggle the

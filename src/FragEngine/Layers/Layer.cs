@@ -1,30 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
-using FragEngine.Services;
+﻿using FragEngine.Services;
 using FragEngine.View;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using FragEngine.Entities;
 
 namespace FragEngine.Layers
 {
-
-    [DataContract]
-    public class Layer
+    public abstract class Layer
     {
         protected bool _initialized;
 
-        [DataMember]
+        public int Order { get; set; }
+
         public virtual string Name { get; set; }
 
-        [DataMember]
         public Vector2 Parallax { get; set; }
 
-        [IgnoreDataMember]
-        public Action<SpriteBatch> DrawMethod;
-
-        [IgnoreDataMember]
         public SamplerState SamplerState { get; set; }
 
         public float Alpha { get; set; }
@@ -51,7 +41,17 @@ namespace FragEngine.Layers
             // children can override this
         }
 
-        public virtual void Draw( SpriteBatch spriteBatch )
+        public virtual void BeginDraw(SpriteBatch spriteBatch)
+        {
+            var camera = ServiceLocator.Get<Camera>();
+
+            if (camera != null)
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState, null, null, null, camera.GetViewMatrix(Parallax));
+            else
+                spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState, null, null);
+        }
+
+        public void Draw( SpriteBatch spriteBatch )
         {
             if( !_initialized )
             {
@@ -59,16 +59,15 @@ namespace FragEngine.Layers
                 _initialized = true;
             }
 
-            var _camera = ServiceLocator.Get<Camera>();
+            BeginDraw(spriteBatch);
+            CustomDraw(spriteBatch);
+            EndDraw(spriteBatch);
+        }
 
-            if( _camera != null )
-                spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState, null, null, null, _camera.GetViewMatrix( Parallax ) );
-            else
-                spriteBatch.Begin( SpriteSortMode.Deferred, null, SamplerState, null, null );
+        public abstract void CustomDraw(SpriteBatch spriteBatch);
 
-            if( DrawMethod != null )
-                DrawMethod( spriteBatch );
-
+        public virtual void EndDraw( SpriteBatch spriteBatch )
+        {
             spriteBatch.End();
         }
 

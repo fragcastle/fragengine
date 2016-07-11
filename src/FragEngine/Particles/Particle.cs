@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using FragEngine.Animation;
 using FragEngine.Collisions;
-using FragEngine.Entities;
+using FragEngine.GameObjects;
 using FragEngine.Services;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -23,7 +18,7 @@ namespace FragEngine.Particles
 
     public class Particle : GameObject
     {
-        private static Dictionary<Color, Texture2D[]> _cache = new Dictionary<Color, Texture2D[]>();
+        private static readonly Dictionary<Color, Texture2D[]> _cache = new Dictionary<Color, Texture2D[]>();
         public Color[] Colors { get; set; }
 
         public Vector2? AbsoluteVelocity { get; set; }

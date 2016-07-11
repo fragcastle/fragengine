@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -18,13 +16,13 @@ namespace FragEngine.View.Screens
     /// </remarks>
     public class ScreenManager : DrawableGameComponent
     {
-        private List<GameScreenBase> screens = new List<GameScreenBase>();
-        private List<GameScreenBase> screensToUpdate = new List<GameScreenBase>();
-        private List<GameScreenBase> screensToDraw = new List<GameScreenBase>();
+        private readonly List<GameScreenBase> screens = new List<GameScreenBase>();
+        private readonly List<GameScreenBase> screensToUpdate = new List<GameScreenBase>();
+        private readonly List<GameScreenBase> screensToDraw = new List<GameScreenBase>();
 
-        private InputState input = new InputState(PlayerIndex.One); // by default, player one controls menus
+        private readonly InputState input = new InputState(PlayerIndex.One); // by default, player one controls menus
 
-        private IGraphicsDeviceService graphicsDeviceService;
+        private readonly IGraphicsDeviceService graphicsDeviceService;
 
         private SpriteBatch _spriteBatch;
         private SpriteFont _font;

@@ -1,10 +1,10 @@
-﻿using FragEngine.Data;
+﻿using FragEngine.Maps;
 
 namespace FragEngine.Collisions
 {
     public class CollisionMap
     {
-        private bool _isEmpty;
+        private readonly bool _isEmpty;
 
         public static CollisionMap Empty
         {
@@ -14,9 +14,9 @@ namespace FragEngine.Collisions
             }
         }
 
-        public Map MapData;
+        public MapDataDictionary MapData { get; set; }
 
-        public int TileSize;
+        public int TileSize { get; set; }
 
         public bool IsEmpty 
         { 
@@ -26,17 +26,17 @@ namespace FragEngine.Collisions
             }
         }
 
-        public CollisionMap( Level level )
+        public CollisionMap(MapDataDictionary collisionMap, int tileSize)
         {
-            MapData = level.CollisionLayer.MapData;
-            TileSize = level.CollisionLayer.TileSize;
+            MapData = collisionMap;
+            TileSize = tileSize;
         }
 
         // private initializer for an "empty" collision map
         private CollisionMap()
         {
             _isEmpty = true;
-            MapData = new Map() { Data = new int[800], Width = 80 };
+            MapData = new MapDataDictionary() { Data = new int[800], Width = 80 };
             TileSize = 16;
 
             for( int i = 0; i < MapData.Data.Length; i++ )

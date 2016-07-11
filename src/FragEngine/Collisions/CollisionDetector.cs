@@ -1,5 +1,5 @@
 ﻿using System;
-using FragEngine.Entities;
+using FragEngine.GameObjects;
 using Microsoft.Xna.Framework;
 
 namespace FragEngine.Collisions
@@ -8,7 +8,7 @@ namespace FragEngine.Collisions
     {
 
         private GameObject _gameObject;
-        private CollisionMap _map;
+        private readonly CollisionMap _map;
 
         private Vector2 _positionDelta;
         private Vector2 _finalPosition;

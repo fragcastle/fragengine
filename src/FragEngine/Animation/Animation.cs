@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace FragEngine.Animation
@@ -18,7 +14,7 @@ namespace FragEngine.Animation
         public float FrameTime { get; set; }
         public int CurrentFrame { get; private set; }
 
-        public Vector2 FrameSize { get; private set; }
+        public Vector2 FrameSize { get; }
 
         public bool FlipX { get; set; }
 
@@ -28,9 +24,7 @@ namespace FragEngine.Animation
 
         public string Name
         {
-            get;
-            private set;
-        }
+            get; }
 
         public Animation( Vector2 frameSize, string name = null )
         {

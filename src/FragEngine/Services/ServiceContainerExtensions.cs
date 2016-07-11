@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Linq;
-using System.Text;
+﻿using System.ComponentModel.Design;
 
 // yeah, yeah but I want these extensions everwhere
 namespace FragEngine

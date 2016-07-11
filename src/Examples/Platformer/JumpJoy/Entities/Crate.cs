@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using FragEngine;
 using FragEngine.Animation;
 using FragEngine.Collisions;
-using FragEngine.Entities;
+using FragEngine.GameObjects;
 using Microsoft.Xna.Framework;
 
 namespace JumpJoy.Entities
@@ -19,7 +19,7 @@ namespace JumpJoy.Entities
             CheckAgainstGroup = GameObjectGroup.A;
             CollisionStyle = GameObjectCollisionStyle.Active;
 
-            Animations = new AnimationSheet(ContentCacheManager.GetTextureFromResource(@"JumpJoy.Resources.crate.png"), 12, 12);
+            Animations = new AnimationSheet(ContentCacheManager.GetTextureFromResource(@"JumpJoy.Resources.crate.png", typeof(Crate).Assembly), 12, 12);
 
             Animations.Add("idle", 1f, false, 1);
 

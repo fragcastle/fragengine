@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace FragEngine
 {
@@ -19,7 +17,7 @@ namespace FragEngine
     public class InputState
     {
 
-        private PlayerIndex _index;
+        private readonly PlayerIndex _index;
 
         public InputState( PlayerIndex index )
         {

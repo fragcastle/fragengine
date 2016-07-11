@@ -1,7 +1,7 @@
 ﻿using FragEngine;
 using FragEngine.Animation;
 using FragEngine.Collisions;
-using FragEngine.Entities;
+using FragEngine.GameObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
@@ -21,7 +21,7 @@ namespace JumpJoy.Entities
 
             Name = "Jump";
 
-            Animations = new AnimationSheet(ContentCacheManager.GetTextureFromResource(@"JumpJoy.Resources.rock.png"), 32, 32);
+            Animations = new AnimationSheet(ContentCacheManager.GetTextureFromResource(@"JumpJoy.Resources.rock.png", typeof(Jumper).Assembly), 32, 32);
 
             Animations.Add("idle", 0.08f, true, 1, 2, 3, 4, 5, 6, 7);
             Animations.Add("run", 0.07f, true, 45, 46, 47, 48, 49, 50);

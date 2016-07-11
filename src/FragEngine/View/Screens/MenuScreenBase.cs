@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -16,7 +14,7 @@ namespace FragEngine.View.Screens
     /// </remarks>
     public abstract class MenuScreenBase : GameScreenBase
     {
-        private List<string> _menuEntries = new List<string>();
+        private readonly List<string> _menuEntries = new List<string>();
         private int _selectedEntry = 0;
 
         protected Texture2D _titleTexture;
